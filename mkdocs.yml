@@ -1,0 +1,139 @@
+site_name: Custodiam
+site_url: https://docs.custodiam.es/
+site_description: >-
+  Documentación pública del proyecto Custodiam — sistema multiplataforma de
+  gestión para agrupaciones de Protección Civil.
+site_author: Equipo Custodiam (Rodrigo Mulero, Marcos Val Sanz)
+copyright: >-
+  Copyright &copy; 2026 Equipo Custodiam &middot;
+  <a href="https://github.com/custodiam/custodiam-book/blob/main/LICENSE">AGPL-3.0</a>
+
+repo_name: custodiam/custodiam-book
+repo_url: https://github.com/custodiam/custodiam-book
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: es
+  logo: assets/logo.svg
+  favicon: assets/favicon.svg
+  font:
+    text: Roboto
+    code: Roboto Mono
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Cambiar a modo claro
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep orange
+      accent: blue grey
+      toggle:
+        icon: material/brightness-7
+        name: Cambiar a modo oscuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep orange
+      accent: orange
+      toggle:
+        icon: material/brightness-4
+        name: Cambiar al modo del sistema
+  features:
+    - announce.dismiss
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - content.code.copy
+    - content.tabs.link
+    - content.tooltips
+    - navigation.footer
+    - navigation.indexes
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.prune
+    - navigation.sections
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/custodiam
+      name: Organización Custodiam en GitHub
+  generator: false
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - search:
+      lang:
+        - es
+  - mermaid2:
+      version: 11.4.1
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid_custom
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+nav:
+  - Inicio: index.md
+  - Empezar:
+      - empezar/index.md
+      - Backend (API): empezar/api.md
+      - App (Flutter): empezar/app.md
+      - Infraestructura: empezar/infra.md
+  - Arquitectura:
+      - arquitectura/index.md
+      - Stack técnico: arquitectura/stack.md
+      - Diagrama del sistema: arquitectura/diagramas.md
+  - ADRs:
+      - adrs/index.md
+      - ADR-001 Polyrepo: adrs/adr-001-polyrepo.md
+  - Guías:
+      - guias/index.md
+  - Contribuir:
+      - contribuir/index.md
