@@ -22,74 +22,96 @@ Esto permite:
 
 ## Diagrama ER — módulo voluntarios
 
-```mermaid
-erDiagram
-    voluntarios ||--o{ acreditaciones : "tiene"
-    voluntarios ||--o{ tallas_voluntario : "tiene"
-    voluntarios ||--o{ contactos_emergencia : "tiene"
-    tipos_acreditacion ||--o{ acreditaciones : "clasifica"
-    tipos_equipamiento ||--o{ tallas_voluntario : "clasifica"
+```d2
+direction: right
 
-    voluntarios {
-        UUID id PK
-        string keycloak_id "UK, indexable"
-        string nombre
-        string dni "UK"
-        string email "UK"
-        string telefono "NOT NULL"
-        string municipio "NOT NULL"
-        date fecha_nacimiento "NOT NULL"
-        string direccion
-        bool conductor_habilitado "default false"
-        string estado "activo|baja|anonimizado"
-        datetime created_at
-        datetime updated_at
-    }
+voluntarios: {
+  shape: sql_table
+  id: uuid {constraint: primary_key}
+  keycloak_id: varchar {constraint: unique}
+  nombre: varchar
+  dni: varchar {constraint: unique}
+  email: varchar {constraint: unique}
+  telefono: varchar
+  municipio: varchar
+  fecha_nacimiento: date
+  direccion: varchar
+  conductor_habilitado: bool
+  estado: enum
+  created_at: timestamptz
+  updated_at: timestamptz
+}
 
-    tipos_acreditacion {
-        UUID id PK
-        string codigo UK "CARNET_CONDUCIR, ESS_SANITARIO..."
-        string nombre
-        enum categoria "LICENCIA_OFICIAL|FORMACION_INTERNA|OTRO"
-        jsonb campos_schema "doc de datos_especificos"
-        bool activo
-    }
+tipos_acreditacion: {
+  shape: sql_table
+  id: uuid {constraint: primary_key}
+  codigo: varchar {constraint: unique}
+  nombre: varchar
+  categoria: enum
+  campos_schema: jsonb
+  activo: bool
+}
 
-    acreditaciones {
-        UUID id PK
-        UUID voluntario_id FK
-        UUID tipo_id FK
-        enum categoria "discriminador real"
-        date fecha_obtencion
-        date fecha_caducidad
-        string numero
-        string entidad_emisora
-        jsonb datos_especificos
-        string documento_url
-    }
+acreditaciones: {
+  shape: sql_table
+  id: uuid {constraint: primary_key}
+  voluntario_id: uuid {constraint: foreign_key}
+  tipo_id: uuid {constraint: foreign_key}
+  categoria: enum
+  fecha_obtencion: date
+  fecha_caducidad: date
+  numero: varchar
+  entidad_emisora: varchar
+  datos_especificos: jsonb
+  documento_url: varchar
+}
 
-    tipos_equipamiento {
-        UUID id PK
-        string codigo UK "CAMISA, BOTAS..."
-        string nombre
-        string sistema_tallas "XS-XXXL, 36-50"
-    }
+tipos_equipamiento: {
+  shape: sql_table
+  id: uuid {constraint: primary_key}
+  codigo: varchar {constraint: unique}
+  nombre: varchar
+  sistema_tallas: varchar
+}
 
-    tallas_voluntario {
-        UUID id PK
-        UUID voluntario_id FK
-        UUID tipo_id FK
-        string valor "M, 42, L"
-    }
+tallas_voluntario: {
+  shape: sql_table
+  id: uuid {constraint: primary_key}
+  voluntario_id: uuid {constraint: foreign_key}
+  tipo_id: uuid {constraint: foreign_key}
+  valor: varchar
+}
 
-    contactos_emergencia {
-        UUID id PK
-        UUID voluntario_id FK
-        string nombre
-        string telefono
-        string parentesco
-        int orden_preferencia "default 1"
-    }
+contactos_emergencia: {
+  shape: sql_table
+  id: uuid {constraint: primary_key}
+  voluntario_id: uuid {constraint: foreign_key}
+  nombre: varchar
+  telefono: varchar
+  parentesco: varchar
+  orden_preferencia: int
+}
+
+voluntarios.id -> acreditaciones.voluntario_id: "tiene" {
+  source-arrowhead.shape: cf-one
+  target-arrowhead.shape: cf-many
+}
+voluntarios.id -> tallas_voluntario.voluntario_id: "tiene" {
+  source-arrowhead.shape: cf-one
+  target-arrowhead.shape: cf-many
+}
+voluntarios.id -> contactos_emergencia.voluntario_id: "tiene" {
+  source-arrowhead.shape: cf-one
+  target-arrowhead.shape: cf-many
+}
+tipos_acreditacion.id -> acreditaciones.tipo_id: "clasifica" {
+  source-arrowhead.shape: cf-one
+  target-arrowhead.shape: cf-many
+}
+tipos_equipamiento.id -> tallas_voluntario.tipo_id: "clasifica" {
+  source-arrowhead.shape: cf-one
+  target-arrowhead.shape: cf-many
+}
 ```
 
 ## Catálogos pre-poblados

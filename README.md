@@ -10,8 +10,18 @@ Documentación pública del proyecto **Custodiam**, sistema multiplataforma de g
 
 - [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) — engine + theme.
 - [uv](https://docs.astral.sh/uv/) — package manager Python (mismo stack que `custodiam-api`).
-- Plugins: `mkdocs-mermaid2-plugin`, `pymdown-extensions`, `mike` (versionado opcional).
+- Plugins: `mkdocs-mermaid2-plugin` (sequences, state, flowcharts), `mkdocs-d2-plugin` (topologías y diagramas ER), `pymdown-extensions`, `mike` (versionado opcional).
 - Hosting: GitHub Pages directo (branch `gh-pages`), dominio `docs.custodiam.es` vía CNAME en Cloudflare DNS modo *DNS only*.
+
+## Requisitos para desarrollo local
+
+- **uv** ≥ 0.9 — package manager Python. Instalación: <https://docs.astral.sh/uv/#installation>.
+- **d2** 0.7.1+ — binario nativo invocado por `mkdocs-d2-plugin` durante el build. **Sin él, los diagramas D2 no se renderizan**. Instalación:
+  - Windows: `winget install Terrastruct.D2` o `scoop install d2`.
+  - macOS: `brew install d2`.
+  - Linux: `curl -fsSL https://d2lang.com/install.sh | sh -s -- --tag v0.7.1`.
+
+El paquete Python `mkdocs-d2-plugin` se instala automáticamente con `uv sync`; el binario `d2` se gestiona aparte porque es nativo del sistema, no Python.
 
 ## Desarrollo local
 
@@ -25,11 +35,13 @@ uv run mkdocs serve
 # Build estático (output en site/)
 uv run mkdocs build
 
-# Build con modo estricto (falla si hay warnings — lo que usa el CI)
+# Build con modo estricto (falla si hay warnings — lo que usa el CI Linux)
 uv run mkdocs build --strict
 ```
 
-> **Gotcha**: si tu terminal hereda `VIRTUAL_ENV` de otro venv padre, `uv` lo respeta y no usa el `.venv/` local del repo. Solución: `unset VIRTUAL_ENV` antes de `uv sync`.
+> **Gotcha 1**: si tu terminal hereda `VIRTUAL_ENV` de otro venv padre, `uv` lo respeta y no usa el `.venv/` local del repo. Solución: `unset VIRTUAL_ENV` antes de `uv sync`.
+>
+> **Gotcha 2 (Windows)**: `mkdocs build --strict` aborta localmente por un warning de `mkdocs-d2-plugin` que usa `\` en lugar de `/` en la ruta del CSS. El warning solo aparece en Windows; en el runner Linux del CI no ocurre. Usa `mkdocs build` (sin `--strict`) para desarrollo local en Windows.
 
 ## Estructura del repo
 
