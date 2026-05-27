@@ -65,6 +65,7 @@ theme:
     - search.share
     - search.suggest
     - toc.follow
+    - toc.integrate
 
 extra:
   social:
@@ -93,7 +94,8 @@ markdown_extensions:
   - tables
   - toc:
       permalink: true
-      toc_depth: 3
+      permalink_title: Enlace permanente a este título
+      toc_depth: 2
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.betterem
