@@ -11,7 +11,7 @@ Diagramas Mermaid de los flujos principales del sistema. Renderizados nativament
 ## Topología de despliegue (modo producción)
 
 ```d2
-direction: right
+direction: down
 
 internet: Internet {
   shape: cloud
@@ -151,7 +151,7 @@ sequenceDiagram
 ## Despliegue del book de documentación
 
 ```d2
-direction: right
+direction: down
 
 dev: Dev\n(commit + push)
 gh: GitHub Actions\nworkflow deploy.yml {
