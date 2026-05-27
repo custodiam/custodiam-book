@@ -23,21 +23,24 @@ Todas las ADRs siguen el mismo esquema:
 ## ADRs publicados
 
 | ID | Título | Decisión clave | Fecha |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **[ADR-001](adr-001-polyrepo.md)** | Estructura polyrepo | Tres repos de código independientes (app, api, infra) bajo organización GitHub `custodiam` | 25-ene-2026 |
+| **[ADR-002](adr-002-sqlmodel.md)** | SQLModel como ORM unificado | Una sola clase es tabla SQL + schema Pydantic; elimina duplicación entre `app/models/` y `app/schemas/` | 30-ene-2026 |
+| **[ADR-010](adr-010-oauth-pkce-keycloak.md)** | OAuth 2.0 + PKCE + Keycloak + PyJWT | Authorization Code + PKCE para clientes públicos; validación JWT local con `azp` check (RFC 9068) | 12-feb-2026 |
+| **[ADR-013](adr-013-rbac-lockstep.md)** | RBAC en lockstep front/back | Matriz rol→permisos replicada en código (Python + Dart); JWT solo transporta roles | 22-may-2026 |
+| **[ADR-024](adr-024-patrol-e2e.md)** | Patrol como framework E2E unificado | Patrol 4.6+ sustituye `integration_test`; pirámide en tres capas (unit / integración / E2E) | 26-may-2026 |
+| **[ADR-025](adr-025-modelo-extensible.md)** | Modelo de datos extensible | Patrón "catálogo + instancias + JSONB + enum discriminador" para entidades con tipos predefinidos ampliables | 26-may-2026 |
+| **[ADR-026](adr-026-uv.md)** | uv como gestor de paquetes Python | `pyproject.toml` PEP 621 + `uv.lock` + Python 3.13 gestionado por uv; ~10× más rápido que pip | 26-may-2026 |
+| **[ADR-027](adr-027-mkdocs-pages.md)** | Material for MkDocs + GitHub Pages | Book público en repo separado; hosting GitHub Pages directo + dominio `docs.custodiam.es` vía Cloudflare DNS modo `DNS only` | 26-may-2026 |
 
 !!! info "Más ADRs en camino"
     El proyecto tiene **27 ADRs documentados internamente** (ADR-001 a ADR-027 al cierre del Sprint 4). Se irán publicando aquí progresivamente conforme alcancen versión final y se confirme que son aptas para audiencia externa.
-    
-    ADRs publicadas próximamente (en orden de prioridad):
-    
-    - ADR-002 — SQLModel como ORM unificado (SQLAlchemy + Pydantic).
-    - ADR-010 — OAuth2 + PKCE + Keycloak + PyJWT.
-    - ADR-013 — Clean Architecture estricta en Flutter.
+
+    Próximas ADRs a publicar:
+
     - ADR-020 — Tres modos de despliegue (dev / tunnel / prod).
     - ADR-022 — iOS 15 como deployment target mínimo.
-    - ADR-026 — uv como package manager Python.
-    - ADR-027 — Material for MkDocs para esta documentación pública.
+    - ADR-023 — Asimetría OAuth web vs móvil (dos `AuthService` por `kIsWeb`).
 
 ## Para contribuidores
 

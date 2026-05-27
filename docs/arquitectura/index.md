@@ -31,7 +31,23 @@ Existe además un **quinto repositorio privado** (`rodrigomulero/DOCUMENTACION`)
 
 - :material-graph: **[Diagrama del sistema](diagramas.md)**
 
-    Diagrama de componentes y flujos principales del sistema (auth, API, notificaciones).
+    Topología de despliegue y secuencias OAuth + notificación de emergencia.
+
+- :material-database: **[Modelo de datos](modelo-datos.md)**
+
+    Esquema relacional, patrón catálogo + instancias + JSONB, diagrama ER del módulo voluntarios.
+
+- :material-sitemap: **[Flujos de negocio](flujos-negocio.md)**
+
+    Ciclo del voluntario, servicio preventivo, emergencia activa, fichaje, inventario.
+
+- :material-bell-ring: **[Notificaciones redundantes](notificaciones.md)**
+
+    Firebase Cloud Messaging como canal principal + ntfy como fallback automático.
+
+- :material-clipboard-text-clock: **[Audit log](audit-log.md)**
+
+    Registro cross-module de operaciones críticas con patrón de imports diferidos.
 
 </div>
 
@@ -56,8 +72,8 @@ Existe además un **quinto repositorio privado** (`rodrigomulero/DOCUMENTACION`)
 | Auth | Keycloak | 26+ | ADR-010, ADR-023 |
 | Push notif | Firebase FCM + ntfy | — | ADR-005 (notif redundantes) |
 | Infra local | Docker Compose | 2.x | ADR-007 |
-| Tunnel + CDN | Cloudflare Tunnel + Pages | — | ADR-022, ADR-028 (pendiente) |
-| Documentación pública | Material for MkDocs | 9.x | ADR-027 |
+| Tunnel + CDN | Cloudflare Tunnel | — | ADR-022 |
+| Documentación pública | Material for MkDocs + GitHub Pages | 9.x | ADR-027 |
 
 ## Referencias
 
