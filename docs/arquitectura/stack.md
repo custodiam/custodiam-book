@@ -85,11 +85,12 @@ flowchart TB
     end
 
     subgraph Edge["Edge (Cloudflare)"]
-        CF_Tunnel["Cloudflare Tunnel<br/>(API + Keycloak)"]
-        CF_Pages["Cloudflare Pages<br/>(PWA)"]
+        CF_Tunnel["Cloudflare Tunnel<br/>(custodiam.es: api, auth, app, ntfy)"]
+        CF_PagesLegal["Cloudflare Pages<br/>(/privacy, /delete legales)"]
     end
 
-    subgraph Stack["Stack (Docker Compose)"]
+    subgraph Stack["Stack autoalojado (Docker Compose)"]
+        WEB["custodiam-web<br/>Nginx Alpine sirviendo PWA"]
         API["FastAPI<br/>custodiam-api"]
         KC["Keycloak 26<br/>realm custodiam"]
         DB[("PostgreSQL 15<br/>2 BDs: custodiam, custodiam_kc")]
@@ -103,11 +104,12 @@ flowchart TB
 
     APP_Android -- HTTPS --> CF_Tunnel
     APP_iOS -- HTTPS --> CF_Tunnel
-    APP_Web -- HTTPS --> CF_Pages
-    CF_Pages -.alternativa.-> CF_Tunnel
+    APP_Web -- HTTPS --> CF_Tunnel
 
+    CF_Tunnel --> WEB
     CF_Tunnel --> API
     CF_Tunnel --> KC
+    CF_Tunnel --> NTFY
 
     API --> DB
     API --> KC

@@ -17,13 +17,13 @@ flowchart LR
     subgraph CF["Cloudflare Edge"]
         DNS["DNS<br/>custodiam.es"]
         Tunnel["Tunnel<br/>cloudflared"]
-        Pages["Pages<br/>app.custodiam.es"]
-        BookPages["Pages<br/>docs.custodiam.es"]
+        BookPages["GitHub Pages<br/>docs.custodiam.es"]
     end
 
     subgraph Host["PC anfitrión (modo prod)"]
         Compose["Docker Compose<br/>--profile tunnel"]
         subgraph Stack["Stack de servicios"]
+            Web_Container["custodiam-web<br/>(Nginx, PWA Flutter):80"]
             API_Container["custodiam-api<br/>:8000"]
             KC_Container["Keycloak 26<br/>:8080"]
             DB_Container[("PostgreSQL 15")]
@@ -32,10 +32,10 @@ flowchart LR
     end
 
     Internet -->|HTTPS| DNS
-    DNS -->|api.custodiam.es<br/>auth.custodiam.es<br/>ntfy.custodiam.es| Tunnel
-    DNS -->|app.custodiam.es| Pages
+    DNS -->|app.custodiam.es<br/>api.custodiam.es<br/>auth.custodiam.es<br/>ntfy.custodiam.es| Tunnel
     DNS -->|docs.custodiam.es| BookPages
 
+    Tunnel -.cloudflared connect.-> Web_Container
     Tunnel -.cloudflared connect.-> API_Container
     Tunnel -.cloudflared connect.-> KC_Container
     Tunnel -.cloudflared connect.-> NTFY_Container
