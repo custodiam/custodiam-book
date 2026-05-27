@@ -122,20 +122,29 @@ Más detalle de la lógica de notificaciones y el fallback en [Notificaciones re
 El fichaje registra la **presencia real del voluntario en un servicio** con timestamp y ubicación opcional.
 
 ```mermaid
-flowchart LR
-    A[Voluntario llega al servicio] --> B{¿Está apuntado<br/>al servicio?}
-    B -->|No| C[Error 403]
-    B -->|Sí| D[Pulsa Fichar Entrada en la app]
-    D --> E[App envía POST /fichajes<br/>servicio_id + timestamp + GPS opcional]
-    E --> F[Backend valida ventana temporal<br/>±1h de inicio del servicio]
-    F --> G[201 Created — entrada registrada]
+flowchart TB
+    subgraph Entrada["Fichaje de entrada"]
+        A[Voluntario llega al servicio] --> B{¿Está apuntado<br/>al servicio?}
+        B -->|No| C[Error 403]
+        B -->|Sí| D[Pulsa Fichar Entrada en la app]
+        D --> E[App envía POST /fichajes<br/>servicio_id + timestamp + GPS opcional]
+        E --> F[Backend valida ventana temporal<br/>±1h de inicio del servicio]
+        F --> G[201 Created — entrada registrada]
+    end
 
-    H[Voluntario termina servicio] --> I[Pulsa Fichar Salida]
-    I --> J[POST /fichajes con tipo=salida]
-    J --> K[201 Created — fichaje cerrado]
+    subgraph Salida["Fichaje de salida"]
+        H[Voluntario termina servicio] --> I[Pulsa Fichar Salida]
+        I --> J[POST /fichajes con tipo=salida]
+        J --> K[201 Created — fichaje cerrado]
+    end
 
-    L[Jefe de equipo] -->|Más tarde| M[Valida fichajes de su equipo]
-    M --> N[Estado fichaje: validado/rechazado]
+    subgraph Validacion["Validación posterior"]
+        L[Jefe de equipo] -->|Más tarde| M[Valida fichajes de su equipo]
+        M --> N[Estado fichaje:<br/>validado o rechazado]
+    end
+
+    Entrada --> Salida
+    Salida --> Validacion
 ```
 
 **Reglas operativas**:
