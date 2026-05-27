@@ -92,32 +92,32 @@ afordancia.
     usuario con solo rol `admin` que abra `/mi-perfil` ve "Sin
     acceso" — es el comportamiento correcto, no un bug.
 
-## Los 5 usuarios que crea el seed
+## Los 7 usuarios que crea el seed
 
-| Usuario | Contraseña | Rol único | Fila en BD | Lo que cubre en la UI |
+Todas las cuentas siguen el patrón **password = username**. Es deliberadamente débil porque las credenciales aparecen en esta página pública y, en el caso de `reviewstore`, en la submission de Google Play y Apple App Store. No es una postura sobre seguridad real de producción: estas cuentas son **sacrificables** y solo se usan para QA del equipo, defensa académica y review de las stores. Las cuentas humanas de una agrupación que adopte Custodiam se crean por el flujo normal de alta de voluntario, no por este seed.
+
+| Usuario | Contraseña | Roles en Keycloak | Fila en BD | Lo que cubre en la UI |
 |---|---|---|---|---|
-| `vol1` | `Vol1Pass!` | `voluntario` | sí | `/mi-perfil` con datos, `/voluntarios` (lista), "Sin acceso" en `/voluntarios/alta` y en la ficha de otro voluntario |
-| `jefe1` | `Jefe1Pass!` | `jefe_equipo` | sí | Todo lo anterior + ficha `/voluntarios/{id}` en **read-only** (ver_ficha sí, editar no) + banner "Comando operativo" en `/home` |
-| `coord1` | `Coord1Pass!` | `coordinador` | sí | Admin operativo completo: `/voluntarios/alta`, ficha en modo edición, cambio de rol, todos los iconos del home |
-| `tesor1` | `Tesor1Pass!` | `tesorero` | sí | Caso edge: lista y ficha sí, editar y crear no — útil para validar el split read/write |
-| `admin1` | `Admin1Pass!` | `admin` | **no** | Admin técnico puro: `/mi-perfil` debe mostrar `AppEmptyState` "Sin perfil" porque no hay fila en BD vinculada al `keycloak_id` |
+| `vol1` | `vol1` | `voluntario` | sí · asignación `voluntario` | `/mi-perfil` con datos, `/voluntarios` (lista), "Sin acceso" en `/voluntarios/alta` y en la ficha de otro voluntario |
+| `jefe1` | `jefe1` | `jefe_equipo` | sí · asignación `jefe_equipo` | Todo lo anterior + ficha `/voluntarios/{id}` en **read-only** (ver_ficha sí, editar no) + banner "Comando operativo" en `/home` |
+| `coord1` | `coord1` | `coordinador` | sí · asignación `coordinador` | Admin operativo completo: `/voluntarios/alta`, ficha en modo edición, cambio de rol, todos los iconos del home |
+| `tesor1` | `tesor1` | `tesorero` | sí · asignación `tesorero` | Caso edge: lista y ficha sí, editar y crear no — útil para validar el split read/write |
+| `admin` | `admin` | `admin` | sí · asignación `admin` | Flujos del admin técnico (permisos `sistema.*`): panel admin, configuración, logs, backups, exportar RGPD |
+| `reviewstore` | `reviewstore` | `coordinador` + `admin` | sí · asignación `coordinador` | **Cuenta para revisión de Google Play y Apple App Store.** Cobertura total: union de todos los permisos operativos del coordinador con los `sistema.*` del admin |
+| `superadmin` | `superadmin` | `coordinador` + `admin` | sí · asignación `coordinador` | Cuenta de emergencia del equipo: misma cobertura que reviewstore pero distinta audiencia, para administración interna del piloto |
 
-### Por qué `admin1` no tiene fila en BD
+### Por qué dos cuentas con `coordinador` + `admin`
 
-Es intencional. El caso "usuario en Keycloak sin fila correspondiente
-en `voluntarios`" tiene que poder probarse en QA porque también
-ocurre en producción de forma natural:
+`reviewstore` y `superadmin` tienen capacidades idénticas pero distinta **audiencia**. Esa separación permite rotar credenciales o eliminar una sin afectar a la otra:
 
-- Un admin técnico que solo gestiona la app sin ser voluntario.
-- Un voluntario anonimizado (Art. 17 RGPD): conserva cuenta KC para
-  no romper FKs históricas, pero su `keycloak_id` se borra de la
-  fila BD.
+- **`reviewstore`** es visible a los revisores externos de Google Play y Apple. Su existencia y su password aparecen en la submission ("Sign-in Info" de App Store Connect y "Acceso a la aplicación" de Google Play Console). Si en algún momento los reviewers reportan algo o cambiamos a otro mecanismo de review (test track, internal testing con cuentas reales), `reviewstore` se borra de Keycloak sin tocar nada más.
+- **`superadmin`** es para uso interno del equipo durante la fase de defensa académica y piloto. Permite que un miembro del equipo pueda entrar a administrar el sistema en cualquier momento sin depender de las credenciales que se le pasaron a los reviewers.
 
-La pantalla `/mi-perfil` para `admin1` debe mostrar `AppEmptyState`
-con el copy "No hay un voluntario en BD vinculado a tu usuario. Pide
-al administrador que te dé de alta" en lugar de un error genérico.
-Si ves un error genérico, hay un bug en el manejo del 404
-(`VoluntariosFailure.notFound`).
+### Por qué `admin` SÍ tiene fila en BD
+
+A diferencia de versiones anteriores de este seed, ahora el usuario `admin` tiene su fila en `voluntarios` con la asignación de rol `admin`. El rol `admin` está en el catálogo canónico de los 12 roles del sistema (sembrado por la migración Alembic `f76feacaf399`), así que es coherente que el usuario `admin` lo tenga materializado en BD igual que cualquier otro rol.
+
+El caso edge "usuario Keycloak sin fila vinculada en BD" sigue cubierto **por código** (`AppEmptyState` con copy "Pide al administrador que te dé de alta") y **por tests E2E** del mock OIDC server. No necesita un usuario seed específico para reproducirlo: cualquier persona que se autentique en Keycloak sin que un admin la haya dado de alta en BD primero cae en ese estado de forma natural, exactamente como en producción.
 
 ## Cómo ejecutar el seed
 
