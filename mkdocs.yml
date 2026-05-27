@@ -80,6 +80,7 @@ plugins:
   - search:
       lang:
         - es
+  - d2
   - mermaid2:
       version: 11.4.1
 

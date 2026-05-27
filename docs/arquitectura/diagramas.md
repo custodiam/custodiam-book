@@ -10,39 +10,59 @@ Diagramas Mermaid de los flujos principales del sistema. Renderizados nativament
 
 ## Topología de despliegue (modo producción)
 
-```mermaid
-flowchart LR
-    Internet((Internet))
+```d2
+direction: right
 
-    subgraph CF["Cloudflare Edge"]
-        DNS["DNS<br/>custodiam.es"]
-        Tunnel["Tunnel<br/>cloudflared"]
-        BookPages["GitHub Pages<br/>docs.custodiam.es"]
-    end
+internet: Internet {
+  shape: cloud
+}
 
-    subgraph Host["PC anfitrión (modo prod)"]
-        Compose["Docker Compose<br/>--profile tunnel"]
-        subgraph Stack["Stack de servicios"]
-            Web_Container["custodiam-web<br/>(Nginx, PWA Flutter):80"]
-            API_Container["custodiam-api<br/>:8000"]
-            KC_Container["Keycloak 26<br/>:8080"]
-            DB_Container[("PostgreSQL 15")]
-            NTFY_Container["ntfy<br/>:80"]
-        end
-    end
+cf: Cloudflare Edge {
+  style.fill: "#fef7ed"
+  style.stroke: "#f97316"
 
-    Internet -->|HTTPS| DNS
-    DNS -->|app.custodiam.es<br/>api.custodiam.es<br/>auth.custodiam.es<br/>ntfy.custodiam.es| Tunnel
-    DNS -->|docs.custodiam.es| BookPages
+  dns: DNS\ncustodiam.es {
+    shape: circle
+  }
+  tunnel: Tunnel\ncloudflared
+  book_pages: GitHub Pages\ndocs.custodiam.es {
+    shape: page
+  }
+}
 
-    Tunnel -.cloudflared connect.-> Web_Container
-    Tunnel -.cloudflared connect.-> API_Container
-    Tunnel -.cloudflared connect.-> KC_Container
-    Tunnel -.cloudflared connect.-> NTFY_Container
+host: PC anfitrión (modo prod) {
+  style.fill: "#f8fafc"
+  style.stroke: "#475569"
 
-    API_Container --> DB_Container
-    KC_Container --> DB_Container
-    API_Container -.admin API.-> KC_Container
+  compose: Docker Compose --profile tunnel {
+    style.italic: true
+  }
+
+  stack: Stack de servicios {
+    style.fill: "#ffffff"
+
+    web: custodiam-web\n(Nginx + PWA Flutter)\n:80
+    api: custodiam-api\n:8000
+    keycloak: Keycloak 26\n:8080
+    db: PostgreSQL 15 {
+      shape: cylinder
+    }
+    ntfy: ntfy\n:80
+  }
+}
+
+internet -> cf.dns: HTTPS
+cf.dns -> cf.tunnel: app/api/auth/ntfy.custodiam.es
+cf.dns -> cf.book_pages: docs.custodiam.es
+
+cf.tunnel -> host.stack.web: cloudflared connect {style.stroke-dash: 3}
+cf.tunnel -> host.stack.api: cloudflared connect {style.stroke-dash: 3}
+cf.tunnel -> host.stack.keycloak: cloudflared connect {style.stroke-dash: 3}
+cf.tunnel -> host.stack.ntfy: cloudflared connect {style.stroke-dash: 3}
+
+host.stack.api -> host.stack.db
+host.stack.keycloak -> host.stack.db
+host.stack.api -> host.stack.keycloak: admin API {style.stroke-dash: 3}
 ```
 
 ## Flujo OAuth2 + PKCE (móvil)
@@ -130,20 +150,31 @@ sequenceDiagram
 
 ## Despliegue del book de documentación
 
-```mermaid
-flowchart LR
-    Dev["Dev (commit + push)"]
-    GH["GitHub Actions<br/>workflow deploy.yml"]
-    Pages["GitHub Pages<br/>branch gh-pages"]
-    DNS["Cloudflare DNS<br/>CNAME docs → custodiam.github.io<br/>(DNS only, sin proxy)"]
-    User((Usuario))
+```d2
+direction: right
 
-    Dev -->|push a main| GH
-    GH -->|uv sync + mkdocs build| GH
-    GH -->|peaceiris/actions-gh-pages@v4| Pages
-    User -->|https://docs.custodiam.es| DNS
-    DNS -->|resuelve a IP de GitHub Pages| Pages
-    User -.fallback.->|custodiam.github.io/custodiam-book/| Pages
+dev: Dev\n(commit + push)
+gh: GitHub Actions\nworkflow deploy.yml {
+  shape: hexagon
+}
+pages: GitHub Pages\nbranch gh-pages {
+  shape: page
+}
+dns: Cloudflare DNS\nCNAME docs → custodiam.github.io\n(DNS only, sin proxy) {
+  shape: cloud
+}
+user: Usuario {
+  shape: person
+}
+
+dev -> gh: push a main
+gh -> gh: uv sync + mkdocs build
+gh -> pages: peaceiris/actions-gh-pages@v4
+user -> dns: https\://docs.custodiam.es
+dns -> pages: resuelve a IP de GitHub Pages
+user -> pages: fallback custodiam.github.io/custodiam-book/ {
+  style.stroke-dash: 3
+}
 ```
 
 !!! tip "Resiliencia vendor-lock-free"

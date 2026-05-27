@@ -17,32 +17,43 @@ A su vez, **Firebase Cloud Messaging (FCM)** sigue siendo el canal nativo de And
 
 ## Topología
 
-```mermaid
-flowchart LR
-    subgraph App["custodiam-app (móvil)"]
-        FCM_SDK["firebase_messaging SDK"]
-        NTFY_Client["ntfy client (HTTP polling)"]
-    end
+```d2
+direction: right
 
-    subgraph Backend["custodiam-api"]
-        Servicio["Servicio<br/>NotificacionesService"]
-        Audit["audit_log"]
-    end
+app: custodiam-app (móvil) {
+  style.fill: "#eef2ff"
+  fcm_sdk: firebase_messaging SDK
+  ntfy_client: ntfy client\n(HTTP polling)
+}
 
-    subgraph External["Servicios externos"]
-        FCM_Service["Firebase Cloud Messaging<br/>(Google)"]
-    end
+backend: custodiam-api {
+  style.fill: "#fefce8"
+  servicio: NotificacionesService
+  audit: audit_log {
+    shape: cylinder
+  }
+}
 
-    subgraph Self["Self-hosted"]
-        NTFY_Server["ntfy<br/>(contenedor en custodiam-infra)"]
-    end
+external: Servicios externos {
+  style.fill: "#fef2f2"
+  fcm: Firebase Cloud Messaging\n(Google) {
+    shape: cloud
+  }
+}
 
-    Servicio -->|HTTPS| FCM_Service
-    Servicio -.fallback automático.-> NTFY_Server
-    Servicio --> Audit
+self: Self-hosted {
+  style.fill: "#f0fdf4"
+  ntfy: ntfy\n(contenedor en custodiam-infra) {
+    shape: cylinder
+  }
+}
 
-    FCM_Service -->|push| FCM_SDK
-    NTFY_Server -->|HTTP push| NTFY_Client
+backend.servicio -> external.fcm: HTTPS
+backend.servicio -> self.ntfy: fallback automático {style.stroke-dash: 3}
+backend.servicio -> backend.audit
+
+external.fcm -> app.fcm_sdk: push
+self.ntfy -> app.ntfy_client: HTTP push
 ```
 
 ## Política de envío por tipo

@@ -76,53 +76,68 @@ Hosted en **GitHub Pages directo** (vendor-lock-free) con dominio propio `docs.c
 
 ## Diagrama del stack (alto nivel)
 
-```mermaid
-flowchart TB
-    subgraph Clients["Clientes"]
-        APP_Android["App Android<br/>(Flutter release)"]
-        APP_iOS["App iOS<br/>(Flutter release)"]
-        APP_Web["PWA<br/>app.custodiam.es"]
-    end
+```d2
+direction: down
 
-    subgraph Edge["Edge (Cloudflare)"]
-        CF_Tunnel["Cloudflare Tunnel<br/>(custodiam.es: api, auth, app, ntfy)"]
-        CF_PagesLegal["Cloudflare Pages<br/>(/privacy, /delete legales)"]
-    end
+clients: Clientes {
+  style.fill: "#eef2ff"
+  android: App Android\n(Flutter release)
+  ios: App iOS\n(Flutter release)
+  web: PWA\napp.custodiam.es
+}
 
-    subgraph Stack["Stack autoalojado (Docker Compose)"]
-        WEB["custodiam-web<br/>Nginx Alpine sirviendo PWA"]
-        API["FastAPI<br/>custodiam-api"]
-        KC["Keycloak 26<br/>realm custodiam"]
-        DB[("PostgreSQL 15<br/>2 BDs: custodiam, custodiam_kc")]
-        NTFY["ntfy<br/>(backup push)"]
-    end
+edge: Edge (Cloudflare) {
+  style.fill: "#fef3c7"
+  tunnel: Cloudflare Tunnel\n(api, auth, app, ntfy.custodiam.es) {
+    shape: cloud
+  }
+  pages_legal: Cloudflare Pages\n(/privacy, /delete legales) {
+    shape: page
+  }
+}
 
-    subgraph External["Externos"]
-        FCM["Firebase FCM<br/>(canal principal push)"]
-        Resend["Resend SMTP<br/>(emails transaccionales Keycloak)"]
-    end
+stack: Stack autoalojado (Docker Compose) {
+  style.fill: "#ecfdf5"
+  web: custodiam-web\nNginx Alpine sirviendo PWA
+  api: FastAPI\ncustodiam-api
+  kc: Keycloak 26\nrealm custodiam
+  db: PostgreSQL 15\n2 BDs: custodiam, custodiam_kc {
+    shape: cylinder
+  }
+  ntfy: ntfy\n(backup push)
+}
 
-    APP_Android -- HTTPS --> CF_Tunnel
-    APP_iOS -- HTTPS --> CF_Tunnel
-    APP_Web -- HTTPS --> CF_Tunnel
+external: Externos {
+  style.fill: "#fef2f2"
+  fcm: Firebase FCM\n(canal principal push) {
+    shape: cloud
+  }
+  resend: Resend SMTP\n(emails transaccionales Keycloak) {
+    shape: cloud
+  }
+}
 
-    CF_Tunnel --> WEB
-    CF_Tunnel --> API
-    CF_Tunnel --> KC
-    CF_Tunnel --> NTFY
+clients.android -> edge.tunnel: HTTPS
+clients.ios -> edge.tunnel: HTTPS
+clients.web -> edge.tunnel: HTTPS
 
-    API --> DB
-    API --> KC
-    API --> FCM
-    API --> NTFY
+edge.tunnel -> stack.web
+edge.tunnel -> stack.api
+edge.tunnel -> stack.kc
+edge.tunnel -> stack.ntfy
 
-    KC --> DB
-    KC --> Resend
+stack.api -> stack.db
+stack.api -> stack.kc
+stack.api -> external.fcm
+stack.api -> stack.ntfy
 
-    APP_Android -.push.- FCM
-    APP_iOS -.push.- FCM
-    APP_Web -.push.- FCM
-    APP_Android -.fallback.- NTFY
+stack.kc -> stack.db
+stack.kc -> external.resend
+
+clients.android -> external.fcm: push {style.stroke-dash: 3}
+clients.ios -> external.fcm: push {style.stroke-dash: 3}
+clients.web -> external.fcm: push {style.stroke-dash: 3}
+clients.android -> stack.ntfy: fallback {style.stroke-dash: 3}
 ```
 
 Diagrama detallado por flujo (autenticación OAuth, propagación de eventos, etc.) en **[Diagramas del sistema](diagramas.md)**.
