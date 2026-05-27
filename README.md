@@ -19,7 +19,7 @@ Documentación pública del proyecto **Custodiam**, sistema multiplataforma de g
 - **d2** 0.7.1+ — binario nativo invocado por `mkdocs-d2-plugin` durante el build. **Sin él, los diagramas D2 no se renderizan**. Instalación:
   - Windows: `winget install Terrastruct.D2` o `scoop install d2`.
   - macOS: `brew install d2`.
-  - Linux: `curl -fsSL https://d2lang.com/install.sh | sh -s -- --tag v0.7.1`.
+  - Linux: `curl -fsSL https://d2lang.com/install.sh | sh -s -- --version v0.7.1`.
 
 El paquete Python `mkdocs-d2-plugin` se instala automáticamente con `uv sync`; el binario `d2` se gestiona aparte porque es nativo del sistema, no Python.
 
