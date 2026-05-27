@@ -126,6 +126,7 @@ nav:
       - Backend (API): empezar/api.md
       - App (Flutter): empezar/app.md
       - Infraestructura: empezar/infra.md
+      - Usuarios de prueba: empezar/usuarios-prueba.md
   - Arquitectura:
       - arquitectura/index.md
       - Stack técnico: arquitectura/stack.md
