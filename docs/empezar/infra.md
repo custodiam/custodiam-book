@@ -10,11 +10,12 @@ description: >-
 Orquestación del stack completo: **PostgreSQL + Keycloak + API + Web + ntfy**, con tres modos mutuamente excluyentes (dev / tunnel / prod) y `just` como interfaz preferida.
 
 !!! info "Decisiones arquitectónicas relevantes"
-    - **ADR-007 — Docker Compose** como orquestador local (no Kubernetes).
-    - **ADR-009 — 2 bases de datos** (`custodiam` para API, `custodiam_kc` para Keycloak) en una sola instancia PostgreSQL.
-    - **ADR-019 — Gestión de secretos con sops + age**.
-    - **ADR-020 — Tres modos de despliegue** mutuamente excluyentes (dev / tunnel / prod) con guard de cross-mode.
-    - **ADR-022 — Cloudflare Tunnel** para exponer el stack vía HTTPS sin abrir puertos.
+    - **[ADR-007 — GHCR](../adrs/adr-007-ghcr.md)**: las imágenes propias se publican en GitHub Container Registry y los modos `tunnel` y `prod` las consumen.
+    - **[ADR-009 — Dos bases de datos](../adrs/adr-009-2-bds-separadas.md)** (`custodiam` para API, `custodiam_kc` para Keycloak) en una sola instancia PostgreSQL.
+    - **[ADR-019 — Gestión de secretos con sops + age](../adrs/adr-019-sops-age.md)** — `docker/.env.sops` cifrado y versionado en el repo.
+    - **[ADR-020 — Tres modos de despliegue](../adrs/adr-020-tres-modos-despliegue.md)** mutuamente excluyentes (dev / tunnel / prod) con guard de cross-mode.
+    - **[ADR-006 — Nginx Alpine](../adrs/adr-006-nginx-alpine.md)**: contenedor `custodiam-web` sirve la PWA Flutter Web.
+    - **[ADR-021 — SMTP transaccional con Resend](../adrs/adr-021-smtp-resend.md)** para los emails que Keycloak emite.
 
 ## Requisitos
 
@@ -66,7 +67,7 @@ just down       # Bajar el stack (los volúmenes con datos sobreviven)
 ```
 
 !!! tip "Política de cross-mode"
-    Los tres modos son **mutuamente excluyentes** (ADR-020). Cada wrapper hace un guard: si detecta que ya hay un modo distinto activo, lo aborta con un mensaje claro y pide ejecutar `just down` primero. Esto evita escenarios mixtos como "estoy en dev pero también tengo el túnel activo".
+    Los tres modos son **mutuamente excluyentes** ([ADR-020](../adrs/adr-020-tres-modos-despliegue.md)). Cada wrapper hace un guard: si detecta que ya hay un modo distinto activo, lo aborta con un mensaje claro y pide ejecutar `just down` primero. Esto evita escenarios mixtos como "estoy en dev pero también tengo el túnel activo".
 
 ## Comandos esenciales
 

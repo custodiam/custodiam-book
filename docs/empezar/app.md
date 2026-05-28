@@ -9,12 +9,18 @@ description: >-
 App cliente Flutter multiplataforma: **Android + iOS + Web**. Arquitectura **Clean estricta + Riverpod + `Result<T>`**, con autenticación OAuth2 + PKCE contra Keycloak.
 
 !!! info "Decisiones arquitectónicas relevantes"
-    - **ADR-013 — Clean Architecture estricta** con tres capas (`domain` / `data` / `presentation`).
-    - **ADR-012 — Riverpod** como state management (no `bloc`, no `setState` global).
-    - **ADR-014 — `Result<T>` sealed** para error handling sin excepciones cross-layer.
-    - **ADR-010 — OAuth2 + PKCE** con paquete `oauth2` de pub.dev.
-    - **ADR-023 — Dos `AuthService` seleccionados por `kIsWeb`** (asimetría móvil/web).
-    - **ADR-018 — Design System propio** con prefijo `App*` y `ThemeExtensions`.
+    - **[ADR-013 — Clean Architecture estricta](../adrs/adr-013-rbac-lockstep.md)** con tres capas (`domain` / `data` / `presentation`) + `infrastructure` cross-cutting.
+    - **[ADR-012 — Riverpod](../adrs/adr-012-riverpod.md)** como state management (no BLoC, no `setState` global).
+    - **[ADR-014 — `Result<T>` sealed + `Failure`](../adrs/adr-014-result-failure.md)** para error handling sin excepciones cross-layer.
+    - **[ADR-004 — Cliente HTTP](../adrs/adr-004-http-cliente.md)** paquete oficial `http` + wrapper `ApiClient`.
+    - **[ADR-010 — OAuth 2.0 + PKCE](../adrs/adr-010-oauth-pkce-keycloak.md)** con paquete `oauth2` de pub.dev.
+    - **[ADR-023 — Dos `AuthService` seleccionados por `kIsWeb`](../adrs/adr-023-oauth-web-asimetria.md)** (asimetría móvil/web).
+    - **[ADR-015 — `EnvConfig`](../adrs/adr-015-env-config.md)** y configuración por entorno con `--dart-define`.
+    - **[ADR-016 — Logging con `dev.log`](../adrs/adr-016-dev-log.md)** y `name:` por subsistema.
+    - **[ADR-017 — SplashPage + `AppStartupUseCase`](../adrs/adr-017-splash-app-startup.md)** como patrón de arranque.
+    - **[ADR-018 — Design System propio](../adrs/adr-018-design-system.md)** con prefijo `App*` y `ThemeExtensions`.
+    - **[ADR-022 — iOS 15 como mínimo](../adrs/adr-022-ios-15.md)** (forzado por Firebase SDK 12.x).
+    - **[ADR-024 — Patrol como framework E2E](../adrs/adr-024-patrol-e2e.md)** unificado.
 
 ## Requisitos
 
@@ -79,7 +85,7 @@ flutter build web --release \
   --dart-define=KEYCLOAK_BASE_URL=https://auth.custodiam.es
 ```
 
-La PWA de producción se sirve en `https://app.custodiam.es` (Cloudflare Pages, ADR-022).
+La PWA de producción se sirve en `https://app.custodiam.es` desde el contenedor `custodiam-web` (Nginx Alpine, [ADR-006](../adrs/adr-006-nginx-alpine.md)) expuesto vía Cloudflare Tunnel.
 
 ## Comandos esenciales
 

@@ -9,10 +9,12 @@ description: >-
 Backend REST con **FastAPI + SQLModel + PostgreSQL + Keycloak**, gestionado con `uv` como package manager moderno.
 
 !!! info "Decisiones arquitectónicas relevantes"
-    - **ADR-026 — uv como package manager**: el repo migró de `pip + venv + requirements.txt` a `uv + pyproject.toml + uv.lock`.
-    - **ADR-002 — SQLModel** unifica SQLAlchemy 2.0 + Pydantic en un solo modelo.
-    - **ADR-008 — psycopg3** como driver PostgreSQL (URL `postgresql+psycopg://...`).
-    - **ADR-010 — PyJWT[crypto]** para validación local de JWT emitidos por Keycloak.
+    - **[ADR-026 — uv como package manager](../adrs/adr-026-uv.md)**: el repo migró de `pip + venv + requirements.txt` a `uv + pyproject.toml + uv.lock`.
+    - **[ADR-002 — SQLModel](../adrs/adr-002-sqlmodel.md)** unifica SQLAlchemy 2.0 + Pydantic en un solo modelo.
+    - **[ADR-003 — Alembic](../adrs/adr-003-alembic.md)** para migraciones con autogeneración.
+    - **[ADR-008 — psycopg3](../adrs/adr-008-psycopg3.md)** como driver PostgreSQL (URL `postgresql+psycopg://...`).
+    - **[ADR-009 — Dos BDs separadas](../adrs/adr-009-2-bds-separadas.md)** para evitar conflictos de Alembic con las tablas de Keycloak.
+    - **[ADR-010 — OAuth + PKCE + Keycloak + PyJWT](../adrs/adr-010-oauth-pkce-keycloak.md)** para validación local de JWT.
 
 ## Requisitos
 
@@ -113,7 +115,7 @@ custodiam-api/
 │   └── env.py             # Carga .env antes de leer DATABASE_URL
 ├── tests/                 # pytest con fixtures de cliente autenticado
 ├── .github/workflows/
-│   └── ci.yml             # CI con astral-sh/setup-uv@v3
+│   └── ci.yml             # CI con astral-sh/setup-uv
 ├── pyproject.toml         # [project] PEP 621 + ruff + pytest config
 ├── uv.lock                # Lockfile reproducible
 └── Dockerfile             # Multi-stage con ghcr.io/astral-sh/uv builder

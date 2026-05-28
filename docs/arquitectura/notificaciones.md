@@ -7,7 +7,7 @@ description: >-
 
 # Notificaciones redundantes
 
-Custodiam usa **dos canales de notificación push** con políticas de redundancia distintas según la criticidad del mensaje. La decisión y las alternativas evaluadas viven en ADR-005 del repo privado; esta página recoge la visión operativa pública.
+Custodiam usa **dos canales de notificación push** con políticas de redundancia distintas según la criticidad del mensaje. Esta página recoge la visión operativa del sistema.
 
 ## Por qué dos canales
 
@@ -60,7 +60,7 @@ self.ntfy -> app.ntfy_client: HTTP push
 
 | Tipo de notificación | Canal primario | Fallback | Reintentos |
 | --- | --- | --- | --- |
-| **Emergencia activa** (CU-30 — convocatoria) | FCM | ntfy automático si FCM falla o timeout > 5 s | 3 reintentos exponenciales |
+| **Emergencia activa** (convocatoria) | FCM | ntfy automático si FCM falla o timeout > 5 s | 3 reintentos exponenciales |
 | **Convocatoria a servicio preventivo** | FCM | ntfy automático si FCM responde error | 1 reintento |
 | **Confirmación / cambio de estado** | FCM | sin fallback | sin reintentos |
 | **Informativa (cambio de turno, recordatorio)** | FCM | sin fallback | sin reintentos |
@@ -111,7 +111,7 @@ sequenceDiagram
 | **tunnel (Cloudflare)** | Cuenta Firebase del proyecto, app `es.custodiam.dev` | Contenedor ntfy expuesto en `ntfy.custodiam.es` |
 | **prod** | Cuenta Firebase del proyecto, app `es.custodiam` | Contenedor ntfy expuesto en `ntfy.custodiam.es` |
 
-Los tres modos están documentados en ADR-020 del repo privado.
+Los tres modos están documentados en [ADR-020](../adrs/adr-020-tres-modos-despliegue.md).
 
 ## Referencias
 
