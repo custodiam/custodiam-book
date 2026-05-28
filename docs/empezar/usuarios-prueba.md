@@ -92,6 +92,107 @@ afordancia.
     usuario con solo rol `admin` que abra `/mi-perfil` ve "Sin
     acceso" — es el comportamiento correcto, no un bug.
 
+## Protocolo de prueba
+
+Esta sección propone un recorrido para validar visualmente que el
+RBAC funciona en cada rol. Pensado para QA del equipo y para
+terceros que quieran evaluar la app sin tener que cruzar varios
+documentos.
+
+### Recorrido rápido (≈15 min)
+
+El orden importa: empieza por la cuenta con menos privilegios y
+sube. Así cada cuenta nueva añade afordancias visibles respecto a la
+anterior y es trivial detectar regresiones del estilo "permiso
+filtrado donde no debería".
+
+1. **`Voluntario1@test.com`** — voluntario operativo básico.
+    - Login, llegada a `/home`.
+    - `/mi-perfil` debe mostrar los datos del propio voluntario y
+      permitir editar los campos de contacto.
+    - `/voluntarios` debe mostrar la lista (lectura permitida).
+    - Intentar abrir una ficha ajena → "Sin acceso".
+    - Intentar abrir `/voluntarios/alta` por URL directa → "Sin
+      acceso".
+
+2. **`Jefeequipo1@test.com`** — comando operativo.
+    - Home muestra el banner "Comando operativo".
+    - La ficha de otro voluntario abre en modo lectura (sin botón
+      Editar).
+    - Acceso al alta de servicios preventivos disponible.
+    - Sigue sin poder dar de alta voluntarios.
+
+3. **`Coordinador1@test.com`** — admin operativo completo.
+    - Home con todos los iconos del dominio visibles.
+    - `/voluntarios/alta` accesible y funcional.
+    - La ficha ajena abre en modo edición; el selector de rol está
+      activo.
+    - La acción "Anonimizar" (Art. 17 RGPD) está disponible en la
+      ficha.
+
+4. **`Tesorero1@test.com`** — split read/write (caso edge).
+    - Ve la lista de voluntarios y abre la ficha ajena.
+    - Los botones de crear, editar y dar de baja están **ocultos** en
+      todo el dominio operativo.
+    - El acceso a gestión económica está visible.
+    - Útil para confirmar que el `AppPermissionGate` no se "rompe" en
+      perfiles solo-lectura.
+
+5. **`Admin1@test.com`** — admin técnico puro.
+    - Panel admin técnico accesible (configuración, backups, logs).
+    - `/mi-perfil` y `/voluntarios` muestran "Sin acceso": `admin`
+      no es un rol del dominio operativo.
+    - Sirve para validar el contraste con `coordinador` documentado
+      más arriba.
+
+6. **`Reviewstore1@test.com`** — cobertura total.
+    - Última cuenta del recorrido. Tiene la unión de todos los
+      permisos operativos y técnicos.
+    - Si esta cuenta NO ve algo que debería ver, hay un bug de RBAC
+      en la matriz o en el `AppPermissionGate`.
+
+### Smoke test por feature
+
+Si solo quieres validar una feature concreta sin recorrer todo, esta
+tabla mapea cada flujo crítico a la cuenta mínima necesaria:
+
+| Feature | Cuenta sugerida | Qué validar |
+|---|---|---|
+| Login OIDC (web) | Cualquiera | Redirección a Keycloak, callback a `/callback`, tokens persistidos |
+| Login OIDC (móvil) | Cualquiera | El custom scheme dispara el browser embed, callback OK |
+| Ver mi perfil | `Voluntario1` | `/mi-perfil` muestra los datos del propio voluntario |
+| Listar voluntarios | `Voluntario1` | `/voluntarios` muestra lista, **sin** botón "Nuevo" |
+| Ficha ajena en lectura | `Jefeequipo1` | Abre `/voluntarios/{id}`, **sin** botón Editar |
+| Crear voluntario | `Coordinador1` | `/voluntarios/alta` accesible, alta crea usuario en Keycloak + fila en BD |
+| Editar voluntario | `Coordinador1` | La ficha abre en modo edición y persiste cambios |
+| Cambiar rol | `Coordinador1` | Selector de rol en la ficha, asignación persistente |
+| Dar de baja (soft delete) | `Coordinador1` | `deleted_at` se setea; el voluntario desaparece de la lista |
+| Anonimizar (Art. 17 RGPD) | `Coordinador1` o `Admin1` | PII pisada con valores neutros, `keycloak_id` se conserva |
+| Crear servicio preventivo | `Jefeequipo1` | Formulario "Nuevo servicio", tipo preventivo, convocatoria |
+| Panel admin técnico | `Admin1` | `/admin/*` accesible; dominio operativo NO accesible |
+| Logs de auditoría | `Coordinador1` o `Admin1` | Tabla de eventos con búsqueda por usuario y fecha |
+| Cobertura total | `Reviewstore1` | Cualquier afordancia debe estar visible |
+
+### Cómo reportar un fallo de RBAC
+
+Si una cuenta ve algo que **no** debería, o **no** ve algo que sí
+debería, abre issue en
+[`custodiam-app`](https://github.com/custodiam/custodiam-app/issues)
+si es el UI quien filtra mal, o en
+[`custodiam-api`](https://github.com/custodiam/custodiam-api/issues)
+si es el backend quien devuelve 200 cuando debería devolver 403.
+Adjunta:
+
+- Cuenta con la que reprodujiste (`<Rol>1@test.com`).
+- Ruta o pantalla.
+- Afordancia esperada vs la observada.
+- Captura de pantalla si aplica.
+
+La matriz canónica de permisos por rol vive en el código (los dos
+archivos enlazados arriba en "Roles del realm `custodiam`");
+cualquier divergencia entre lo que el código dice y lo que el UI
+ofrece es un bug del UI o del backend, no de la matriz.
+
 ## Los 7 usuarios que crea el seed
 
 Todas las cuentas siguen el patrón triple-igual **username = password = email = `<Rol>1@test.com`**. Es deliberadamente débil porque las credenciales aparecen en esta página pública y, en el caso de `Reviewstore1@test.com`, en la submission de Google Play y Apple App Store. No es una postura sobre seguridad real de producción: estas cuentas son **sacrificables** y solo se usan para QA del equipo, evaluación interna y review de las stores. Las cuentas humanas de una agrupación que adopte Custodiam se crean por el flujo normal de alta de voluntario, no por este seed.
