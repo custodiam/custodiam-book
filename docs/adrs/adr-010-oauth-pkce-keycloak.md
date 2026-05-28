@@ -79,7 +79,7 @@ Custodiam requiere autenticación con tres clientes simultáneos: aplicación m�
 - **Dos clientes registrados en Keycloak**: `custodiam-app` (público, sin secret, con PKCE obligatorio, *redirect URIs* para los tres canales) y `custodiam-api` (confidencial, con secret, usado solo por el backend para llamar a la Admin API).
 - **Tiempos de sesión configurados**: access token 15 minutos, SSO Idle 24 horas, SSO Max 24 horas, Client login timeout 5 minutos. El refresh token rotation activado.
 - **Validación JWT en backend**: implementada en `app/core/security.py` con `PyJWKClient` cacheando claves cinco minutos. Errores tipados: `ExpiredSignatureError`, `InvalidIssuerError`, `PyJWKClientError`, `InvalidTokenError` → HTTP 401.
-- **Asimetría móvil/web del flujo OAuth**: el cliente Flutter mantiene dos implementaciones de `AuthService` seleccionadas por `kIsWeb` (ADR-023, pendiente de publicación). La razón es que el navegador no soporta deep links del SO; la SPA redirige completamente al IdP y persiste el `code_verifier` en `sessionStorage` para sobrevivir el viaje de ida y vuelta.
+- **Asimetría móvil/web del flujo OAuth**: el cliente Flutter mantiene dos implementaciones de `AuthService` seleccionadas por `kIsWeb` ([ADR-023](adr-023-oauth-web-asimetria.md)). La razón es que el navegador no soporta deep links del SO; la SPA redirige completamente al IdP y persiste el `code_verifier` en `sessionStorage` para sobrevivir el viaje de ida y vuelta.
 - **RBAC en lockstep**: los roles del realm Keycloak se traducen a una matriz rol→permisos definida en `app/core/permissions.py` y espejada en `lib/infrastructure/auth/permissions.dart` ([ADR-013](adr-013-rbac-lockstep.md)).
 
 ## Referencias
