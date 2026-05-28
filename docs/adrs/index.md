@@ -31,6 +31,7 @@ Todas las ADRs siguen el mismo esquema:
 | **[ADR-013](adr-013-rbac-lockstep.md)** | RBAC en lockstep front/back | Matriz rol→permisos replicada en código (Python + Dart); JWT solo transporta roles | 24-feb-2026 |
 | **[ADR-025](adr-025-modelo-extensible.md)** | Modelo de datos extensible | Patrón "catálogo + instancias + JSONB + enum discriminador" para entidades con tipos predefinidos ampliables | 10-mar-2026 |
 | **[ADR-020](adr-020-tres-modos-despliegue.md)** | Tres modos de despliegue | Stack en exactamente uno de `dev` / `tunnel` / `prod`; tres scripts simétricos con guard de cross-mode | 05-may-2026 |
+| **[ADR-021](adr-021-smtp-resend.md)** | SMTP transaccional con Resend | Resend (AWS SES eu-west-1) para emails transaccionales del realm Keycloak; tracking opt-in OFF preserva los App Links | 12-may-2026 |
 | **[ADR-024](adr-024-patrol-e2e.md)** | Patrol como framework E2E unificado | Patrol 4.6+ sustituye `integration_test`; pirámide en tres capas (unit / integración / E2E) | 22-may-2026 |
 | **[ADR-026](adr-026-uv.md)** | uv como gestor de paquetes Python | `pyproject.toml` PEP 621 + `uv.lock` + Python 3.13 gestionado por uv; ~10× más rápido que pip | 24-may-2026 |
 | **[ADR-027](adr-027-mkdocs-pages.md)** | Material for MkDocs + GitHub Pages | Book público en repo separado; hosting GitHub Pages directo + dominio `docs.custodiam.es` vía Cloudflare DNS modo `DNS only` | 26-may-2026 |
