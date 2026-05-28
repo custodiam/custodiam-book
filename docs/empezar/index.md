@@ -25,6 +25,10 @@ Esta sección reúne las guías para levantar cada uno de los tres repositorios 
 
     Levantar todo el stack (PostgreSQL + Keycloak + API + Web + ntfy) en un solo comando con `custodiam-infra`.
 
+- :material-account-key: **[Usuarios de prueba](usuarios-prueba.md)**
+
+    Credenciales seed, matriz de capacidades por rol y protocolo de prueba para validar el RBAC de un vistazo.
+
 </div>
 
 ## Requisitos previos comunes
