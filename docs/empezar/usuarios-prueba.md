@@ -94,7 +94,7 @@ afordancia.
 
 ## Los 7 usuarios que crea el seed
 
-Todas las cuentas siguen el patrón triple-igual **username = password = email = `<Rol>1@test.com`**. Es deliberadamente débil porque las credenciales aparecen en esta página pública y, en el caso de `Reviewstore1@test.com`, en la submission de Google Play y Apple App Store. No es una postura sobre seguridad real de producción: estas cuentas son **sacrificables** y solo se usan para QA del equipo, defensa académica y review de las stores. Las cuentas humanas de una agrupación que adopte Custodiam se crean por el flujo normal de alta de voluntario, no por este seed.
+Todas las cuentas siguen el patrón triple-igual **username = password = email = `<Rol>1@test.com`**. Es deliberadamente débil porque las credenciales aparecen en esta página pública y, en el caso de `Reviewstore1@test.com`, en la submission de Google Play y Apple App Store. No es una postura sobre seguridad real de producción: estas cuentas son **sacrificables** y solo se usan para QA del equipo, evaluación interna y review de las stores. Las cuentas humanas de una agrupación que adopte Custodiam se crean por el flujo normal de alta de voluntario, no por este seed.
 
 El patrón concreto cumple la `passwordPolicy` del realm `custodiam` (`length(8) and upperCase(1) and digits(1)`) sin necesidad de relajarla: la mayúscula inicial cubre `upperCase(1)`, el dígito `1` cubre `digits(1)` y la longitud del string sobra para `length(8)`. Usar el mismo string en los tres campos (username, password, email) reduce errores de copia/pega en QA y deja a los reviewers de las stores con un dato único que recordar por cuenta.
 
@@ -113,7 +113,7 @@ El patrón concreto cumple la `passwordPolicy` del realm `custodiam` (`length(8)
 `Reviewstore1@test.com` y `Superadmin1@test.com` tienen capacidades idénticas pero distinta **audiencia**. Esa separación permite rotar credenciales o eliminar una sin afectar a la otra:
 
 - **`Reviewstore1@test.com`** es visible a los revisores externos de Google Play y Apple. Su existencia y su password aparecen en la submission ("Sign-in Info" de App Store Connect y "Acceso a la aplicación" de Google Play Console). Si en algún momento los reviewers reportan algo o cambiamos a otro mecanismo de review (test track, internal testing con cuentas reales), `Reviewstore1@test.com` se borra de Keycloak sin tocar nada más.
-- **`Superadmin1@test.com`** es para uso interno del equipo durante la fase de defensa académica y piloto. Permite que un miembro del equipo pueda entrar a administrar el sistema en cualquier momento sin depender de las credenciales que se le pasaron a los reviewers.
+- **`Superadmin1@test.com`** es para uso interno del equipo durante la fase piloto. Permite que un miembro del equipo pueda entrar a administrar el sistema en cualquier momento sin depender de las credenciales que se le pasaron a los reviewers.
 
 ### Por qué `admin` SÍ tiene fila en BD
 
@@ -210,7 +210,7 @@ verificarlos:
   devuelve 502.
 - **Historial de cambios del voluntario** — requiere la tabla
   `voluntario_evento` (audit log) que aún no existe en BD; está
-  planificado en EN-02-04 para Sprint 5.
+  planificado para una iteración posterior del módulo de Voluntarios.
 
 ## Referencias
 
