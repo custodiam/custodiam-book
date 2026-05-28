@@ -141,6 +141,7 @@ nav:
       - ADR-010 OAuth + PKCE + Keycloak: adrs/adr-010-oauth-pkce-keycloak.md
       - ADR-011 Deep links: adrs/adr-011-deep-links.md
       - ADR-013 RBAC lockstep: adrs/adr-013-rbac-lockstep.md
+      - ADR-020 Tres modos de despliegue: adrs/adr-020-tres-modos-despliegue.md
       - ADR-024 Patrol E2E: adrs/adr-024-patrol-e2e.md
       - ADR-025 Modelo extensible: adrs/adr-025-modelo-extensible.md
       - ADR-026 uv: adrs/adr-026-uv.md
