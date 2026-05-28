@@ -10,7 +10,7 @@ description: >-
 | Campo | Valor |
 |---|---|
 | **Estado** | Aceptado |
-| **Fecha** | 30 de enero de 2026 |
+| **Fecha** | 5 de febrero de 2026 |
 | **Decisores** | Equipo Custodiam |
 
 ## Contexto
