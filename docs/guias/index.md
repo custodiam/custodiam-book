@@ -17,9 +17,9 @@ Esta sección recoge **guías técnicas paso a paso** para operar el sistema. Ca
 
     Levantar el stack completo (PostgreSQL + Keycloak + API + Web + ntfy) con Docker Compose. Tres modos mutuamente excluyentes (dev / tunnel / prod), setup desde cero, estrategia de imágenes, comandos útiles y troubleshooting completo.
 
-- :material-key-variant: **Configuración de Keycloak**
+- :material-key-variant: **[Configuración de Keycloak](configuracion-keycloak.md)**
 
-    Realm `custodiam`, clientes OIDC (`custodiam-app` público con PKCE obligatorio, `custodiam-api` confidencial), roles, usuarios de prueba, integración SMTP transaccional. Cubierto en **[Usuarios de prueba](../empezar/usuarios-prueba.md)** y en el realm exportado de `custodiam-infra`.
+    Realm `custodiam` desde cero: política HTTPS, `KC_HOSTNAME` por entorno, SMTP transaccional con Resend, los 12 roles funcionales, cliente confidencial `custodiam-api`, cliente público `custodiam-app` con PKCE S256 obligatorio, usuarios de prueba, exportación del realm. Troubleshooting completo y referencia de endpoints OIDC.
 
 - :material-language-python: **Setup FastAPI con uv**
 

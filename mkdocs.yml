@@ -166,5 +166,6 @@ nav:
   - Guías:
       - guias/index.md
       - Docker Compose local: guias/docker-compose-local.md
+      - Configuración de Keycloak: guias/configuracion-keycloak.md
   - Contribuir:
       - contribuir/index.md
