@@ -138,9 +138,15 @@ nav:
       - adrs/index.md
       - ADR-001 Polyrepo: adrs/adr-001-polyrepo.md
       - ADR-002 SQLModel: adrs/adr-002-sqlmodel.md
+      - ADR-003 Alembic: adrs/adr-003-alembic.md
+      - ADR-006 Nginx Alpine: adrs/adr-006-nginx-alpine.md
+      - ADR-007 GHCR: adrs/adr-007-ghcr.md
+      - ADR-008 psycopg3: adrs/adr-008-psycopg3.md
+      - ADR-009 2 BDs separadas: adrs/adr-009-2-bds-separadas.md
       - ADR-010 OAuth + PKCE + Keycloak: adrs/adr-010-oauth-pkce-keycloak.md
       - ADR-011 Deep links: adrs/adr-011-deep-links.md
       - ADR-013 RBAC lockstep: adrs/adr-013-rbac-lockstep.md
+      - ADR-019 sops + age: adrs/adr-019-sops-age.md
       - ADR-020 Tres modos de despliegue: adrs/adr-020-tres-modos-despliegue.md
       - ADR-021 SMTP Resend: adrs/adr-021-smtp-resend.md
       - ADR-022 iOS 15 mínimo: adrs/adr-022-ios-15.md
