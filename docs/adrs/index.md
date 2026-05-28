@@ -33,16 +33,15 @@ Todas las ADRs siguen el mismo esquema:
 | **[ADR-020](adr-020-tres-modos-despliegue.md)** | Tres modos de despliegue | Stack en exactamente uno de `dev` / `tunnel` / `prod`; tres scripts simétricos con guard de cross-mode | 05-may-2026 |
 | **[ADR-021](adr-021-smtp-resend.md)** | SMTP transaccional con Resend | Resend (AWS SES eu-west-1) para emails transaccionales del realm Keycloak; tracking opt-in OFF preserva los App Links | 12-may-2026 |
 | **[ADR-022](adr-022-ios-15.md)** | Versión mínima de iOS soportada | iOS 15.0 como mínimo (`Podfile` + `project.pbxproj`); forzado por Firebase iOS SDK 12.x | 15-may-2026 |
+| **[ADR-023](adr-023-oauth-web-asimetria.md)** | OAuth + PKCE en SPA web vs móvil | Dos implementaciones de `AuthService` por `kIsWeb` + persistencia del `code_verifier` en `sessionStorage` | 20-may-2026 |
 | **[ADR-024](adr-024-patrol-e2e.md)** | Patrol como framework E2E unificado | Patrol 4.6+ sustituye `integration_test`; pirámide en tres capas (unit / integración / E2E) | 22-may-2026 |
 | **[ADR-026](adr-026-uv.md)** | uv como gestor de paquetes Python | `pyproject.toml` PEP 621 + `uv.lock` + Python 3.13 gestionado por uv; ~10× más rápido que pip | 24-may-2026 |
 | **[ADR-027](adr-027-mkdocs-pages.md)** | Material for MkDocs + GitHub Pages | Book público en repo separado; hosting GitHub Pages directo + dominio `docs.custodiam.es` vía Cloudflare DNS modo `DNS only` | 26-may-2026 |
 
 !!! info "Más ADRs en camino"
-    El proyecto tiene **27 ADRs documentados internamente** (ADR-001 a ADR-027 al cierre del Sprint 4). Se irán publicando aquí progresivamente conforme alcancen versión final y se confirme que son aptas para audiencia externa.
+    El proyecto tiene 27 ADRs documentados internamente. Esta sección publica las aptas para audiencia externa conforme alcancen versión final.
 
-    Próximas ADRs a publicar:
-
-    - ADR-023 — Asimetría OAuth web vs móvil (dos `AuthService` por `kIsWeb`).
+    Próximas ADRs a publicar: ADR-003 a ADR-009 (decisiones de stack y registro Docker), ADR-012 a ADR-019 (arquitectura interna del cliente Flutter, gestión de secretos).
 
 ## Para contribuidores
 

@@ -117,7 +117,7 @@ sequenceDiagram
 ```
 
 !!! info "Asimetría móvil/web — ADR-023"
-    La diferencia clave entre móvil y web: en móvil la app sobrevive la redirección al IdP (deep link vuelve a la misma instancia con el `_pendingGrant` intacto en memoria); en web, la navegación a Keycloak recarga la PWA completa, perdiendo el estado en memoria. Por eso web necesita persistir el `code_verifier` en `sessionStorage` antes de redirigir. Se implementa con dos `AuthService` distintos seleccionados vía `kIsWeb`. Detalle completo en [ADR-023 del repo privado].
+    La diferencia clave entre móvil y web: en móvil la app sobrevive la redirección al IdP (deep link vuelve a la misma instancia con el `_pendingGrant` intacto en memoria); en web, la navegación a Keycloak recarga la PWA completa, perdiendo el estado en memoria. Por eso web necesita persistir el `code_verifier` en `sessionStorage` antes de redirigir. Se implementa con dos `AuthService` distintos seleccionados vía `kIsWeb`. Detalle completo en [ADR-023](../adrs/adr-023-oauth-web-asimetria.md).
 
 ## Flujo de notificación de emergencia
 

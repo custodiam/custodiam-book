@@ -16,7 +16,7 @@ description: >-
 
 ## Contexto
 
-El refactor del flujo OAuth web (ADR-023, pendiente de publicación) cerró cuatro capas de asimetría móvil/web y dejó la PWA pública operativa, pero los tres escenarios del DoD (login feliz end-to-end, llegada huérfana a `/callback`, `sessionStorage` deshabilitado) quedaron cubiertos exclusivamente en **verificación manual**. Los tests automatizados del repositorio (`flutter test` puro contra `InMemorySessionStorageGateway`) se acercaban al flujo pero ninguno corría dentro de un browser real.
+El refactor del flujo OAuth web ([ADR-023](adr-023-oauth-web-asimetria.md)) cerró cuatro capas de asimetría móvil/web y dejó la PWA pública operativa, pero los tres escenarios del DoD (login feliz end-to-end, llegada huérfana a `/callback`, `sessionStorage` deshabilitado) quedaron cubiertos exclusivamente en **verificación manual**. Los tests automatizados del repositorio (`flutter test` puro contra `InMemorySessionStorageGateway`) se acercaban al flujo pero ninguno corría dentro de un browser real.
 
 Mientras esa cobertura quede manual, cualquier regresión futura en el flujo de autenticación web —el camino de entrada principal a la PWA— pasaría inadvertida hasta el siguiente ciclo de QA manual. El riesgo no es teórico: las cuatro capas de asimetría de la propia PWA fueron silenciosamente acumulables y se descubrieron en orden estrictamente lineal porque cada una bloqueaba la siguiente. Sin red automatizada en browser real, una quinta capa se detectaría con el mismo coste (incidente en producción).
 
@@ -135,4 +135,4 @@ Aceptado porque las cuatro capas de asimetría documentadas en ADR-023 se manife
 - **[Patrol Web — superficie del WebAutomator](https://patrol.leancode.co/web)**
 - **[Patrol GitHub](https://github.com/leancodepl/patrol)** — código fuente, issues, changelog.
 - **[Playwright](https://playwright.dev/)** — herramienta que Patrol usa para web.
-- **ADR-023 Asimetría OAuth web vs móvil** (pendiente de publicación) — patrón que motivó la necesidad de E2E real.
+- **[ADR-023 Asimetría OAuth web vs móvil](adr-023-oauth-web-asimetria.md)** — patrón que motivó la necesidad de E2E real.
