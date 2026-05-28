@@ -139,6 +139,7 @@ nav:
       - ADR-001 Polyrepo: adrs/adr-001-polyrepo.md
       - ADR-002 SQLModel: adrs/adr-002-sqlmodel.md
       - ADR-010 OAuth + PKCE + Keycloak: adrs/adr-010-oauth-pkce-keycloak.md
+      - ADR-011 Deep links: adrs/adr-011-deep-links.md
       - ADR-013 RBAC lockstep: adrs/adr-013-rbac-lockstep.md
       - ADR-024 Patrol E2E: adrs/adr-024-patrol-e2e.md
       - ADR-025 Modelo extensible: adrs/adr-025-modelo-extensible.md

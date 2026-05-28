@@ -27,6 +27,7 @@ Todas las ADRs siguen el mismo esquema:
 | **[ADR-001](adr-001-polyrepo.md)** | Estructura polyrepo | Tres repos de código independientes (app, api, infra) bajo organización GitHub `custodiam` | 25-ene-2026 |
 | **[ADR-002](adr-002-sqlmodel.md)** | SQLModel como ORM unificado | Una sola clase es tabla SQL + schema Pydantic; elimina duplicación entre `app/models/` y `app/schemas/` | 05-feb-2026 |
 | **[ADR-010](adr-010-oauth-pkce-keycloak.md)** | OAuth 2.0 + PKCE + Keycloak + PyJWT | Authorization Code + PKCE para clientes públicos; validación JWT local con `azp` check (RFC 9068) | 12-feb-2026 |
+| **[ADR-011](adr-011-deep-links.md)** | Estrategia de deep links | Custom scheme `es.custodiam://callback` para OAuth + App Links / Universal Links HTTPS para emails y notificaciones | 18-feb-2026 |
 | **[ADR-013](adr-013-rbac-lockstep.md)** | RBAC en lockstep front/back | Matriz rol→permisos replicada en código (Python + Dart); JWT solo transporta roles | 24-feb-2026 |
 | **[ADR-025](adr-025-modelo-extensible.md)** | Modelo de datos extensible | Patrón "catálogo + instancias + JSONB + enum discriminador" para entidades con tipos predefinidos ampliables | 10-mar-2026 |
 | **[ADR-024](adr-024-patrol-e2e.md)** | Patrol como framework E2E unificado | Patrol 4.6+ sustituye `integration_test`; pirámide en tres capas (unit / integración / E2E) | 22-may-2026 |
