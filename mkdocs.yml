@@ -168,5 +168,6 @@ nav:
       - Docker Compose local: guias/docker-compose-local.md
       - Configuración de Keycloak: guias/configuracion-keycloak.md
       - Setup FastAPI con uv: guias/setup-fastapi-uv.md
+      - Cliente OIDC en Flutter: guias/flutter-oidc.md
   - Contribuir:
       - contribuir/index.md
