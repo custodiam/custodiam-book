@@ -11,7 +11,7 @@ description: >-
 | Campo | Valor |
 |---|---|
 | **Estado** | Aceptado |
-| **Fecha** | 26 de mayo de 2026 |
+| **Fecha** | 10 de marzo de 2026 |
 | **Decisores** | Equipo Custodiam |
 
 ## Contexto
