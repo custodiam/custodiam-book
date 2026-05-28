@@ -165,5 +165,6 @@ nav:
       - ADR-027 MkDocs + Pages: adrs/adr-027-mkdocs-pages.md
   - Guías:
       - guias/index.md
+      - Docker Compose local: guias/docker-compose-local.md
   - Contribuir:
       - contribuir/index.md
