@@ -167,5 +167,6 @@ nav:
       - guias/index.md
       - Docker Compose local: guias/docker-compose-local.md
       - Configuración de Keycloak: guias/configuracion-keycloak.md
+      - Setup FastAPI con uv: guias/setup-fastapi-uv.md
   - Contribuir:
       - contribuir/index.md

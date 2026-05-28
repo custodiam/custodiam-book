@@ -21,9 +21,9 @@ Esta sección recoge **guías técnicas paso a paso** para operar el sistema. Ca
 
     Realm `custodiam` desde cero: política HTTPS, `KC_HOSTNAME` por entorno, SMTP transaccional con Resend, los 12 roles funcionales, cliente confidencial `custodiam-api`, cliente público `custodiam-app` con PKCE S256 obligatorio, usuarios de prueba, exportación del realm. Troubleshooting completo y referencia de endpoints OIDC.
 
-- :material-language-python: **Setup FastAPI con uv**
+- :material-language-python: **[Setup FastAPI con uv](setup-fastapi-uv.md)**
 
-    Clonado, `uv sync`, migraciones Alembic, arranque con hot reload, tests, linter. Cubierto en **[Empezar → Backend API](../empezar/api.md)**.
+    Configurar `custodiam-api` desde cero: entorno con uv 0.9+, estructura del proyecto, `pyproject.toml` PEP 621, código base (config, BD, main, tests), migraciones Alembic, linter ruff, variables de entorno. Comandos esenciales y troubleshooting.
 
 - :material-flutter: **Flutter OIDC**
 
