@@ -20,7 +20,7 @@ Esta página recoge los **flujos operativos centrales** de Custodiam tal como lo
 | **Tesorero** | Acceso a métricas de actividad para gestión económica. |
 | **Admin** | Configuración técnica, backups, exportaciones RGPD. **No tiene capacidades operativas por sí mismo** ([ADR-013](../adrs/adr-013-rbac-lockstep.md)). |
 
-La matriz completa rol → permisos vive en `RBAC_v0.1.0` del repo privado y está espejada en código backend (Python) y cliente (Dart) en lockstep.
+La matriz completa rol → permisos está espejada en código backend (Python) y cliente (Dart) en lockstep ([ADR-013](../adrs/adr-013-rbac-lockstep.md)). Cada rol tiene un subconjunto explícito de los cuarenta permisos atómicos del catálogo.
 
 ## Ciclo del voluntario
 
@@ -153,7 +153,7 @@ flowchart TB
 - **GPS opcional**: el voluntario puede compartir ubicación al fichar (para validación de presencia física), pero no es obligatorio. La aplicación pide permiso explícito y guarda preferencia.
 - **Offline-first**: si el voluntario está sin cobertura al fichar (situación habitual en zonas rurales o eventos masivos), el fichaje se persiste en SQLite local del dispositivo y se sincroniza al volver online.
 
-## Inventario (epic E05, pendiente F2)
+## Inventario (módulo previsto en fase Beta)
 
 El módulo de inventario gestiona material y vehículos de la agrupación: alta, asignación a voluntarios o servicios, revisión de mantenimiento, baja por desgaste.
 

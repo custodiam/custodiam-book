@@ -82,7 +82,7 @@ fix(api): handle missing telefono in voluntario create payload
 
 docs(book): add ADR-001 explaining polyrepo structure
 
-chore(tooling): migrate to uv as package manager (EN-08-36)
+chore(tooling): migrate to uv as package manager
 ```
 
 ## Licencia y propiedad intelectual

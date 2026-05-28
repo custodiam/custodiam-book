@@ -7,7 +7,7 @@ description: >-
 
 # ADRs — Architecture Decision Records
 
-Los ADRs son el registro permanente de las decisiones arquitectónicas tomadas durante el desarrollo. Cada uno documenta el contexto, la decisión, las alternativas evaluadas y las implicaciones operativas. Esta sección publica las ADRs aptas para audiencia externa; el repo privado del equipo conserva las versiones extendidas con material académico interno.
+Los ADRs son el registro permanente de las decisiones arquitectónicas tomadas durante el desarrollo. Cada uno documenta el contexto, la decisión, las alternativas evaluadas y las implicaciones operativas.
 
 ## Patrón estructural común
 

@@ -139,7 +139,7 @@ sequenceDiagram
         FCM-->>Volunt: Push notification<br/>(notificación + datos del servicio)
         Note over Volunt: Voluntario toca → abre app en pantalla del servicio
     else FCM falla o timeout > 5s
-        API->>NTFY: Publica al canal /custodiam-emergencia<br/>(fallback ADR-005)
+        API->>NTFY: Publica al canal /custodiam-emergencia<br/>(canal de respaldo)
         NTFY-->>Volunt: Push via ntfy<br/>(canal secundario)
         Note over API: Log de fallo de FCM<br/>+ telemetría para análisis
     end

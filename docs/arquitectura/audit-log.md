@@ -111,7 +111,7 @@ El audit log es **el mecanismo de cumplimiento del derecho de acceso del RGPD ar
 
 ## Lección operativa registrada
 
-El patrón "tabla genérica + helper privado con imports diferidos" se aplicó por primera vez al implementar el módulo de voluntarios (Epic E02, Sprint 4). Antes había una tentación de hacer `audit_log` "un módulo dependiente de cada uno" o "un módulo del que dependen todos", con resultados igualmente malos (dependencias cíclicas en el primer caso, acoplamiento fuerte en el segundo). El patrón actual se documentó como lección operativa interna del proyecto y se aplicará por defecto en módulos futuros (servicios, fichajes, inventario, notificaciones).
+El patrón "tabla genérica + helper privado con imports diferidos" se aplicó por primera vez al implementar el módulo de voluntarios. Antes había una tentación de hacer `audit_log` "un módulo dependiente de cada uno" o "un módulo del que dependen todos", con resultados igualmente malos (dependencias cíclicas en el primer caso, acoplamiento fuerte en el segundo). El patrón actual se aplica por defecto en los siguientes módulos del backend (servicios, fichajes, inventario, notificaciones).
 
 ## Referencias
 
