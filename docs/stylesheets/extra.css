@@ -29,3 +29,19 @@
 .md-grid {
   max-width: 1440px;
 }
+
+/* Términos del glosario auto-linkeados desde el hook hooks/glosario.py.
+ * Estilo discreto: subrayado punteado en el color de acento, sin pintar
+ * el fondo ni cambiar el peso. Ligeramente más visible al hacer hover.
+ */
+.md-typeset a.glossary-term {
+  color: inherit;
+  text-decoration: underline dotted var(--md-accent-fg-color);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+.md-typeset a.glossary-term:hover {
+  color: var(--md-accent-fg-color);
+  text-decoration-thickness: 1.5px;
+}

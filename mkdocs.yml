@@ -53,8 +53,6 @@ theme:
     - content.tooltips
     - navigation.footer
     - navigation.indexes
-    - navigation.instant
-    - navigation.instant.progress
     - navigation.top
     - navigation.tracking
     - search.highlight
@@ -81,6 +79,9 @@ plugins:
   - mermaid2:
       version: 11.4.1
 
+hooks:
+  - hooks/glosario.py
+
 markdown_extensions:
   - abbr
   - admonition
@@ -106,7 +107,11 @@ markdown_extensions:
   - pymdownx.keys
   - pymdownx.mark
   - pymdownx.smartsymbols
-  - pymdownx.snippets
+  - pymdownx.snippets:
+      auto_append:
+        - includes/abreviaturas.md
+      base_path:
+        - docs
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -169,5 +174,6 @@ nav:
       - Configuración de Keycloak: guias/configuracion-keycloak.md
       - Setup FastAPI con uv: guias/setup-fastapi-uv.md
       - Cliente OIDC en Flutter: guias/flutter-oidc.md
+  - Glosario: glosario.md
   - Contribuir:
       - contribuir/index.md
