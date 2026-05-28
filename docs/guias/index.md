@@ -13,9 +13,9 @@ Esta sección recoge **guías técnicas paso a paso** para operar el sistema. Ca
 
 <div class="grid cards" markdown>
 
-- :material-docker: **Docker Compose local**
+- :material-docker: **[Docker Compose local](docker-compose-local.md)**
 
-    Levantar el stack completo (PostgreSQL + Keycloak + API + Web + ntfy) en local con `just dev` o `./scripts/dev-up.sh`. Tres modos mutuamente excluyentes (dev / tunnel / prod). Cubierto operativamente en el recorrido **[Empezar → Infraestructura](../empezar/infra.md)**.
+    Levantar el stack completo (PostgreSQL + Keycloak + API + Web + ntfy) con Docker Compose. Tres modos mutuamente excluyentes (dev / tunnel / prod), setup desde cero, estrategia de imágenes, comandos útiles y troubleshooting completo.
 
 - :material-key-variant: **Configuración de Keycloak**
 
