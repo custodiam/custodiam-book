@@ -138,14 +138,22 @@ filtrado donde no debería".
     - Útil para confirmar que el `AppPermissionGate` no se "rompe" en
       perfiles solo-lectura.
 
-5. **`Admin1@test.com`** — admin técnico puro.
+5. **`Secretario1@test.com`** — administrativo no operativo.
+    - Gestión de voluntarios disponible: `/voluntarios/alta`, ficha en
+      modo edición, cambio de rol y baja.
+    - Crear servicio preventivo disponible; **crear servicio de
+      emergencia** y **convocar** quedan ocultos.
+    - Útil para validar el subconjunto "secretaría" del coordinador
+      sin caer en el dominio de comando operativo.
+
+6. **`Admin1@test.com`** — admin técnico puro.
     - Panel admin técnico accesible (configuración, backups, logs).
     - `/mi-perfil` y `/voluntarios` muestran "Sin acceso": `admin`
       no es un rol del dominio operativo.
     - Sirve para validar el contraste con `coordinador` documentado
       más arriba.
 
-6. **`Reviewstore1@test.com`** — cobertura total.
+7. **`Reviewstore1@test.com`** — cobertura total.
     - Última cuenta del recorrido. Tiene la unión de todos los
       permisos operativos y técnicos.
     - Si esta cuenta NO ve algo que debería ver, hay un bug de RBAC
@@ -163,10 +171,10 @@ tabla mapea cada flujo crítico a la cuenta mínima necesaria:
 | Ver mi perfil | `Voluntario1` | `/mi-perfil` muestra los datos del propio voluntario |
 | Listar voluntarios | `Voluntario1` | `/voluntarios` muestra lista, **sin** botón "Nuevo" |
 | Ficha ajena en lectura | `Jefeequipo1` | Abre `/voluntarios/{id}`, **sin** botón Editar |
-| Crear voluntario | `Coordinador1` | `/voluntarios/alta` accesible, alta crea usuario en Keycloak + fila en BD |
-| Editar voluntario | `Coordinador1` | La ficha abre en modo edición y persiste cambios |
-| Cambiar rol | `Coordinador1` | Selector de rol en la ficha, asignación persistente |
-| Dar de baja (soft delete) | `Coordinador1` | `deleted_at` se setea; el voluntario desaparece de la lista |
+| Crear voluntario | `Coordinador1` o `Secretario1` | `/voluntarios/alta` accesible, alta crea usuario en Keycloak + fila en BD |
+| Editar voluntario | `Coordinador1` o `Secretario1` | La ficha abre en modo edición y persiste cambios |
+| Cambiar rol | `Coordinador1` o `Secretario1` | Selector de rol en la ficha, asignación persistente |
+| Dar de baja (soft delete) | `Coordinador1` o `Secretario1` | `deleted_at` se setea; el voluntario desaparece de la lista |
 | Anonimizar (Art. 17 RGPD) | `Coordinador1` o `Admin1` | PII pisada con valores neutros, `keycloak_id` se conserva |
 | Crear servicio preventivo | `Jefeequipo1` | Formulario "Nuevo servicio", tipo preventivo, convocatoria |
 | Panel admin técnico | `Admin1` | `/admin/*` accesible; dominio operativo NO accesible |
@@ -193,7 +201,7 @@ archivos enlazados arriba en "Roles del realm `custodiam`");
 cualquier divergencia entre lo que el código dice y lo que el UI
 ofrece es un bug del UI o del backend, no de la matriz.
 
-## Los 7 usuarios que crea el seed
+## Los 8 usuarios que crea el seed
 
 Todas las cuentas siguen el patrón triple-igual **username = password = email = `<Rol>1@test.com`**. Es deliberadamente débil porque las credenciales aparecen en esta página pública y, en el caso de `Reviewstore1@test.com`, en la submission de Google Play y Apple App Store. No es una postura sobre seguridad real de producción: estas cuentas son **sacrificables** y solo se usan para QA del equipo, evaluación interna y review de las stores. Las cuentas humanas de una agrupación que adopte Custodiam se crean por el flujo normal de alta de voluntario, no por este seed.
 
@@ -205,6 +213,7 @@ El patrón concreto cumple la `passwordPolicy` del realm `custodiam` (`length(8)
 | `Jefeequipo1@test.com` | `jefe_equipo` | sí · asignación `jefe_equipo` | Todo lo anterior + ficha `/voluntarios/{id}` en **read-only** (ver_ficha sí, editar no) + banner "Comando operativo" en `/home` |
 | `Coordinador1@test.com` | `coordinador` | sí · asignación `coordinador` | Admin operativo completo: `/voluntarios/alta`, ficha en modo edición, cambio de rol, todos los iconos del home |
 | `Tesorero1@test.com` | `tesorero` | sí · asignación `tesorero` | Caso edge: lista y ficha sí, editar y crear no — útil para validar el split read/write |
+| `Secretario1@test.com` | `secretario` | sí · asignación `secretario` | Subconjunto administrativo del coordinador: gestión de voluntarios (alta, edición, baja, cambio de rol) y servicios preventivos; sin servicios de emergencia ni convocatoria |
 | `Admin1@test.com` | `admin` | sí · asignación `admin` | Flujos del admin técnico (permisos `sistema.*`): panel admin, configuración, logs, backups, exportar RGPD |
 | `Reviewstore1@test.com` | `coordinador` + `admin` | sí · asignación `coordinador` | **Cuenta para revisión de Google Play y Apple App Store.** Cobertura total: union de todos los permisos operativos del coordinador con los `sistema.*` del admin |
 | `Superadmin1@test.com` | `coordinador` + `admin` | sí · asignación `coordinador` | Cuenta de emergencia del equipo: misma cobertura que `Reviewstore1@test.com` pero distinta audiencia, para administración interna del piloto |
@@ -268,7 +277,7 @@ Salida esperada:
     granting realm role 'voluntario'
 ==> Ensuring BD row for kc_id <uuid> (rol voluntario)
 ...
-==> Done. 7 test users seeded.
+==> Done. 8 test users seeded.
 ```
 
 ### Idempotencia
