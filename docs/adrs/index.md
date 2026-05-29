@@ -51,9 +51,10 @@ Todas las ADRs siguen el mismo esquema:
 | **[ADR-024](adr-024-patrol-e2e.md)** | Patrol como framework E2E unificado | Patrol 4.6+ sustituye `integration_test`; pirámide en tres capas (unit / integración / E2E) | 22-may-2026 |
 | **[ADR-026](adr-026-uv.md)** | uv como gestor de paquetes Python | `pyproject.toml` PEP 621 + `uv.lock` + Python 3.13 gestionado por uv; ~10× más rápido que pip | 24-may-2026 |
 | **[ADR-027](adr-027-mkdocs-pages.md)** | Material for MkDocs + GitHub Pages | Book público en repo separado; hosting GitHub Pages directo + dominio `docs.custodiam.es` vía Cloudflare DNS modo `DNS only` | 26-may-2026 |
+| **[ADR-028](adr-028-valuekeys-tests.md)** | Catálogo central de ValueKeys para tests | Clase `K` en `lib/app/test_keys.dart` como fuente única del string de cada key; importable desde producción, tests de widget y E2E | 28-may-2026 |
 
 !!! success "Registro completo"
-    Los **27 ADRs** del registro arquitectónico están publicados en esta sección. Cualquier decisión arquitectónica futura se añadirá numerada como ADR-028 en adelante, siguiendo el mismo patrón estructural.
+    Los **28 ADRs** del registro arquitectónico están publicados en esta sección. Cualquier decisión arquitectónica futura se añadirá numerada como ADR-029 en adelante, siguiendo el mismo patrón estructural.
 
 ## Para contribuidores
 

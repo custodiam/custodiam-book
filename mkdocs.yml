@@ -168,6 +168,7 @@ nav:
       - ADR-025 Modelo extensible: adrs/adr-025-modelo-extensible.md
       - ADR-026 uv: adrs/adr-026-uv.md
       - ADR-027 MkDocs + Pages: adrs/adr-027-mkdocs-pages.md
+      - ADR-028 ValueKeys para tests: adrs/adr-028-valuekeys-tests.md
   - Guías:
       - guias/index.md
       - Docker Compose local: guias/docker-compose-local.md
