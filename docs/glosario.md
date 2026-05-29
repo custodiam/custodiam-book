@@ -879,6 +879,15 @@ dominio HTTPS a una app verificando la propiedad mediante un archivo
 directamente; si no, abre el navegador como fallback. Ver
 [ADR-011](adrs/adr-011-deep-links.md).
 
+### ValueKey { #valuekey }
+
+Identificador estable que se asigna a un widget de Flutter para que
+los tests lo localicen de forma fiable con `find.byKey(...)`, en
+lugar de depender del tipo o del texto visible. En Custodiam todas
+las ValueKey estables viven en una única clase `K`
+(`lib/app/test_keys.dart`), compartida entre las pantallas y los
+tests. Ver [ADR-028](adrs/adr-028-valuekeys-tests.md).
+
 ---
 
 ## Alternativas evaluadas y descartadas

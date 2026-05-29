@@ -99,6 +99,7 @@
 *[soft delete]: Borrado lógico (campo deleted_at) que mantiene la fila para histórico.
 *[SplashPage]: Pantalla inicial de la app durante el arranque, mientras corre AppStartup.
 *[Universal Links]: Mecanismo iOS análogo a App Links de Android, vía apple-app-site-association.
+*[ValueKey]: Clave estable de un widget Flutter para que los tests lo localicen con find.byKey.
 
 *[Auth0]: Plataforma SaaS de Identity-as-a-Service. ALTERNATIVA DESCARTADA en Custodiam (ADR-010).
 *[BLoC]: Patrón de gestión de estado por streams para Flutter. ALTERNATIVA DESCARTADA (ADR-012).
