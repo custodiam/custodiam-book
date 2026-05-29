@@ -219,3 +219,7 @@ __marimo__/
 
 # MkDocs build output
 site/
+
+# Claude Code (local, no commitear)
+.claude/
+CLAUDE.md
