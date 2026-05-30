@@ -52,9 +52,10 @@ Todas las ADRs siguen el mismo esquema:
 | **[ADR-026](adr-026-uv.md)** | uv como gestor de paquetes Python | `pyproject.toml` PEP 621 + `uv.lock` + Python 3.13 gestionado por uv; ~10× más rápido que pip | 24-may-2026 |
 | **[ADR-027](adr-027-mkdocs-pages.md)** | Material for MkDocs + GitHub Pages | Book público en repo separado; hosting GitHub Pages directo + dominio `docs.custodiam.es` vía Cloudflare DNS modo `DNS only` | 26-may-2026 |
 | **[ADR-028](adr-028-valuekeys-tests.md)** | Catálogo central de ValueKeys para tests | Clase `K` en `lib/app/test_keys.dart` como fuente única del string de cada key; importable desde producción, tests de widget y E2E | 28-may-2026 |
+| **[ADR-031](adr-031-material-vehiculo.md)** | Modelo de asignación de material a vehículo | `CheckConstraint` ternario ("exactamente uno de tres destinos") + FK `vehiculo_id` + enum `DOTACION_VEHICULO` para la dotación fija; material temporal inferido por servicio | 28-may-2026 |
 
-!!! success "Registro completo"
-    Los **28 ADRs** del registro arquitectónico están publicados en esta sección. Cualquier decisión arquitectónica futura se añadirá numerada como ADR-029 en adelante, siguiendo el mismo patrón estructural.
+!!! info "Sobre la numeración"
+    La numeración de los ADRs sigue el orden cronológico en que se tomaron las decisiones. Algunos números pueden corresponder a decisiones cuyo diseño está cerrado pero cuya implementación llega en fases posteriores; cada uno se publica cuando se materializa. Las decisiones futuras se añaden siguiendo el mismo patrón estructural.
 
 ## Para contribuidores
 
