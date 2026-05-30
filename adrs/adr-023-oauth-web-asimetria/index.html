@@ -1,0 +1,2385 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Dos implementaciones de AuthService seleccionadas por kIsWeb + persistencia del code_verifier en sessionStorage para la implementación web. La interfaz AuthService permanece invariante y el resto del cliente no ve la división.">
+      
+      
+        <meta name="author" content="Equipo Custodiam (Rodrigo Mulero, Marcos Val Sanz)">
+      
+      
+        <link rel="canonical" href="https://docs.custodiam.es/adrs/adr-023-oauth-web-asimetria/">
+      
+      
+        <link rel="prev" href="../adr-022-ios-15/">
+      
+      
+        <link rel="next" href="../adr-024-patrol-e2e/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>ADR-023 — Asimetría OAuth + PKCE en SPA web vs cliente móvil - Custodiam</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/mkdocs_d2_plugin.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#adr-023-asimetria-oauth-pkce-en-spa-web-vs-cliente-movil" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Custodiam" class="md-header__button md-logo" aria-label="Custodiam" data-md-component="logo">
+      
+  <img src="../../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Custodiam
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ADR-023 — Asimetría OAuth + PKCE en SPA web vs cliente móvil
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="blue-grey"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="orange"  aria-label="Cambiar al modo del sistema"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Cambiar al modo del sistema" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Compartir" aria-label="Compartir" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/custodiam/custodiam-book" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    custodiam/custodiam-book
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Custodiam" class="md-nav__button md-logo" aria-label="Custodiam" data-md-component="logo">
+      
+  <img src="../../assets/logo.svg" alt="logo">
+
+    </a>
+    Custodiam
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/custodiam/custodiam-book" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    custodiam/custodiam-book
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../empezar/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Empezar
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Empezar
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../empezar/api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend (API)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../empezar/app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    App (Flutter)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../empezar/infra/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infraestructura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../empezar/usuarios-prueba/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usuarios de prueba
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../arquitectura/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arquitectura
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Arquitectura
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arquitectura/stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stack técnico
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arquitectura/diagramas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrama del sistema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arquitectura/modelo-datos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modelo de datos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arquitectura/flujos-negocio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flujos de negocio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arquitectura/notificaciones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notificaciones redundantes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arquitectura/audit-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Audit log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADRs
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ADRs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-001-polyrepo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-001 Polyrepo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-002-sqlmodel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-002 SQLModel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-003-alembic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-003 Alembic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-004-http-cliente/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-004 Cliente HTTP Flutter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-005-sqflite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-005 sqflite
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-006-nginx-alpine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-006 Nginx Alpine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-007-ghcr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-007 GHCR
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-008-psycopg3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-008 psycopg3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-009-2-bds-separadas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-009 2 BDs separadas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-010-oauth-pkce-keycloak/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-010 OAuth + PKCE + Keycloak
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-011-deep-links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-011 Deep links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-012-riverpod/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-012 Riverpod
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-013-rbac-lockstep/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-013 RBAC lockstep
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-014-result-failure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-014 Result<T> + Failure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-015-env-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-015 EnvConfig
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-016-dev-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-016 dev.log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-017-splash-app-startup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-017 SplashPage + AppStartup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-018-design-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-018 Design System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-019-sops-age/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-019 sops + age
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-020-tres-modos-despliegue/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-020 Tres modos de despliegue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-021-smtp-resend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-021 SMTP Resend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-022-ios-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-022 iOS 15 mínimo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-023 OAuth web vs móvil
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-023 OAuth web vs móvil
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decisión
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#justificacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Justificación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternativas-evaluadas-y-descartadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alternativas evaluadas y descartadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implicaciones-operativas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implicaciones operativas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referencias
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-024-patrol-e2e/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-024 Patrol E2E
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-025-modelo-extensible/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-025 Modelo extensible
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-026-uv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-026 uv
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-027-mkdocs-pages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-027 MkDocs + Pages
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-028-valuekeys-tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-028 ValueKeys para tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-031-material-vehiculo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-031 Material↔vehículo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../guias/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guías
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guías
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guias/docker-compose-local/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose local
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guias/configuracion-keycloak/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuración de Keycloak
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guias/setup-fastapi-uv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup FastAPI con uv
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guias/flutter-oidc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cliente OIDC en Flutter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glosario/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glosario
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../contribuir/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contribuir
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contribuir
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/custodiam/custodiam-book/edit/main/docs/adrs/adr-023-oauth-web-asimetria.md" title="Editar esta página" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/custodiam/custodiam-book/raw/main/docs/adrs/adr-023-oauth-web-asimetria.md" title="Ver código fuente de esta página" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5"/></svg>
+    </a>
+  
+
+
+<h1 id="adr-023-asimetria-oauth-pkce-en-spa-web-vs-cliente-movil"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-023 — Asimetría OAuth + <abbr title="Proof Key for Code Exchange. Extensión de OAuth 2.0 que protege el Authorization Code en clientes públicos.">PKCE</abbr> en <abbr title="Single Page Application. App web que se carga una sola vez y navega por JavaScript.">SPA</abbr> web vs cliente móvil<a class="headerlink" href="#adr-023-asimetria-oauth-pkce-en-spa-web-vs-cliente-movil" title="Enlace permanente a este título">&para;</a></h1>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Estado</strong></td>
+<td>Aceptado</td>
+</tr>
+<tr>
+<td><strong>Fecha</strong></td>
+<td>20 de mayo de 2026</td>
+</tr>
+<tr>
+<td><strong>Decisores</strong></td>
+<td>Equipo Custodiam (Marcos Val Sanz, Rodrigo Mulero García)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="contexto">Contexto<a class="headerlink" href="#contexto" title="Enlace permanente a este título">&para;</a></h2>
+<p>Tras estabilizar el despliegue de la <a class="glossary-term" href="../../glosario/#pwa"><abbr title="Progressive Web App. App web con capacidades nativas (instalación, offline, push).">PWA</abbr></a> pública <code>https://app.custodiam.es</code> con la imagen <code>custodiam-web</code> (nginx + cache busting correcto), las verificaciones <em>end-to-end</em> del flujo de autenticación revelaron un fallo distinto: el botón "Iniciar sesión" redirige correctamente a <a class="glossary-term" href="../../glosario/#keycloak"><abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr></a> (<code>https://auth.custodiam.es/realms/custodiam/...</code>), el usuario se autentica, <a class="glossary-term" href="../../glosario/#keycloak"><abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr></a> devuelve el control a <code>https://app.custodiam.es/callback?code=...</code>, pero la app <strong>no completa el intercambio del código por tokens</strong> y rebota al usuario a <code>/login</code>.</p>
+<p>La causa raíz es estructural y específica del flujo <a class="glossary-term" href="../../glosario/#oauth-2-0"><abbr title="Marco IETF de autorización delegada por token (RFC 6749).">OAuth 2.0</abbr></a> + <a class="glossary-term" href="../../glosario/#pkce"><abbr title="Proof Key for Code Exchange. Extensión de OAuth 2.0 que protege el Authorization Code en clientes públicos.">PKCE</abbr></a> en aplicaciones de página única:</p>
+<ul>
+<li><strong>En móvil (Android/iOS)</strong>, <code>KeycloakAuthService.login()</code> lanza el navegador externo con <code>launchUrl(authUrl, mode: LaunchMode.externalApplication)</code>. La app <a class="glossary-term" href="../../glosario/#flutter"><abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr></a> <strong>sigue viva en memoria</strong>, esperando el <code>callback</code> por <em>deep link</em> a través de <code>app_links</code>. Al volver del navegador, el método <code>_pendingGrant.handleAuthorizationResponse()</code> se ejecuta dentro de la misma instancia que conserva el <code>code_verifier</code> <a class="glossary-term" href="../../glosario/#pkce"><abbr title="Proof Key for Code Exchange. Extensión de OAuth 2.0 que protege el Authorization Code en clientes públicos.">PKCE</abbr></a> generado al inicio del flujo.</li>
+<li><strong>En web</strong>, <code>launchUrl(authUrl, webOnlyWindowName: '_self')</code> <strong>sustituye la pestaña actual</strong> por la URL de <a class="glossary-term" href="../../glosario/#keycloak"><abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr></a>. Cuando <a class="glossary-term" href="../../glosario/#keycloak"><abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr></a> redirige de vuelta a <code>/callback</code>, el navegador carga la aplicación <a class="glossary-term" href="../../glosario/#flutter"><abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr></a> <strong>completamente desde cero</strong>: una nueva instancia de <code>KeycloakAuthService</code> se crea con <code>_pendingGrant == null</code>, y <code>handleWebCallback</code> falla silenciosamente devolviendo <code>Fail(AuthFailure.refreshFailed())</code>.</li>
+</ul>
+<p>Es un problema clásico del flujo <a class="glossary-term" href="../../glosario/#pkce"><abbr title="Proof Key for Code Exchange. Extensión de OAuth 2.0 que protege el Authorization Code en clientes públicos.">PKCE</abbr></a> en SPAs, conocido en la industria, y para el que existen patrones canónicos de solución. La asimetría móvil/web estaba documentada a alto nivel desde el inicio, pero <strong>no se descendió al detalle de la persistencia del <code>code_verifier</code> entre cargas</strong>, lo que dejó el bug latente hasta la primera prueba end-to-end real contra el dominio público.</p>
+<h2 id="decision">Decisión<a class="headerlink" href="#decision" title="Enlace permanente a este título">&para;</a></h2>
+<p>Combinación de dos resoluciones complementarias:</p>
+<ol>
+<li>
+<p><strong>Separación de implementaciones por plataforma vía <a class="glossary-term" href="../../glosario/#clean-architecture"><abbr title="Aproximación arquitectónica por capas concéntricas con dependencias hacia el centro.">Clean Architecture</abbr></a>.</strong> La interfaz <code>AuthService</code> permanece invariante. Se crean dos implementaciones concretas:</p>
+<ul>
+<li><strong><code>KeycloakMobileAuthService</code></strong> — especializada en el flujo OAuth + <a class="glossary-term" href="../../glosario/#pkce"><abbr title="Proof Key for Code Exchange. Extensión de OAuth 2.0 que protege el Authorization Code en clientes públicos.">PKCE</abbr></a> con redirect a navegador externo y captura del callback por <em>deep link</em>. Equivale a la implementación previa sin las ramas condicionales <code>kIsWeb</code>.</li>
+<li><strong><code>KeycloakWebAuthService</code></strong> — especializada en el flujo OAuth + <a class="glossary-term" href="../../glosario/#pkce"><abbr title="Proof Key for Code Exchange. Extensión de OAuth 2.0 que protege el Authorization Code en clientes públicos.">PKCE</abbr></a> con redirect <code>_self</code> y reconstrucción del grant tras la nueva carga de la app.</li>
+</ul>
+<p>El <code>authServiceProvider</code> (<a class="glossary-term" href="../../glosario/#riverpod"><abbr title="Framework de gestión de estado e inyección de dependencias para Flutter, sucesor de Provider.">Riverpod</abbr></a>, en <code>lib/infrastructure/di/providers.dart</code>) selecciona una u otra implementación en tiempo de ejecución vía <code>kIsWeb</code>.</p>
+</li>
+<li>
+<p><strong>Persistencia del <code>code_verifier</code> en <code>window.sessionStorage</code> para la implementación web.</strong> Antes de lanzar el redirect a <a class="glossary-term" href="../../glosario/#keycloak"><abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr></a>, <code>KeycloakWebAuthService.login()</code> guarda el <code>code_verifier</code> en <code>sessionStorage</code> bajo una clave identificada (<code>custodiam.oauth.code_verifier</code>). En <code>handleWebCallback</code> recupera el <code>code_verifier</code> persistido, reconstruye el <code>oauth2.AuthorizationCodeGrant</code> con el parámetro <code>codeVerifier:</code> apuntando a ese valor, procesa el callback, limpia la clave de <code>sessionStorage</code> y completa el flujo.</p>
+</li>
+</ol>
+<p><code>sessionStorage</code> se elige sobre <code>localStorage</code> por su semántica precisa: vida útil ligada a la pestaña del navegador (se limpia al cerrarla), no se sincroniza entre pestañas (lo cual evita interferencias entre ventanas simultáneas), y desaparece automáticamente sin que la app tenga que recordar limpiarlo en caminos de error.</p>
+<h2 id="justificacion">Justificación<a class="headerlink" href="#justificacion" title="Enlace permanente a este título">&para;</a></h2>
+<ol>
+<li>
+<p><strong>Coherencia con <a class="glossary-term" href="../../glosario/#clean-architecture"><abbr title="Aproximación arquitectónica por capas concéntricas con dependencias hacia el centro.">Clean Architecture</abbr></a>.</strong> El cliente <a class="glossary-term" href="../../glosario/#flutter"><abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr></a> adopta Clean estricto + Feature-first. Una asimetría real entre dos plataformas se modela con <strong>dos implementaciones concretas de una misma interfaz</strong>, no con ramificación condicional dentro de una sola clase. Mantener <code>kIsWeb</code> dentro de <code>KeycloakAuthService</code> introduce dos flujos divergentes que comparten estado por accidente; separarlos elimina el origen del bug operativo.</p>
+</li>
+<li>
+<p><strong>Decisiones arquitectónicas previas se conservan.</strong> La elección del stack (<code>oauth2</code> + <code>url_launcher</code> + <code>app_links</code>, <a href="../adr-010-oauth-pkce-keycloak/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-010</a>) no requiere modificación. Esta decisión opera estrictamente dentro de la capa <code>infrastructure/auth/</code> sin propagarse al resto de la arquitectura (ViewModels, router, ni el resto de features ven el cambio).</p>
+</li>
+<li>
+<p><strong>Riesgo y coste de implementación bajos.</strong> Refactor localizado (renombrar la clase actual, crear la nueva, ajustar el provider). Estimación realista: 1-2 días de trabajo. Los mocks de tests existentes (<code>_MockAuthService</code>, <code>_ToggleAuthService</code>, <code>_InMemoryAuthService</code>) siguen siendo válidos porque la interfaz no cambia.</p>
+</li>
+<li>
+<p><strong>Aplicación canónica del principio "separar el qué del cómo".</strong> Una misma capacidad funcional (autenticación) implementada con dos mecanismos distintos según el contexto de ejecución, sin que el resto del sistema deba saber cuál está en uso. Encaja con el patrón general aplicable cuando una plataforma real impone restricciones distintas a las de otra.</p>
+</li>
+<li>
+<p><strong>Reversibilidad alta.</strong> Si en el futuro se decide migrar al patrón <a class="glossary-term" href="../../glosario/#bff"><abbr title="Backend for Frontend. Patrón con un backend dedicado a cada cliente.">BFF</abbr></a> (ver alternativas descartadas), las dos implementaciones aquí decididas se sustituyen por una sola (<code>KeycloakBffAuthService</code> o equivalente) sin que el resto del cliente vea el cambio. El compromiso aquí es mínimo.</p>
+</li>
+</ol>
+<h2 id="alternativas-evaluadas-y-descartadas">Alternativas evaluadas y descartadas<a class="headerlink" href="#alternativas-evaluadas-y-descartadas" title="Enlace permanente a este título">&para;</a></h2>
+<h3 id="a-single-service-con-kisweb-interno-lo-que-habia-fallido">A. Single-service con <code>kIsWeb</code> interno (lo que había, fallido)<a class="headerlink" href="#a-single-service-con-kisweb-interno-lo-que-habia-fallido" title="Enlace permanente a este título">&para;</a></h3>
+<ul>
+<li><strong>Pros</strong>: una sola clase, menos código.</li>
+<li><strong>Contras</strong>: el estado en memoria (<code>_pendingGrant</code>) no sobrevive a la redirección <code>_self</code> en web y el código se enreda al intentar gestionar dos modelos de ciclo de vida en una misma instancia.</li>
+<li><strong>Descartado por</strong>: es el origen del bug operativo detectado.</li>
+</ul>
+<h3 id="b-localstorage-en-lugar-de-sessionstorage-para-persistir-el-code_verifier">B. <code>localStorage</code> en lugar de <code>sessionStorage</code> para persistir el <code>code_verifier</code><a class="headerlink" href="#b-localstorage-en-lugar-de-sessionstorage-para-persistir-el-code_verifier" title="Enlace permanente a este título">&para;</a></h3>
+<ul>
+<li><strong>Pros</strong>: persiste entre pestañas y entre sesiones del navegador.</li>
+<li><strong>Contras</strong>: el <code>code_verifier</code> es un secreto efímero del flujo; no debe sobrevivir al cierre de la pestaña. <code>localStorage</code> introduce riesgo de fuga y obliga a la aplicación a limpiarlo explícitamente en caminos de error que podrían no ejecutarse.</li>
+<li><strong>Descartado por</strong>: vida útil incorrecta para un secreto efímero.</li>
+</ul>
+<h3 id="c-flutter_secure_storage-para-el-code_verifier">C. <code>flutter_secure_storage</code> para el <code>code_verifier</code><a class="headerlink" href="#c-flutter_secure_storage-para-el-code_verifier" title="Enlace permanente a este título">&para;</a></h3>
+<ul>
+<li><strong>Pros</strong>: almacenamiento cifrado por dispositivo (Keychain en iOS, EncryptedSharedPreferences en Android, IndexedDB cifrado en web).</li>
+<li><strong>Contras</strong>: sobredimensionado — es la respuesta correcta para <em>refresh tokens</em> persistentes pero excesiva para un secreto que solo necesita sobrevivir una redirección de unos segundos.</li>
+<li><strong>Descartado por</strong>: complejidad innecesaria para el caso.</li>
+</ul>
+<h3 id="d-shared_preferences">D. <code>shared_preferences</code><a class="headerlink" href="#d-shared_preferences" title="Enlace permanente a este título">&para;</a></h3>
+<ul>
+<li><strong>Pros</strong>: paquete ya declarado en <code>pubspec.yaml</code>.</li>
+<li><strong>Contras</strong>: en web <code>shared_preferences</code> utiliza <code>localStorage</code> por debajo, heredando los mismos problemas que la alternativa B.</li>
+<li><strong>Descartado por</strong>: implementación equivalente a <code>localStorage</code> con misma semántica errónea.</li>
+</ul>
+<h3 id="e-popup-oauth-en-lugar-de-redirect-_self-webonlywindowname-_blank">E. Popup OAuth en lugar de redirect <code>_self</code> (<code>webOnlyWindowName: '_blank'</code>)<a class="headerlink" href="#e-popup-oauth-en-lugar-de-redirect-_self-webonlywindowname-_blank" title="Enlace permanente a este título">&para;</a></h3>
+<ul>
+<li><strong>Pros</strong>: la app principal queda viva, el popup se cierra al terminar.</li>
+<li><strong>Contras</strong>: la mayoría de navegadores bloquean <em>popups</em> no iniciados por interacción directa del usuario; la UX en móvil web es deficiente; complica el manejo del cierre prematuro del popup.</li>
+<li><strong>Descartado por</strong>: experiencia de usuario degradada y bloqueo del navegador.</li>
+</ul>
+<h3 id="f-iframe-oculto-con-promptnone-silent-sso">F. Iframe oculto con <code>prompt=none</code> (silent <abbr title="Single Sign-On. Un solo login da acceso a varias apps que comparten IdP.">SSO</abbr>)<a class="headerlink" href="#f-iframe-oculto-con-promptnone-silent-sso" title="Enlace permanente a este título">&para;</a></h3>
+<ul>
+<li><strong>Pros</strong>: refrescos invisibles cuando hay sesión activa.</li>
+<li><strong>Contras</strong>: solo funciona cuando existe una sesión activa en <a class="glossary-term" href="../../glosario/#keycloak"><abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr></a>; no resuelve el flujo de <em>login</em> inicial. Es complemento posible para refrescos silenciosos en navegadores donde la cookie de <a class="glossary-term" href="../../glosario/#keycloak"><abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr></a> siga viva, pero no es la primera línea de defensa.</li>
+<li><strong>Descartado</strong> como única solución; queda apuntado como complemento futuro.</li>
+</ul>
+<h3 id="g-cambio-de-paquete-a-openid_client-o-keycloak_flutter">G. Cambio de paquete a <code>openid_client</code> o <code>keycloak_flutter</code><a class="headerlink" href="#g-cambio-de-paquete-a-openid_client-o-keycloak_flutter" title="Enlace permanente a este título">&para;</a></h3>
+<ul>
+<li><strong>Pros</strong>: librerías especializadas pueden gestionar internamente la persistencia.</li>
+<li><strong>Contras</strong>: ambos cambian la decisión de stack de auth, obligan a refactorizar también el flujo móvil que hoy funciona, y representan ecosistemas menos maduros en <a class="glossary-term" href="../../glosario/#flutter"><abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr></a> que <code>oauth2 + url_launcher + app_links</code>.</li>
+<li><strong>Descartado por</strong>: refactor de alcance mayor sin beneficio sobre la solución propuesta.</li>
+</ul>
+<h3 id="h-patron-bff-backend-for-frontend-en-fastapi">H. Patrón <abbr title="Backend for Frontend. Patrón con un backend dedicado a cada cliente.">BFF</abbr> (<em>Backend for Frontend</em>) en <abbr title="Framework Python para APIs HTTP con tipado, validación Pydantic y soporte OpenAPI.">FastAPI</abbr><a class="headerlink" href="#h-patron-bff-backend-for-frontend-en-fastapi" title="Enlace permanente a este título">&para;</a></h3>
+<p>En el patrón <a class="glossary-term" href="../../glosario/#bff"><abbr title="Backend for Frontend. Patrón con un backend dedicado a cada cliente.">BFF</abbr></a>, la <a class="glossary-term" href="../../glosario/#pwa"><abbr title="Progressive Web App. App web con capacidades nativas (instalación, offline, push).">PWA</abbr></a> nunca recibe tokens: toda la danza OAuth (incluido el <code>code_verifier</code>) ocurre en <code>custodiam-api</code>, que gestiona una sesión web vía cookie <code>httpOnly</code> y hace de proxy para las llamadas autenticadas. Es el patrón <strong>recomendado por OWASP para SPAs nuevas desde aproximadamente 2023</strong> por su reducción de la superficie de ataque XSS sobre tokens.</p>
+<ul>
+<li><strong>Pros</strong>: técnicamente superior. Elimina el almacenamiento de tokens en el cliente web. Reduce el riesgo XSS sobre credenciales. Postura de seguridad alineada con las recomendaciones actuales.</li>
+<li><strong>Contras</strong>:<ul>
+<li>Cambia la decisión de stack de auth (<a href="../adr-010-oauth-pkce-keycloak/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-010</a>) fundamentalmente: en web los tokens dejan de ser artefacto del cliente.</li>
+<li>Requiere implementar middleware de sesión en <a class="glossary-term" href="../../glosario/#fastapi"><abbr title="Framework Python para APIs HTTP con tipado, validación Pydantic y soporte OpenAPI.">FastAPI</abbr></a> (cookies <code>httpOnly</code>, protección CSRF, refresh server-side), no presupuestado.</li>
+<li>Estimación realista: 2-3 semanas de trabajo en una fase del proyecto orientada al cierre del piloto.</li>
+<li>El piloto utilizará principalmente la app móvil, donde el flujo OAuth + <a class="glossary-term" href="../../glosario/#pkce"><abbr title="Proof Key for Code Exchange. Extensión de OAuth 2.0 que protege el Authorization Code en clientes públicos.">PKCE</abbr></a> directo (cliente nativo confiable) es perfectamente apropiado. La <a class="glossary-term" href="../../glosario/#pwa"><abbr title="Progressive Web App. App web con capacidades nativas (instalación, offline, push).">PWA</abbr></a> web es canal secundario.</li>
+</ul>
+</li>
+<li><strong>Descartado para el MVP</strong>, <strong>apuntado como evolución natural</strong> en fases posteriores. Una migración futura a <a class="glossary-term" href="../../glosario/#bff"><abbr title="Backend for Frontend. Patrón con un backend dedicado a cada cliente.">BFF</abbr></a> puede realizarse sin invalidar esta decisión: las dos implementaciones de <code>AuthService</code> se sustituyen por una sola (<code>KeycloakBffAuthService</code>) o se mantiene el modelo cliente-nativo en móvil y se añade el <code>KeycloakBffAuthService</code> solo para web.</li>
+</ul>
+<h3 id="i-cambio-de-identity-provider-a-auth0-aws-cognito-u-okta">I. Cambio de Identity <abbr title="Librería de estado precursora de Riverpod. ALTERNATIVA DESCARTADA (ADR-012).">Provider</abbr> a <abbr title="Plataforma SaaS de Identity-as-a-Service. ALTERNATIVA DESCARTADA en Custodiam (ADR-010).">Auth0</abbr>, AWS Cognito u Okta<a class="headerlink" href="#i-cambio-de-identity-provider-a-auth0-aws-cognito-u-okta" title="Enlace permanente a este título">&para;</a></h3>
+<ul>
+<li><strong>Pros</strong>: gestionado, sin necesidad de operar <a class="glossary-term" href="../../glosario/#keycloak"><abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr></a>.</li>
+<li><strong>Contras</strong>: cambia decisiones arquitectónicas fundamentales — el proyecto ha sostenido la elección de <a class="glossary-term" href="../../glosario/#keycloak"><abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr></a> con argumentos sólidos (soberanía sobre los datos, <a class="glossary-term" href="../../glosario/#agpl"><abbr title="GNU Affero General Public License. Licencia copyleft fuerte; obliga a publicar el fuente incluso en servicios en red.">AGPL</abbr></a>-3.0, autohospedaje, sin coste por usuario activo).</li>
+<li><strong>Descartado por</strong>: cambio de <a class="glossary-term" href="../../glosario/#idp"><abbr title="Identity Provider. Sistema que autentica usuarios y emite tokens de identidad.">IdP</abbr></a> fuera del alcance.</li>
+</ul>
+<h2 id="implicaciones-operativas">Implicaciones operativas<a class="headerlink" href="#implicaciones-operativas" title="Enlace permanente a este título">&para;</a></h2>
+<ul>
+<li><strong>Refactor incremental, no <em>big bang</em>.</strong> La interfaz <code>AuthService</code> se mantiene exactamente igual. El cambio es invisible para el resto del cliente <a class="glossary-term" href="../../glosario/#flutter"><abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr></a> (ViewModels, router, redirects de <a class="glossary-term" href="../../glosario/#gorouter"><abbr title="Paquete Flutter oficial para enrutado declarativo con soporte de deep links.">GoRouter</abbr></a>). Únicamente <code>lib/infrastructure/di/providers.dart</code> selecciona una u otra implementación.</li>
+<li><strong>Tests existentes válidos.</strong> Los mocks (<code>_MockAuthService</code>, <code>_ToggleAuthService</code>, <code>_InMemoryAuthService</code>) implementan <code>AuthService</code> y siguen siendo válidos. Se añaden tests específicos para <code>KeycloakWebAuthService</code> que cubren el ciclo <em>login → persistir <code>code_verifier</code> → callback con grant reconstruido</em>.</li>
+<li><strong>Tres pruebas <a class="glossary-term" href="../../glosario/#e2e"><abbr title="End-to-End test. Prueba que ejecuta toda la app contra infraestructura real.">E2E</abbr></a> nuevas requeridas:</strong><ol>
+<li><strong>Login web feliz</strong> hasta <code>/home</code>.</li>
+<li><strong>Login web con <code>sessionStorage</code> deshabilitado</strong> por el navegador — la app debe degradar a un mensaje de error claro en lugar de fallar en silencio.</li>
+<li><strong>Recarga manual de la pestaña</strong> en medio del flujo (entre el redirect y el callback) — escenario poco frecuente pero conviene cubrirlo.</li>
+</ol>
+</li>
+<li><strong>Sin impacto en seguridad respecto al modelo <a class="glossary-term" href="../../glosario/#pkce"><abbr title="Proof Key for Code Exchange. Extensión de OAuth 2.0 que protege el Authorization Code en clientes públicos.">PKCE</abbr></a> estándar.</strong> El <code>code_verifier</code> permanece en <code>sessionStorage</code> durante segundos (los que tarda <a class="glossary-term" href="../../glosario/#keycloak"><abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr></a> en responder y el callback en ejecutarse), bajo el modelo de aislamiento de orígenes del navegador. No es un secreto persistente: si la pestaña se cierra antes de completar el flujo, el <code>code_verifier</code> se descarta automáticamente y el <code>code</code> recibido en el callback resulta inutilizable por sí solo.</li>
+<li><strong>Documentación a actualizar.</strong> La sección sobre la asimetría móvil/web del flujo <a class="glossary-term" href="../../glosario/#oidc"><abbr title="OpenID Connect. Capa de identidad sobre OAuth 2.0 que añade id_token.">OIDC</abbr></a> se reescribe con la nueva estructura de dos implementaciones. La capa <code>infrastructure/auth/</code> queda como ejemplo canónico del patrón "interfaz cross-cutting + implementaciones por plataforma" aplicable a futuras asimetrías reales.</li>
+</ul>
+<h2 id="referencias">Referencias<a class="headerlink" href="#referencias" title="Enlace permanente a este título">&para;</a></h2>
+<ul>
+<li><strong><a href="https://datatracker.ietf.org/doc/html/rfc7636"><abbr title="Request for Comments. Documento de estándar publicado por el IETF.">RFC</abbr> 7636 — Proof Key for Code Exchange</a></strong> — fundamento del flujo <a class="glossary-term" href="../../glosario/#pkce"><abbr title="Proof Key for Code Exchange. Extensión de OAuth 2.0 que protege el Authorization Code en clientes públicos.">PKCE</abbr></a>.</li>
+<li><strong><a href="https://datatracker.ietf.org/doc/html/rfc9700"><abbr title="Request for Comments. Documento de estándar publicado por el IETF.">RFC</abbr> 9700 — Best Current Practice for <abbr title="Marco IETF de autorización delegada por token (RFC 6749).">OAuth 2.0</abbr> Security</a></strong> §2.1.1 — trata explícitamente el problema de la persistencia del <code>code_verifier</code> en clientes <a class="glossary-term" href="../../glosario/#spa"><abbr title="Single Page Application. App web que se carga una sola vez y navega por JavaScript.">SPA</abbr></a>.</li>
+<li><strong><a href="https://pub.dev/packages/oauth2">Paquete <code>oauth2</code> en pub.dev</a></strong> — referencia del parámetro <code>codeVerifier:</code> opcional del constructor de <code>AuthorizationCodeGrant</code>, que permite la reconstrucción del grant desde un <code>code_verifier</code> persistido.</li>
+<li><strong><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage">Web Storage API (MDN)</a></strong> — semántica de <code>sessionStorage</code> (por pestaña, no se sincroniza entre tabs, se limpia al cerrar).</li>
+<li><strong><a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps"><abbr title="Marco IETF de autorización delegada por token (RFC 6749).">OAuth 2.0</abbr> for Browser-Based Apps (IETF draft)</a></strong> — discusión del patrón <a class="glossary-term" href="../../glosario/#bff"><abbr title="Backend for Frontend. Patrón con un backend dedicado a cada cliente.">BFF</abbr></a> como alternativa a OAuth + <a class="glossary-term" href="../../glosario/#pkce"><abbr title="Proof Key for Code Exchange. Extensión de OAuth 2.0 que protege el Authorization Code en clientes públicos.">PKCE</abbr></a> directo en <a class="glossary-term" href="../../glosario/#spa"><abbr title="Single Page Application. App web que se carga una sola vez y navega por JavaScript.">SPA</abbr></a> (relevante para la evolución futura mencionada en la alternativa H).</li>
+<li><strong><a href="../adr-010-oauth-pkce-keycloak/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-010 OAuth + <abbr title="Proof Key for Code Exchange. Extensión de OAuth 2.0 que protege el Authorization Code en clientes públicos.">PKCE</abbr> + <abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr></a></strong> — stack de auth sobre el que se asienta esta decisión.</li>
+</ul>
+<!--
+  Definiciones de tooltip (Markdown abbr extension).
+  Incluido automáticamente en cada página vía pymdownx.snippets:auto_append.
+  Cada *[Término]: ... añade un <abbr title="..."> con tooltip al hacer hover.
+  Las definiciones se mantienen alineadas con docs/glosario.md.
+-->
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../adr-022-ios-15/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: ADR-022 iOS 15 mínimo">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                ADR-022 iOS 15 mínimo
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../adr-024-patrol-e2e/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: ADR-024 Patrol E2E">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                ADR-024 Patrol E2E
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Equipo Custodiam &middot; <a href="https://github.com/custodiam/custodiam-book/blob/main/LICENSE">AGPL-3.0</a>
+    </div>
+  
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/custodiam" target="_blank" rel="noopener" title="Organización Custodiam en GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.tabs.link", "content.tooltips", "navigation.footer", "navigation.indexes", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow", "toc.integrate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1967 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Términos técnicos, herramientas y conceptos del proyecto Custodiam, con enlace al recurso oficial cuando existe." name="description"/>
+<meta content="Equipo Custodiam (Rodrigo Mulero, Marcos Val Sanz)" name="author"/>
+<link href="https://docs.custodiam.es/glosario/" rel="canonical"/>
+<link href="../guias/flutter-oidc/" rel="prev"/>
+<link href="../contribuir/" rel="next"/>
+<link href="../assets/favicon.svg" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Glosario - Custodiam</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../stylesheets/extra.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/mkdocs_d2_plugin.css" rel="stylesheet"/>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#glosario">
+          Saltar a contenido
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Cabecera" class="md-header__inner md-grid">
+<a aria-label="Custodiam" class="md-header__button md-logo" data-md-component="logo" href=".." title="Custodiam">
+<img alt="logo" src="../assets/logo.svg"/>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Custodiam
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Glosario
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Cambiar a modo claro" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Cambiar a modo claro">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
+</label>
+<input aria-label="Cambiar a modo oscuro" class="md-option" data-md-color-accent="blue-grey" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="deep-orange" data-md-color-scheme="default" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_2" hidden="" title="Cambiar a modo oscuro">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Cambiar al modo del sistema" class="md-option" data-md-color-accent="orange" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="deep-orange" data-md-color-scheme="slate" id="__palette_2" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Cambiar al modo del sistema">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Búsqueda" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Búsqueda" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Buscar" class="md-search__options">
+<a aria-label="Compartir" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Compartir">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+</a>
+<button aria-label="Limpiar" class="md-search__icon md-icon" tabindex="-1" title="Limpiar" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/custodiam/custodiam-book" title="Ir al repositorio">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    custodiam/custodiam-book
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navegación" class="md-nav md-nav--primary md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Custodiam" class="md-nav__button md-logo" data-md-component="logo" href=".." title="Custodiam">
+<img alt="logo" src="../assets/logo.svg"/>
+</a>
+    Custodiam
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/custodiam/custodiam-book" title="Ir al repositorio">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    custodiam/custodiam-book
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<div class="md-nav__link md-nav__container">
+<a class="md-nav__link" href="../empezar/">
+<span class="md-ellipsis">
+    
+  
+    Empezar
+  
+
+    
+  </span>
+</a>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-nav__icon md-icon"></span>
+</label>
+</div>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Empezar
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../empezar/api/">
+<span class="md-ellipsis">
+    
+  
+    Backend (API)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../empezar/app/">
+<span class="md-ellipsis">
+    
+  
+    App (Flutter)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../empezar/infra/">
+<span class="md-ellipsis">
+    
+  
+    Infraestructura
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../empezar/usuarios-prueba/">
+<span class="md-ellipsis">
+    
+  
+    Usuarios de prueba
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<div class="md-nav__link md-nav__container">
+<a class="md-nav__link" href="../arquitectura/">
+<span class="md-ellipsis">
+    
+  
+    Arquitectura
+  
+
+    
+  </span>
+</a>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-nav__icon md-icon"></span>
+</label>
+</div>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Arquitectura
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../arquitectura/stack/">
+<span class="md-ellipsis">
+    
+  
+    Stack técnico
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../arquitectura/diagramas/">
+<span class="md-ellipsis">
+    
+  
+    Diagrama del sistema
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../arquitectura/modelo-datos/">
+<span class="md-ellipsis">
+    
+  
+    Modelo de datos
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../arquitectura/flujos-negocio/">
+<span class="md-ellipsis">
+    
+  
+    Flujos de negocio
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../arquitectura/notificaciones/">
+<span class="md-ellipsis">
+    
+  
+    Notificaciones redundantes
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../arquitectura/audit-log/">
+<span class="md-ellipsis">
+    
+  
+    Audit log
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<div class="md-nav__link md-nav__container">
+<a class="md-nav__link" href="../adrs/">
+<span class="md-ellipsis">
+    
+  
+    ADRs
+  
+
+    
+  </span>
+</a>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-nav__icon md-icon"></span>
+</label>
+</div>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    ADRs
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-001-polyrepo/">
+<span class="md-ellipsis">
+    
+  
+    ADR-001 Polyrepo
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-002-sqlmodel/">
+<span class="md-ellipsis">
+    
+  
+    ADR-002 SQLModel
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-003-alembic/">
+<span class="md-ellipsis">
+    
+  
+    ADR-003 Alembic
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-004-http-cliente/">
+<span class="md-ellipsis">
+    
+  
+    ADR-004 Cliente HTTP Flutter
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-005-sqflite/">
+<span class="md-ellipsis">
+    
+  
+    ADR-005 sqflite
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-006-nginx-alpine/">
+<span class="md-ellipsis">
+    
+  
+    ADR-006 Nginx Alpine
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-007-ghcr/">
+<span class="md-ellipsis">
+    
+  
+    ADR-007 GHCR
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-008-psycopg3/">
+<span class="md-ellipsis">
+    
+  
+    ADR-008 psycopg3
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-009-2-bds-separadas/">
+<span class="md-ellipsis">
+    
+  
+    ADR-009 2 BDs separadas
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-010-oauth-pkce-keycloak/">
+<span class="md-ellipsis">
+    
+  
+    ADR-010 OAuth + PKCE + Keycloak
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-011-deep-links/">
+<span class="md-ellipsis">
+    
+  
+    ADR-011 Deep links
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-012-riverpod/">
+<span class="md-ellipsis">
+    
+  
+    ADR-012 Riverpod
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-013-rbac-lockstep/">
+<span class="md-ellipsis">
+    
+  
+    ADR-013 RBAC lockstep
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-014-result-failure/">
+<span class="md-ellipsis">
+    
+  
+    ADR-014 Result<t> + Failure
+  
+
+    
+  </t></span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-015-env-config/">
+<span class="md-ellipsis">
+    
+  
+    ADR-015 EnvConfig
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-016-dev-log/">
+<span class="md-ellipsis">
+    
+  
+    ADR-016 dev.log
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-017-splash-app-startup/">
+<span class="md-ellipsis">
+    
+  
+    ADR-017 SplashPage + AppStartup
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-018-design-system/">
+<span class="md-ellipsis">
+    
+  
+    ADR-018 Design System
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-019-sops-age/">
+<span class="md-ellipsis">
+    
+  
+    ADR-019 sops + age
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-020-tres-modos-despliegue/">
+<span class="md-ellipsis">
+    
+  
+    ADR-020 Tres modos de despliegue
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-021-smtp-resend/">
+<span class="md-ellipsis">
+    
+  
+    ADR-021 SMTP Resend
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-022-ios-15/">
+<span class="md-ellipsis">
+    
+  
+    ADR-022 iOS 15 mínimo
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-023-oauth-web-asimetria/">
+<span class="md-ellipsis">
+    
+  
+    ADR-023 OAuth web vs móvil
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-024-patrol-e2e/">
+<span class="md-ellipsis">
+    
+  
+    ADR-024 Patrol E2E
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-025-modelo-extensible/">
+<span class="md-ellipsis">
+    
+  
+    ADR-025 Modelo extensible
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-026-uv/">
+<span class="md-ellipsis">
+    
+  
+    ADR-026 uv
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-027-mkdocs-pages/">
+<span class="md-ellipsis">
+    
+  
+    ADR-027 MkDocs + Pages
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-028-valuekeys-tests/">
+<span class="md-ellipsis">
+    
+  
+    ADR-028 ValueKeys para tests
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adrs/adr-031-material-vehiculo/">
+<span class="md-ellipsis">
+    
+  
+    ADR-031 Material↔vehículo
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
+<div class="md-nav__link md-nav__container">
+<a class="md-nav__link" href="../guias/">
+<span class="md-ellipsis">
+    
+  
+    Guías
+  
+
+    
+  </span>
+</a>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-nav__icon md-icon"></span>
+</label>
+</div>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Guías
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../guias/docker-compose-local/">
+<span class="md-ellipsis">
+    
+  
+    Docker Compose local
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../guias/configuracion-keycloak/">
+<span class="md-ellipsis">
+    
+  
+    Configuración de Keycloak
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../guias/setup-fastapi-uv/">
+<span class="md-ellipsis">
+    
+  
+    Setup FastAPI con uv
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../guias/flutter-oidc/">
+<span class="md-ellipsis">
+    
+  
+    Cliente OIDC en Flutter
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Glosario
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    Glosario
+  
+
+    
+  </span>
+</a>
+<nav aria-label="Tabla de contenidos" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#acronimos">
+<span class="md-ellipsis">
+      
+        Acrónimos
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#herramientas">
+<span class="md-ellipsis">
+      
+        Herramientas
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#conceptos-del-proyecto">
+<span class="md-ellipsis">
+      
+        Conceptos del proyecto
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#alternativas-evaluadas-y-descartadas">
+<span class="md-ellipsis">
+      
+        Alternativas evaluadas y descartadas
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_7" type="checkbox"/>
+<div class="md-nav__link md-nav__container">
+<a class="md-nav__link" href="../contribuir/">
+<span class="md-ellipsis">
+    
+  
+    Contribuir
+  
+
+    
+  </span>
+</a>
+</div>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Contribuir
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<a class="md-content__button md-icon" href="https://github.com/custodiam/custodiam-book/edit/main/docs/glosario.md" rel="edit" title="Editar esta página">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"></path></svg>
+</a>
+<a class="md-content__button md-icon" href="https://github.com/custodiam/custodiam-book/raw/main/docs/glosario.md" title="Ver código fuente de esta página">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5"></path></svg>
+</a>
+<h1 id="glosario">Glosario<a class="headerlink" href="#glosario" title="Enlace permanente a este título">¶</a></h1>
+<p>Página de consulta rápida. Los términos también aparecen subrayados (con
+tooltip al pasar el ratón) en el resto del book; haz clic para volver
+aquí.</p>
+<p>Organizado en cuatro secciones:</p>
+<ul>
+<li><strong>Acrónimos</strong> — siglas técnicas con enlace a su especificación o estándar.</li>
+<li><strong>Herramientas</strong> — librerías, frameworks y servicios del stack actual.</li>
+<li><strong>Conceptos del proyecto</strong> — clases, patrones y archivos canónicos
+  específicos de Custodiam.</li>
+<li><strong>Alternativas evaluadas y descartadas</strong> — herramientas mencionadas en
+  los ADRs como opciones que se consideraron y no se eligieron. <strong>No
+  forman parte del stack actual.</strong></li>
+</ul>
+<hr/>
+<h2 id="acronimos">Acrónimos<a class="headerlink" href="#acronimos" title="Enlace permanente a este título">¶</a></h2>
+<h3 id="abac"><abbr title="Attribute-Based Access Control. Modelo de autorización por atributos.">ABAC</abbr><a class="headerlink" href="#abac" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Attribute-Based Access Control</em>. Modelo de autorización donde el acceso a
+un recurso depende de atributos (del usuario, del recurso, del entorno)
+evaluados por un motor de políticas. Más expresivo que <abbr title="Role-Based Access Control. Modelo de autorización por roles.">RBAC</abbr> pero más
+costoso de mantener. Custodiam optó por <abbr title="Role-Based Access Control. Modelo de autorización por roles.">RBAC</abbr>; ver
+<a href="../adrs/adr-013-rbac-lockstep/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-013</a>.</p>
+<ul>
+<li>:material-text-box-check: NIST: <a href="https://csrc.nist.gov/projects/attribute-based-access-control">https://csrc.nist.gov/projects/attribute-based-access-control</a></li>
+</ul>
+<h3 id="adr"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr><a class="headerlink" href="#adr" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Architecture Decision Record</em>. Documento breve que registra una decisión
+técnica importante con su contexto, alternativas evaluadas y
+justificación. La colección de Custodiam vive en
+<a href="../adrs/">la sección de ADRs</a>.</p>
+<ul>
+<li>:material-web: Plantillas y ejemplos: <a href="https://adr.github.io/">https://adr.github.io/</a></li>
+<li>:material-github: Repo de referencia:
+  <a href="https://github.com/joelparkerhenderson/architecture-decision-record">https://github.com/joelparkerhenderson/architecture-decision-record</a></li>
+</ul>
+<h3 id="agpl"><abbr title="GNU Affero General Public License. Licencia copyleft fuerte; obliga a publicar el fuente incluso en servicios en red.">AGPL</abbr><a class="headerlink" href="#agpl" title="Enlace permanente a este título">¶</a></h3>
+<p><em>GNU Affero General Public License</em>. Licencia copyleft fuerte que obliga
+a publicar el código fuente incluso cuando el software se ofrece como
+servicio en red. Custodiam se distribuye bajo <abbr title="GNU Affero General Public License. Licencia copyleft fuerte; obliga a publicar el fuente incluso en servicios en red.">AGPL</abbr>-3.0.</p>
+<ul>
+<li>:material-text-box-check: Texto oficial:
+  <a href="https://www.gnu.org/licenses/agpl-3.0.html">https://www.gnu.org/licenses/agpl-3.0.html</a></li>
+</ul>
+<h3 id="bff"><abbr title="Backend for Frontend. Patrón con un backend dedicado a cada cliente.">BFF</abbr><a class="headerlink" href="#bff" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Backend for Frontend</em>. Patrón donde cada frontend (web, móvil, tercero)
+tiene un backend propio adaptado a sus necesidades en lugar de
+consumir un único API genérico. Se menciona en
+<a href="../adrs/adr-023-oauth-web-asimetria/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-023</a> como contraste a la
+asimetría que sí adopta Custodiam.</p>
+<ul>
+<li>:material-web: Sam Newman:
+  <a href="https://samnewman.io/patterns/architectural/bff/">https://samnewman.io/patterns/architectural/bff/</a></li>
+</ul>
+<h3 id="ci-cd"><abbr title="Continuous Integration / Continuous Delivery. Build, test y despliegue automatizados.">CI/CD</abbr><a class="headerlink" href="#ci-cd" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Continuous Integration / Continuous Delivery</em>. Prácticas que automatizan
+build, test y despliegue tras cada cambio en el repositorio. Custodiam
+usa GitHub Actions para la parte de CI y publica imágenes a <abbr title="GitHub Container Registry. Registro de imágenes Docker integrado en GitHub.">GHCR</abbr>.</p>
+<ul>
+<li>:material-web: Explicación: <a href="https://about.gitlab.com/topics/ci-cd/">https://about.gitlab.com/topics/ci-cd/</a></li>
+</ul>
+<h3 id="cname"><abbr title="Canonical Name. Tipo de registro DNS que apunta un dominio a otro nombre.">CNAME</abbr><a class="headerlink" href="#cname" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Canonical Name record</em>. Tipo de registro DNS que apunta un nombre de
+dominio a otro nombre. Custodiam lo usa para que <code>docs.custodiam.es</code>
+resuelva al hosting de GitHub Pages; ver
+<a href="../adrs/adr-027-mkdocs-pages/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-027</a>.</p>
+<ul>
+<li>:material-text-box-check: <abbr title="Request for Comments. Documento de estándar publicado por el IETF.">RFC</abbr> 1035:
+  <a href="https://datatracker.ietf.org/doc/html/rfc1035">https://datatracker.ietf.org/doc/html/rfc1035</a></li>
+</ul>
+<h3 id="cors"><abbr title="Cross-Origin Resource Sharing. Mecanismo HTTP que controla peticiones cross-origin desde JavaScript.">CORS</abbr><a class="headerlink" href="#cors" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Cross-Origin Resource Sharing</em>. Mecanismo HTTP que permite a un servidor
+indicar qué orígenes (dominios) tienen permiso para hacer peticiones a
+sus recursos desde JavaScript de navegador.</p>
+<ul>
+<li>:material-text-box-check: MDN:
+  <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS</a></li>
+</ul>
+<h3 id="di"><abbr title="Dependency Injection. Patrón en el que un objeto recibe sus dependencias de fuera.">DI</abbr><a class="headerlink" href="#di" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Dependency Injection</em>. Patrón donde un objeto recibe sus dependencias
+de fuera en lugar de crearlas internamente, facilitando los tests y la
+sustitución por implementaciones alternativas. En el frontend de
+Custodiam el contenedor de <abbr title="Dependency Injection. Patrón en el que un objeto recibe sus dependencias de fuera.">DI</abbr> es <abbr title="Framework de gestión de estado e inyección de dependencias para Flutter, sucesor de Provider.">Riverpod</abbr>; ver
+<a href="../adrs/adr-012-riverpod/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-012</a>.</p>
+<ul>
+<li>:material-web: Martin Fowler:
+  <a href="https://martinfowler.com/articles/injection.html">https://martinfowler.com/articles/injection.html</a></li>
+</ul>
+<h3 id="dkim"><abbr title="DomainKeys Identified Mail. Firma criptográfica de las cabeceras de un correo saliente.">DKIM</abbr><a class="headerlink" href="#dkim" title="Enlace permanente a este título">¶</a></h3>
+<p><em>DomainKeys Identified Mail</em>. Mecanismo que firma criptográficamente las
+cabeceras de un correo saliente para que el receptor pueda verificar
+que el mensaje no se ha modificado y procede del dominio declarado.
+Custodiam lo configura sobre <abbr title="Servicio SaaS de envío transaccional de correo con SMTP y API HTTP.">Resend</abbr>; ver
+<a href="../adrs/adr-021-smtp-resend/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-021</a>.</p>
+<ul>
+<li>:material-text-box-check: <abbr title="Request for Comments. Documento de estándar publicado por el IETF.">RFC</abbr> 6376:
+  <a href="https://datatracker.ietf.org/doc/html/rfc6376">https://datatracker.ietf.org/doc/html/rfc6376</a></li>
+</ul>
+<h3 id="dod"><abbr title="Definition of Done. Criterios objetivos que una tarea debe cumplir para considerarse completada.">DoD</abbr><a class="headerlink" href="#dod" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Definition of Done</em>. Criterios objetivos que una historia o tarea debe
+cumplir para considerarse completada. Custodiam la aplica especialmente
+a las pruebas <abbr title="End-to-End test. Prueba que ejecuta toda la app contra infraestructura real.">E2E</abbr> con <abbr title="Framework de testing E2E para Flutter, con gestos nativos y orquestación en Android, iOS y Web.">Patrol</abbr>; ver
+<a href="../adrs/adr-024-patrol-e2e/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-024</a>.</p>
+<ul>
+<li>:material-web: Scrum.org:
+  <a href="https://www.scrum.org/resources/blog/scrum-glossary">https://www.scrum.org/resources/blog/scrum-glossary</a></li>
+</ul>
+<h3 id="e2e"><abbr title="End-to-End test. Prueba que ejecuta toda la app contra infraestructura real.">E2E</abbr><a class="headerlink" href="#e2e" title="Enlace permanente a este título">¶</a></h3>
+<p><em>End-to-End test</em>. Prueba que ejecuta la aplicación completa contra una
+infraestructura real (frontend, backend, base de datos, <abbr title="Identity Provider. Sistema que autentica usuarios y emite tokens de identidad.">IdP</abbr>) y valida
+flujos de usuario, no unidades aisladas. En Custodiam corre con <abbr title="Framework de testing E2E para Flutter, con gestos nativos y orquestación en Android, iOS y Web.">Patrol</abbr>;
+ver <a href="../adrs/adr-024-patrol-e2e/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-024</a>.</p>
+<h3 id="fcm"><abbr title="Firebase Cloud Messaging. Servicio de Google para notificaciones push.">FCM</abbr><a class="headerlink" href="#fcm" title="Enlace permanente a este título">¶</a></h3>
+<p><em><abbr title="Plataforma de Google con servicios para apps móviles y web.">Firebase</abbr> Cloud Messaging</em>. Servicio de Google para enviar notificaciones
+push a Android, iOS y web. Custodiam lo combina con <abbr title="Servicio de notificaciones push HTTP autoalojable.">ntfy</abbr> como segundo
+canal de respaldo; ver <a href="../arquitectura/notificaciones/">arquitectura de
+notificaciones</a>.</p>
+<ul>
+<li>:material-web: Docs:
+  <a href="https://firebase.google.com/docs/cloud-messaging">https://firebase.google.com/docs/cloud-messaging</a></li>
+</ul>
+<h3 id="ghcr"><abbr title="GitHub Container Registry. Registro de imágenes Docker integrado en GitHub.">GHCR</abbr><a class="headerlink" href="#ghcr" title="Enlace permanente a este título">¶</a></h3>
+<p><em>GitHub Container Registry</em>. Registro de imágenes Docker integrado en
+GitHub, ligado a la organización o usuario del repositorio. Custodiam
+publica todas sus imágenes a <code>ghcr.io/custodiam/*</code>; ver
+<a href="../adrs/adr-007-ghcr/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-007</a>.</p>
+<ul>
+<li>:material-web: Docs:
+  <a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry">https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry</a></li>
+</ul>
+<h3 id="idp"><abbr title="Identity Provider. Sistema que autentica usuarios y emite tokens de identidad.">IdP</abbr><a class="headerlink" href="#idp" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Identity <abbr title="Librería de estado precursora de Riverpod. ALTERNATIVA DESCARTADA (ADR-012).">Provider</abbr></em>. Sistema que autentica usuarios y emite tokens o
+aserciones de identidad para que aplicaciones externas confíen en él.
+El <abbr title="Identity Provider. Sistema que autentica usuarios y emite tokens de identidad.">IdP</abbr> de Custodiam es <abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr>; ver
+<a href="../adrs/adr-010-oauth-pkce-keycloak/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-010</a>.</p>
+<ul>
+<li>:material-web: Wikipedia:
+  <a href="https://en.wikipedia.org/wiki/Identity_provider">https://en.wikipedia.org/wiki/Identity_provider</a></li>
+</ul>
+<h3 id="jsonb"><abbr title="Tipo de PostgreSQL para almacenar JSON en formato binario indexable.">JSONB</abbr><a class="headerlink" href="#jsonb" title="Enlace permanente a este título">¶</a></h3>
+<p>Tipo de datos de PostgreSQL que almacena JSON en formato binario
+descompuesto, permitiendo indexar y consultar campos internos con
+buen rendimiento. Custodiam lo usa para los campos variables de los
+catálogos extensibles; ver <a href="../adrs/adr-025-modelo-extensible/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-025</a>.</p>
+<ul>
+<li>:material-web: PostgreSQL docs:
+  <a href="https://www.postgresql.org/docs/current/datatype-json.html">https://www.postgresql.org/docs/current/datatype-json.html</a></li>
+</ul>
+<h3 id="jwks"><abbr title="JSON Web Key Set. Documento con las claves públicas que verifican un JWT.">JWKS</abbr><a class="headerlink" href="#jwks" title="Enlace permanente a este título">¶</a></h3>
+<p><em>JSON Web Key Set</em>. Documento JSON con las claves públicas que un
+emisor de tokens (p. ej. <abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr>) publica para que los receptores
+puedan verificar la firma de los <abbr title="JSON Web Token. Token JSON firmado y compacto.">JWT</abbr>. Custodiam lo consume desde el
+backend; ver <a href="../adrs/adr-010-oauth-pkce-keycloak/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-010</a>.</p>
+<ul>
+<li>:material-text-box-check: <abbr title="Request for Comments. Documento de estándar publicado por el IETF.">RFC</abbr> 7517:
+  <a href="https://datatracker.ietf.org/doc/html/rfc7517">https://datatracker.ietf.org/doc/html/rfc7517</a></li>
+</ul>
+<h3 id="jwt"><abbr title="JSON Web Token. Token JSON firmado y compacto.">JWT</abbr><a class="headerlink" href="#jwt" title="Enlace permanente a este título">¶</a></h3>
+<p><em>JSON Web Token</em>. Formato de token compacto y firmado que codifica
+información sobre un sujeto (usuario, sesión) en un objeto JSON. En
+Custodiam el access token es <abbr title="JSON Web Token. Token JSON firmado y compacto.">JWT</abbr> firmado por <abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr> y verificado por
+el backend; ver <a href="../adrs/adr-010-oauth-pkce-keycloak/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-010</a>.</p>
+<ul>
+<li>:material-text-box-check: <abbr title="Request for Comments. Documento de estándar publicado por el IETF.">RFC</abbr> 7519:
+  <a href="https://datatracker.ietf.org/doc/html/rfc7519">https://datatracker.ietf.org/doc/html/rfc7519</a></li>
+</ul>
+<h3 id="mfa"><abbr title="Multi-Factor Authentication. Login que combina dos o más factores distintos.">MFA</abbr><a class="headerlink" href="#mfa" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Multi-Factor Authentication</em>. Autenticación que combina dos o más
+factores distintos (conocimiento, posesión, inherencia). Custodiam no
+exige <abbr title="Multi-Factor Authentication. Login que combina dos o más factores distintos.">MFA</abbr> en el MVP, pero <abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr> la soporta nativamente para
+activarla en fases posteriores.</p>
+<ul>
+<li>:material-web: NIST:
+  <a href="https://www.nist.gov/itl/applied-cybersecurity/tig/back-basics-multi-factor-authentication">https://www.nist.gov/itl/applied-cybersecurity/tig/back-basics-multi-factor-authentication</a></li>
+</ul>
+<h3 id="mta"><abbr title="Mail Transfer Agent. Servidor que envía y reenvía correo por SMTP.">MTA</abbr><a class="headerlink" href="#mta" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Mail Transfer Agent</em>. Servidor responsable de enviar y reenviar correos
+electrónicos siguiendo el protocolo <abbr title="Simple Mail Transfer Protocol. Protocolo estándar de envío de correo (RFC 5321).">SMTP</abbr>. Custodiam no operara su
+propio <abbr title="Mail Transfer Agent. Servidor que envía y reenvía correo por SMTP.">MTA</abbr>, sino que delega en <abbr title="Servicio SaaS de envío transaccional de correo con SMTP y API HTTP.">Resend</abbr>; ver
+<a href="../adrs/adr-021-smtp-resend/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-021</a>.</p>
+<ul>
+<li>:material-text-box-check: <abbr title="Request for Comments. Documento de estándar publicado por el IETF.">RFC</abbr> 5321:
+  <a href="https://datatracker.ietf.org/doc/html/rfc5321">https://datatracker.ietf.org/doc/html/rfc5321</a></li>
+</ul>
+<h3 id="oauth-2-0"><abbr title="Marco IETF de autorización delegada por token (RFC 6749).">OAuth 2.0</abbr><a class="headerlink" href="#oauth-2-0" title="Enlace permanente a este título">¶</a></h3>
+<p>Marco de autorización delegada estandarizado por el IETF. Permite a
+una aplicación obtener un token de acceso a recursos en nombre de un
+usuario sin manejar sus credenciales. Custodiam lo combina con <abbr title="OpenID Connect. Capa de identidad sobre OAuth 2.0 que añade id_token.">OIDC</abbr> y
+<abbr title="Proof Key for Code Exchange. Extensión de OAuth 2.0 que protege el Authorization Code en clientes públicos.">PKCE</abbr>; ver <a href="../adrs/adr-010-oauth-pkce-keycloak/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-010</a>.</p>
+<ul>
+<li>:material-text-box-check: <abbr title="Request for Comments. Documento de estándar publicado por el IETF.">RFC</abbr> 6749:
+  <a href="https://datatracker.ietf.org/doc/html/rfc6749">https://datatracker.ietf.org/doc/html/rfc6749</a></li>
+<li>:material-web: oauth.net: <a href="https://oauth.net/2/">https://oauth.net/2/</a></li>
+</ul>
+<h3 id="oidc"><abbr title="OpenID Connect. Capa de identidad sobre OAuth 2.0 que añade id_token.">OIDC</abbr><a class="headerlink" href="#oidc" title="Enlace permanente a este título">¶</a></h3>
+<p><em>OpenID Connect</em>. Capa de identidad construida sobre <abbr title="Marco IETF de autorización delegada por token (RFC 6749).">OAuth 2.0</abbr> que
+añade un <code>id_token</code> con información del usuario autenticado. Es lo que
+permite que la app <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr> sepa "quién es" el usuario, no solo "qué
+puede hacer".</p>
+<ul>
+<li>:material-text-box-check: Spec:
+  <a href="https://openid.net/specs/openid-connect-core-1_0.html">https://openid.net/specs/openid-connect-core-1_0.html</a></li>
+</ul>
+<h3 id="pii"><abbr title="Personally Identifiable Information. Datos que permiten identificar a una persona física.">PII</abbr><a class="headerlink" href="#pii" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Personally Identifiable Information</em>. Cualquier dato que, solo o
+combinado con otros, permita identificar a una persona física. En
+Custodiam las operaciones sobre <abbr title="Personally Identifiable Information. Datos que permiten identificar a una persona física.">PII</abbr> (alta, edición, anonimización) se
+registran en <code>audit_log</code> por requisito <abbr title="Reglamento General de Protección de Datos (UE 2016/679). GDPR en inglés.">RGPD</abbr>.</p>
+<ul>
+<li>:material-web: NIST glossary:
+  <a href="https://csrc.nist.gov/glossary/term/PII">https://csrc.nist.gov/glossary/term/PII</a></li>
+</ul>
+<h3 id="pkce"><abbr title="Proof Key for Code Exchange. Extensión de OAuth 2.0 que protege el Authorization Code en clientes públicos.">PKCE</abbr><a class="headerlink" href="#pkce" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Proof Key for Code Exchange</em>. Extensión de <abbr title="Marco IETF de autorización delegada por token (RFC 6749).">OAuth 2.0</abbr> que protege el
+flujo <abbr title="Tipo de grant de OAuth 2.0 donde el cliente canjea un código por un access token.">Authorization Code</abbr> contra interceptación del código de
+autorización en clientes públicos (móvil y <abbr title="Single Page Application. App web que se carga una sola vez y navega por JavaScript.">SPA</abbr>). Custodiam lo usa en
+los tres clientes (Android, iOS, Web); ver
+<a href="../adrs/adr-010-oauth-pkce-keycloak/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-010</a>.</p>
+<ul>
+<li>:material-text-box-check: <abbr title="Request for Comments. Documento de estándar publicado por el IETF.">RFC</abbr> 7636:
+  <a href="https://datatracker.ietf.org/doc/html/rfc7636">https://datatracker.ietf.org/doc/html/rfc7636</a></li>
+</ul>
+<h3 id="pwa"><abbr title="Progressive Web App. App web con capacidades nativas (instalación, offline, push).">PWA</abbr><a class="headerlink" href="#pwa" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Progressive Web App</em>. Aplicación web que ofrece capacidades
+tradicionalmente nativas (instalación, offline, notificaciones). La
+versión web de Custodiam se distribuye como <abbr title="Progressive Web App. App web con capacidades nativas (instalación, offline, push).">PWA</abbr> servida por Nginx
+Alpine; ver <a href="../adrs/adr-006-nginx-alpine/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-006</a>.</p>
+<ul>
+<li>:material-web: web.dev:
+  <a href="https://web.dev/explore/progressive-web-apps">https://web.dev/explore/progressive-web-apps</a></li>
+</ul>
+<h3 id="rbac"><abbr title="Role-Based Access Control. Modelo de autorización por roles.">RBAC</abbr><a class="headerlink" href="#rbac" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Role-Based Access Control</em>. Modelo de autorización donde los
+permisos se asignan a roles y los roles a usuarios. Custodiam lo
+implementa con un catálogo canónico de permisos espejado entre
+backend y frontend; ver <a href="../adrs/adr-013-rbac-lockstep/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-013</a>.</p>
+<ul>
+<li>:material-web: NIST:
+  <a href="https://csrc.nist.gov/projects/role-based-access-control">https://csrc.nist.gov/projects/role-based-access-control</a></li>
+</ul>
+<h3 id="rfc"><abbr title="Request for Comments. Documento de estándar publicado por el IETF.">RFC</abbr><a class="headerlink" href="#rfc" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Request for Comments</em>. Documentos publicados por el IETF que
+establecen estándares y prácticas de Internet (HTTP, OAuth, <abbr title="JSON Web Token. Token JSON firmado y compacto.">JWT</abbr>,
+<abbr title="Simple Mail Transfer Protocol. Protocolo estándar de envío de correo (RFC 5321).">SMTP</abbr>, <abbr title="DomainKeys Identified Mail. Firma criptográfica de las cabeceras de un correo saliente.">DKIM</abbr>, etc.). Custodiam cita los RFCs relevantes cuando justifica
+decisiones de seguridad o protocolo.</p>
+<ul>
+<li>:material-web: IETF: <a href="https://www.ietf.org/standards/rfcs/">https://www.ietf.org/standards/rfcs/</a></li>
+</ul>
+<h3 id="rgpd"><abbr title="Reglamento General de Protección de Datos (UE 2016/679). GDPR en inglés.">RGPD</abbr><a class="headerlink" href="#rgpd" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Reglamento General de Protección de Datos</em> (en inglés GDPR).
+Reglamento UE 2016/679 que regula el tratamiento de datos personales
+de residentes en la Unión Europea. Custodiam aplica el Art. 17 sobre
+derecho de supresión vía anonimización irreversible.</p>
+<ul>
+<li>:material-text-box-check: Texto consolidado:
+  <a href="https://gdpr-info.eu/">https://gdpr-info.eu/</a></li>
+</ul>
+<h3 id="smtp"><abbr title="Simple Mail Transfer Protocol. Protocolo estándar de envío de correo (RFC 5321).">SMTP</abbr><a class="headerlink" href="#smtp" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Simple Mail Transfer Protocol</em>. Protocolo estándar para enviar correo
+electrónico entre servidores. <abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr> lo usa para enviar emails de
+verificación y reset de contraseña a través de <abbr title="Servicio SaaS de envío transaccional de correo con SMTP y API HTTP.">Resend</abbr>; ver
+<a href="../adrs/adr-021-smtp-resend/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-021</a>.</p>
+<ul>
+<li>:material-text-box-check: <abbr title="Request for Comments. Documento de estándar publicado por el IETF.">RFC</abbr> 5321:
+  <a href="https://datatracker.ietf.org/doc/html/rfc5321">https://datatracker.ietf.org/doc/html/rfc5321</a></li>
+</ul>
+<h3 id="spa"><abbr title="Single Page Application. App web que se carga una sola vez y navega por JavaScript.">SPA</abbr><a class="headerlink" href="#spa" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Single Page Application</em>. Aplicación web cuyo HTML inicial se carga
+una sola vez y donde el cambio de "página" se hace por JavaScript sin
+recargar. Las versiones web de <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr> son técnicamente SPAs y eso
+condiciona cómo se sirven; ver <a href="../adrs/adr-006-nginx-alpine/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-006</a>.</p>
+<ul>
+<li>:material-web: MDN:
+  <a href="https://developer.mozilla.org/en-US/docs/Glossary/SPA">https://developer.mozilla.org/en-US/docs/Glossary/SPA</a></li>
+</ul>
+<h3 id="spf"><abbr title="Sender Policy Framework. Publica en DNS qué servidores pueden enviar correo en nombre de un dominio.">SPF</abbr><a class="headerlink" href="#spf" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Sender Policy Framework</em>. Mecanismo que publica en DNS qué servidores
+están autorizados a enviar correo en nombre de un dominio, ayudando a
+detectar spoofing. Custodiam lo configura junto con <abbr title="DomainKeys Identified Mail. Firma criptográfica de las cabeceras de un correo saliente.">DKIM</abbr> para el
+dominio del proyecto; ver <a href="../adrs/adr-021-smtp-resend/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-021</a>.</p>
+<ul>
+<li>:material-text-box-check: <abbr title="Request for Comments. Documento de estándar publicado por el IETF.">RFC</abbr> 7208:
+  <a href="https://datatracker.ietf.org/doc/html/rfc7208">https://datatracker.ietf.org/doc/html/rfc7208</a></li>
+</ul>
+<h3 id="sso"><abbr title="Single Sign-On. Un solo login da acceso a varias apps que comparten IdP.">SSO</abbr><a class="headerlink" href="#sso" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Single Sign-On</em>. Esquema en el que un único login da acceso a
+múltiples aplicaciones que confían en el mismo <abbr title="Identity Provider. Sistema que autentica usuarios y emite tokens de identidad.">IdP</abbr>. Custodiam queda
+preparada para <abbr title="Single Sign-On. Un solo login da acceso a varias apps que comparten IdP.">SSO</abbr> porque centraliza la autenticación en <abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr>.</p>
+<ul>
+<li>:material-web: Wikipedia:
+  <a href="https://en.wikipedia.org/wiki/Single_sign-on">https://en.wikipedia.org/wiki/Single_sign-on</a></li>
+</ul>
+<h3 id="wsl2"><abbr title="Windows Subsystem for Linux v2. Capa de Microsoft que corre un kernel Linux dentro de Windows.">WSL2</abbr><a class="headerlink" href="#wsl2" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Windows Subsystem for Linux versión 2</em>. Capa de Microsoft que ejecuta
+un kernel Linux real dentro de Windows. Docker Desktop la usa por
+debajo para correr contenedores Linux en máquinas Windows del equipo.</p>
+<ul>
+<li>:material-web: Microsoft Learn:
+  <a href="https://learn.microsoft.com/en-us/windows/wsl/">https://learn.microsoft.com/en-us/windows/wsl/</a></li>
+</ul>
+<hr/>
+<h2 id="herramientas">Herramientas<a class="headerlink" href="#herramientas" title="Enlace permanente a este título">¶</a></h2>
+<h3 id="age"><abbr title="Herramienta moderna de cifrado de archivos con sintaxis simple y clave pública X25519.">age</abbr><a class="headerlink" href="#age" title="Enlace permanente a este título">¶</a></h3>
+<p>Herramienta moderna de cifrado de archivos con sintaxis simple y
+soporte de clave pública (X25519). Custodiam la usa con <abbr title="Secrets OPerationS. Cifra archivos estructurados campo a campo con age, GPG o KMS.">sops</abbr> para
+cifrar los archivos <code>.env</code> versionados; ver
+<a href="../adrs/adr-019-sops-age/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-019</a>.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://age-encryption.org/">https://age-encryption.org/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/FiloSottile/age">https://github.com/FiloSottile/age</a></li>
+</ul>
+<h3 id="alembic"><abbr title="Herramienta de migraciones de esquema para SQLAlchemy/SQLModel.">Alembic</abbr><a class="headerlink" href="#alembic" title="Enlace permanente a este título">¶</a></h3>
+<p>Herramienta de migraciones de esquema para <abbr title="ORM y toolkit SQL de referencia en Python.">SQLAlchemy</abbr>. Compatible con
+<abbr title="Capa que combina SQLAlchemy y Pydantic en una sola declaración de modelo.">SQLModel</abbr>. Custodiam la usa para versionar el esquema de PostgreSQL
+con <code>autogenerate</code> semiautomático; ver
+<a href="../adrs/adr-003-alembic/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-003</a>.</p>
+<ul>
+<li>:material-web: Docs: <a href="https://alembic.sqlalchemy.org/">https://alembic.sqlalchemy.org/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/sqlalchemy/alembic">https://github.com/sqlalchemy/alembic</a></li>
+</ul>
+<h3 id="app-links-package"><abbr title="Paquete Flutter que captura App Links de Android y Universal Links de iOS.">app_links</abbr><a class="headerlink" href="#app-links-package" title="Enlace permanente a este título">¶</a></h3>
+<p>Paquete Dart que captura <abbr title="URLs que abren una vista concreta dentro de una app móvil.">deep links</abbr> (<abbr title="Mecanismo de Android para vincular un dominio HTTPS a una app vía assetlinks.json.">App Links</abbr> de Android y Universal
+Links de iOS) y los entrega a la app <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr>. Custodiam lo usa en el
+flujo de OAuth para recibir el callback del <abbr title="Identity Provider. Sistema que autentica usuarios y emite tokens de identidad.">IdP</abbr>; ver
+<a href="../adrs/adr-011-deep-links/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-011</a>.</p>
+<ul>
+<li>:material-package: pub.dev:
+  <a href="https://pub.dev/packages/app_links">https://pub.dev/packages/app_links</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/llfbandit/app_links">https://github.com/llfbandit/app_links</a></li>
+</ul>
+<h3 id="cloudflare-tunnel"><abbr title="Túnel saliente desde tu infra hasta Cloudflare; expone servicios sin abrir puertos.">Cloudflare Tunnel</abbr><a class="headerlink" href="#cloudflare-tunnel" title="Enlace permanente a este título">¶</a></h3>
+<p>Servicio de Cloudflare que crea un túnel saliente desde tu
+infraestructura hasta su red, exponiendo servicios internos sin abrir
+puertos. Custodiam lo usa para acceder al stack local desde
+internet sin VPN; ver
+<a href="../adrs/adr-020-tres-modos-despliegue/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-020</a>.</p>
+<ul>
+<li>:material-web: Docs:
+  <a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/">https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/</a></li>
+</ul>
+<h3 id="cloudflared"><abbr title="Daemon que mantiene abierto el Cloudflare Tunnel desde el servidor.">cloudflared</abbr><a class="headerlink" href="#cloudflared" title="Enlace permanente a este título">¶</a></h3>
+<p>Daemon ligero que mantiene abierto el <abbr title="Túnel saliente desde tu infra hasta Cloudflare; expone servicios sin abrir puertos.">Cloudflare Tunnel</abbr> desde el
+servidor o el contenedor. Se distribuye como binario único y
+contenedor Docker oficial.</p>
+<ul>
+<li>:material-github: Repo:
+  <a href="https://github.com/cloudflare/cloudflared">https://github.com/cloudflare/cloudflared</a></li>
+</ul>
+<h3 id="d2"><abbr title="Lenguaje declarativo moderno para diagramas, alternativo a Mermaid.">D2</abbr><a class="headerlink" href="#d2" title="Enlace permanente a este título">¶</a></h3>
+<p>Lenguaje declarativo moderno para diagramas, alternativo a <abbr title="Lenguaje basado en texto para describir diagramas que se renderizan en el navegador.">Mermaid</abbr>,
+con sintaxis más compacta y mejor manejo de tablas SQL y topologías
+estáticas. Custodiam lo usa junto con <abbr title="Lenguaje basado en texto para describir diagramas que se renderizan en el navegador.">Mermaid</abbr> en el book; ver
+<a href="../adrs/adr-027-mkdocs-pages/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-027</a>.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://d2lang.com/">https://d2lang.com/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/terrastruct/d2">https://github.com/terrastruct/d2</a></li>
+</ul>
+<h3 id="fastapi"><abbr title="Framework Python para APIs HTTP con tipado, validación Pydantic y soporte OpenAPI.">FastAPI</abbr><a class="headerlink" href="#fastapi" title="Enlace permanente a este título">¶</a></h3>
+<p>Framework Python para construir APIs HTTP basado en <code>pydantic</code> para
+validación y tipado, con soporte nativo de OpenAPI y ASGI. Es el
+framework backend de Custodiam (<code>custodiam-api</code>).</p>
+<ul>
+<li>:material-web: Docs: <a href="https://fastapi.tiangolo.com/">https://fastapi.tiangolo.com/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/fastapi/fastapi">https://github.com/fastapi/fastapi</a></li>
+</ul>
+<h3 id="firebase"><abbr title="Plataforma de Google con servicios para apps móviles y web.">Firebase</abbr><a class="headerlink" href="#firebase" title="Enlace permanente a este título">¶</a></h3>
+<p>Plataforma de Google que agrupa servicios para apps móviles y web
+(Cloud Messaging, Analytics, Crashlytics, etc.). Custodiam la usa
+para <abbr title="Firebase Cloud Messaging. Servicio de Google para notificaciones push.">FCM</abbr> como canal primario de notificaciones push.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://firebase.google.com/">https://firebase.google.com/</a></li>
+</ul>
+<h3 id="firebase-core"><abbr title="Paquete Flutter que inicializa Firebase antes de usar otros paquetes Firebase.">firebase_core</abbr><a class="headerlink" href="#firebase-core" title="Enlace permanente a este título">¶</a></h3>
+<p>Paquete <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr> que inicializa <abbr title="Plataforma de Google con servicios para apps móviles y web.">Firebase</abbr> en la app antes de poder usar
+ningún otro paquete de la familia (Messaging, Analytics, etc.).
+Requiere configuración nativa por plataforma (Android, iOS, Web).</p>
+<ul>
+<li>:material-package: pub.dev:
+  <a href="https://pub.dev/packages/firebase_core">https://pub.dev/packages/firebase_core</a></li>
+</ul>
+<h3 id="flutter"><abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr><a class="headerlink" href="#flutter" title="Enlace permanente a este título">¶</a></h3>
+<p>Framework de Google para construir aplicaciones nativas para
+Android, iOS, Web y desktop desde un único código base en Dart. Es la
+plataforma del cliente de Custodiam (<code>custodiam-app</code>).</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://flutter.dev">https://flutter.dev</a></li>
+<li>:material-github: Repo: <a href="https://github.com/flutter/flutter">https://github.com/flutter/flutter</a></li>
+</ul>
+<h3 id="flutter-riverpod"><abbr title="Paquete Flutter que adapta Riverpod al árbol de widgets.">flutter_riverpod</abbr><a class="headerlink" href="#flutter-riverpod" title="Enlace permanente a este título">¶</a></h3>
+<p>Paquete <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr> que adapta <abbr title="Framework de gestión de estado e inyección de dependencias para Flutter, sucesor de Provider.">Riverpod</abbr> al árbol de widgets, exponiendo
+<code>ConsumerWidget</code>, <code>ref.watch()</code> y <code>ref.read()</code>. Custodiam lo usa como
+contenedor de <abbr title="Dependency Injection. Patrón en el que un objeto recibe sus dependencias de fuera.">DI</abbr> y gestión de estado en toda la app.</p>
+<ul>
+<li>:material-package: pub.dev:
+  <a href="https://pub.dev/packages/flutter_riverpod">https://pub.dev/packages/flutter_riverpod</a></li>
+</ul>
+<h3 id="flutter-secure-storage"><abbr title="Paquete Flutter que cifra pares clave-valor usando Keystore / Keychain.">flutter_secure_storage</abbr><a class="headerlink" href="#flutter-secure-storage" title="Enlace permanente a este título">¶</a></h3>
+<p>Paquete <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr> que guarda pares clave-valor cifrados usando Keystore
+(Android) y Keychain (iOS). Custodiam lo usa para persistir tokens
+OAuth en móvil; en web los tokens viven en memoria (no hay sustituto
+seguro equivalente).</p>
+<ul>
+<li>:material-package: pub.dev:
+  <a href="https://pub.dev/packages/flutter_secure_storage">https://pub.dev/packages/flutter_secure_storage</a></li>
+</ul>
+<h3 id="gorouter"><abbr title="Paquete Flutter oficial para enrutado declarativo con soporte de deep links.">GoRouter</abbr><a class="headerlink" href="#gorouter" title="Enlace permanente a este título">¶</a></h3>
+<p>Paquete oficial de <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr> para enrutado declarativo, soporte de deep
+links y manejo del back button. Custodiam lo usa como router único de
+la app; ver <a href="../adrs/adr-011-deep-links/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-011</a>.</p>
+<ul>
+<li>:material-package: pub.dev:
+  <a href="https://pub.dev/packages/go_router">https://pub.dev/packages/go_router</a></li>
+</ul>
+<h3 id="just"><abbr title="Command runner en Rust orientado a tareas, alternativa moderna a make.">just</abbr><a class="headerlink" href="#just" title="Enlace permanente a este título">¶</a></h3>
+<p>Command runner escrito en Rust, alternativa moderna a <code>make</code> orientada
+a tareas (no a builds). Sirve como envoltura uniforme de comandos en
+<code>custodiam-infra</code> y <code>custodiam-app</code>; "envuelve, no sustituye".</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://just.systems/">https://just.systems/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/casey/just">https://github.com/casey/just</a></li>
+</ul>
+<h3 id="keepassxc"><abbr title="Gestor de contraseñas de escritorio con base de datos cifrada local (.kdbx).">KeePassXC</abbr><a class="headerlink" href="#keepassxc" title="Enlace permanente a este título">¶</a></h3>
+<p>Gestor de contraseñas de escritorio que almacena credenciales en una
+base de datos local cifrada (<code>.kdbx</code>). Custodiam lo recomienda al
+equipo como sitio donde guardar la clave <abbr title="Herramienta moderna de cifrado de archivos con sintaxis simple y clave pública X25519.">age</abbr> personal y secretos no
+versionados; ver <a href="../adrs/adr-019-sops-age/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-019</a>.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://keepassxc.org/">https://keepassxc.org/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/keepassxreboot/keepassxc">https://github.com/keepassxreboot/keepassxc</a></li>
+</ul>
+<h3 id="keycloak"><abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr><a class="headerlink" href="#keycloak" title="Enlace permanente a este título">¶</a></h3>
+<p>Servidor <abbr title="OpenID Connect. Capa de identidad sobre OAuth 2.0 que añade id_token.">OIDC</abbr> y <abbr title="Marco IETF de autorización delegada por token (RFC 6749).">OAuth 2.0</abbr> de código abierto. Hace de Identity
+<abbr title="Librería de estado precursora de Riverpod. ALTERNATIVA DESCARTADA (ADR-012).">Provider</abbr> de Custodiam: maneja login, registro, reset de contraseña,
+emisión de tokens y gestión de realms; ver
+<a href="../adrs/adr-010-oauth-pkce-keycloak/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-010</a>.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://www.keycloak.org/">https://www.keycloak.org/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/keycloak/keycloak">https://github.com/keycloak/keycloak</a></li>
+</ul>
+<h3 id="material-design-3"><abbr title="Tercera generación del sistema de diseño de Google.">Material Design 3</abbr><a class="headerlink" href="#material-design-3" title="Enlace permanente a este título">¶</a></h3>
+<p>Tercera generación del sistema de diseño de Google, con tokens
+dinámicos de color y mayor flexibilidad de personalización. Custodiam
+lo adopta como base del Design System de la app; ver
+<a href="../adrs/adr-018-design-system/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-018</a>.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://m3.material.io/">https://m3.material.io/</a></li>
+</ul>
+<h3 id="material-for-mkdocs"><abbr title="Theme y plugins para MkDocs muy mantenido; renderiza este book.">Material for MkDocs</abbr><a class="headerlink" href="#material-for-mkdocs" title="Enlace permanente a este título">¶</a></h3>
+<p>Theme y plugins para <abbr title="Generador Python de sitios estáticos a partir de Markdown.">MkDocs</abbr> muy mantenido, con búsqueda integrada,
+modo oscuro, soporte de instant navigation y muchas extensiones.
+Es el theme que renderiza este book; ver
+<a href="../adrs/adr-027-mkdocs-pages/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-027</a>.</p>
+<ul>
+<li>:material-web: Sitio oficial:
+  <a href="https://squidfunk.github.io/mkdocs-material/">https://squidfunk.github.io/mkdocs-material/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/squidfunk/mkdocs-material">https://github.com/squidfunk/mkdocs-material</a></li>
+</ul>
+<h3 id="mermaid"><abbr title="Lenguaje basado en texto para describir diagramas que se renderizan en el navegador.">Mermaid</abbr><a class="headerlink" href="#mermaid" title="Enlace permanente a este título">¶</a></h3>
+<p>Lenguaje basado en texto para describir diagramas (sequence, state,
+flowchart). Renderiza en el navegador. Custodiam lo usa junto con <abbr title="Lenguaje declarativo moderno para diagramas, alternativo a Mermaid.">D2</abbr>;
+ver <a href="../adrs/adr-027-mkdocs-pages/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-027</a>.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://mermaid.js.org/">https://mermaid.js.org/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/mermaid-js/mermaid">https://github.com/mermaid-js/mermaid</a></li>
+</ul>
+<h3 id="mkdocs"><abbr title="Generador Python de sitios estáticos a partir de Markdown.">MkDocs</abbr><a class="headerlink" href="#mkdocs" title="Enlace permanente a este título">¶</a></h3>
+<p>Generador de sitios estáticos a partir de archivos Markdown, escrito
+en Python. Base sobre la que corre el book; ver
+<a href="../adrs/adr-027-mkdocs-pages/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-027</a>.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://www.mkdocs.org/">https://www.mkdocs.org/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/mkdocs/mkdocs">https://github.com/mkdocs/mkdocs</a></li>
+</ul>
+<h3 id="n8n"><abbr title="Plataforma de automatización tipo workflow (Zapier autoalojado).">n8n</abbr><a class="headerlink" href="#n8n" title="Enlace permanente a este título">¶</a></h3>
+<p>Plataforma de automatización tipo workflow ("Zapier autoalojado").
+Custodiam la levanta en el stack local para integrar flujos
+auxiliares.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://n8n.io/">https://n8n.io/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/n8n-io/n8n">https://github.com/n8n-io/n8n</a></li>
+</ul>
+<h3 id="ntfy"><abbr title="Servicio de notificaciones push HTTP autoalojable.">ntfy</abbr><a class="headerlink" href="#ntfy" title="Enlace permanente a este título">¶</a></h3>
+<p>Servicio de notificaciones push HTTP-based, autoalojable, sin requerir
+cuentas. Custodiam lo usa como segundo canal de notificaciones, en
+paralelo con <abbr title="Firebase Cloud Messaging. Servicio de Google para notificaciones push.">FCM</abbr>, para reducir dependencia de Google.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://ntfy.sh/">https://ntfy.sh/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/binwiederhier/ntfy">https://github.com/binwiederhier/ntfy</a></li>
+</ul>
+<h3 id="oauth2-dart"><abbr title="Paquete Dart oficial que implementa OAuth 2.0 con PKCE (no confundir con el estándar).">oauth2</abbr><a class="headerlink" href="#oauth2-dart" title="Enlace permanente a este título">¶</a></h3>
+<p>Paquete Dart oficial (no confundir con el estándar <a href="#oauth-2-0"><abbr title="Marco IETF de autorización delegada por token (RFC 6749).">OAuth 2.0</abbr></a>)
+mantenido por el equipo de Dart, que implementa el flujo <abbr title="Marco IETF de autorización delegada por token (RFC 6749).">OAuth 2.0</abbr> con
+soporte de <abbr title="Proof Key for Code Exchange. Extensión de OAuth 2.0 que protege el Authorization Code en clientes públicos.">PKCE</abbr>. Custodiam lo usa en móvil; en web el flujo se
+gestiona manualmente; ver
+<a href="../adrs/adr-023-oauth-web-asimetria/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-023</a>.</p>
+<ul>
+<li>:material-package: pub.dev: <a href="https://pub.dev/packages/oauth2">https://pub.dev/packages/oauth2</a></li>
+<li>:material-github: Repo: <a href="https://github.com/dart-lang/oauth2">https://github.com/dart-lang/oauth2</a></li>
+</ul>
+<h3 id="patrol"><abbr title="Framework de testing E2E para Flutter, con gestos nativos y orquestación en Android, iOS y Web.">Patrol</abbr><a class="headerlink" href="#patrol" title="Enlace permanente a este título">¶</a></h3>
+<p>Framework de testing <abbr title="End-to-End test. Prueba que ejecuta toda la app contra infraestructura real.">E2E</abbr> para <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr>, con soporte de gestos nativos,
+permisos del sistema y orquestación en Android, iOS y Web. Custodiam
+lo adopta como herramienta <abbr title="End-to-End test. Prueba que ejecuta toda la app contra infraestructura real.">E2E</abbr> oficial; ver
+<a href="../adrs/adr-024-patrol-e2e/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-024</a>.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://patrol.leancode.co/">https://patrol.leancode.co/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/leancodepl/patrol">https://github.com/leancodepl/patrol</a></li>
+</ul>
+<h3 id="psycopg3"><abbr title="Driver PostgreSQL para Python v3, con soporte async y type hints.">psycopg3</abbr><a class="headerlink" href="#psycopg3" title="Enlace permanente a este título">¶</a></h3>
+<p>Versión 3 del driver de PostgreSQL para Python. Soporta async, type
+hints nativos y mejor performance que <code>psycopg2</code>. Custodiam lo usa con
+URL <code>postgresql+psycopg://...</code>; ver <a href="../adrs/adr-008-psycopg3/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-008</a>.</p>
+<ul>
+<li>:material-web: Docs: <a href="https://www.psycopg.org/psycopg3/">https://www.psycopg.org/psycopg3/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/psycopg/psycopg">https://github.com/psycopg/psycopg</a></li>
+</ul>
+<h3 id="pydantic"><abbr title="Librería Python de validación y serialización basada en type hints.">Pydantic</abbr><a class="headerlink" href="#pydantic" title="Enlace permanente a este título">¶</a></h3>
+<p>Librería Python de validación y serialización basada en type hints.
+Es el motor de validación de <abbr title="Framework Python para APIs HTTP con tipado, validación Pydantic y soporte OpenAPI.">FastAPI</abbr> y la base sobre la que <abbr title="Capa que combina SQLAlchemy y Pydantic en una sola declaración de modelo.">SQLModel</abbr>
+construye sus modelos.</p>
+<ul>
+<li>:material-web: Docs: <a href="https://docs.pydantic.dev/">https://docs.pydantic.dev/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/pydantic/pydantic">https://github.com/pydantic/pydantic</a></li>
+</ul>
+<h3 id="pyjwt"><abbr title="Librería Python de referencia para emitir y verificar JWT.">PyJWT</abbr><a class="headerlink" href="#pyjwt" title="Enlace permanente a este título">¶</a></h3>
+<p>Librería Python de referencia para emitir y verificar JWTs. Custodiam
+la usa en el backend para verificar los tokens emitidos por <abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr>
+contra el <abbr title="JSON Web Key Set. Documento con las claves públicas que verifican un JWT.">JWKS</abbr> publicado.</p>
+<ul>
+<li>:material-web: Docs: <a href="https://pyjwt.readthedocs.io/">https://pyjwt.readthedocs.io/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/jpadilla/pyjwt">https://github.com/jpadilla/pyjwt</a></li>
+</ul>
+<h3 id="pytest"><abbr title="Framework de testing más usado en Python; runner de tests de custodiam-api.">pytest</abbr><a class="headerlink" href="#pytest" title="Enlace permanente a este título">¶</a></h3>
+<p>Framework de testing más usado en el ecosistema Python. Sintaxis
+declarativa, fixtures y plugins ricos. Es el runner de tests de
+<code>custodiam-api</code>.</p>
+<ul>
+<li>:material-web: Docs: <a href="https://docs.pytest.org/">https://docs.pytest.org/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/pytest-dev/pytest">https://github.com/pytest-dev/pytest</a></li>
+</ul>
+<h3 id="resend"><abbr title="Servicio SaaS de envío transaccional de correo con SMTP y API HTTP.">Resend</abbr><a class="headerlink" href="#resend" title="Enlace permanente a este título">¶</a></h3>
+<p>Servicio SaaS de envío transaccional de correo, con <abbr title="Simple Mail Transfer Protocol. Protocolo estándar de envío de correo (RFC 5321).">SMTP</abbr> relay y API
+HTTP. Custodiam lo elige sobre AWS SES y otros por simplicidad de
+onboarding y precio; ver <a href="../adrs/adr-021-smtp-resend/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-021</a>.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://resend.com/">https://resend.com/</a></li>
+<li>:material-github: Org: <a href="https://github.com/resend">https://github.com/resend</a></li>
+</ul>
+<h3 id="riverpod"><abbr title="Framework de gestión de estado e inyección de dependencias para Flutter, sucesor de Provider.">Riverpod</abbr><a class="headerlink" href="#riverpod" title="Enlace permanente a este título">¶</a></h3>
+<p>Framework de gestión de estado e inyección de dependencias para
+<abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr>, sucesor moderno de <abbr title="Librería de estado precursora de Riverpod. ALTERNATIVA DESCARTADA (ADR-012).">Provider</abbr>. Custodiam lo adopta como base
+para ViewModels y servicios; ver <a href="../adrs/adr-012-riverpod/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-012</a>.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://riverpod.dev/">https://riverpod.dev/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/rrousselGit/riverpod">https://github.com/rrousselGit/riverpod</a></li>
+</ul>
+<h3 id="ruff"><abbr title="Linter y formatter de Python escrito en Rust, mucho más rápido que Flake8/Pylint.">Ruff</abbr><a class="headerlink" href="#ruff" title="Enlace permanente a este título">¶</a></h3>
+<p>Linter y formatter de Python escrito en Rust, varias órdenes de
+magnitud más rápido que Flake8/Pylint. Custodiam lo usa como única
+herramienta de lint y formato en <code>custodiam-api</code>.</p>
+<ul>
+<li>:material-web: Docs: <a href="https://docs.astral.sh/ruff/">https://docs.astral.sh/ruff/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/astral-sh/ruff">https://github.com/astral-sh/ruff</a></li>
+</ul>
+<h3 id="sops"><abbr title="Secrets OPerationS. Cifra archivos estructurados campo a campo con age, GPG o KMS.">sops</abbr><a class="headerlink" href="#sops" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Secrets OPerationS</em>. Herramienta de Mozilla (hoy CNCF) para cifrar
+archivos estructurados (YAML, JSON, ENV) campo a campo con backends
+intercambiables (<abbr title="Herramienta moderna de cifrado de archivos con sintaxis simple y clave pública X25519.">age</abbr>, GPG, KMS). Custodiam la usa con <abbr title="Herramienta moderna de cifrado de archivos con sintaxis simple y clave pública X25519.">age</abbr> para
+versionar <code>.env.sops</code>; ver <a href="../adrs/adr-019-sops-age/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-019</a>.</p>
+<ul>
+<li>:material-github: Repo: <a href="https://github.com/getsops/sops">https://github.com/getsops/sops</a></li>
+</ul>
+<h3 id="sqflite"><abbr title="Paquete Flutter de SQLite para Android e iOS; almacenamiento local offline-first.">sqflite</abbr><a class="headerlink" href="#sqflite" title="Enlace permanente a este título">¶</a></h3>
+<p>Paquete <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr> de SQLite para Android y iOS. Custodiam lo usa como
+almacenamiento local offline-first; ver
+<a href="../adrs/adr-005-sqflite/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-005</a>.</p>
+<ul>
+<li>:material-package: pub.dev: <a href="https://pub.dev/packages/sqflite">https://pub.dev/packages/sqflite</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/tekartik/sqflite">https://github.com/tekartik/sqflite</a></li>
+</ul>
+<h3 id="sqlalchemy"><abbr title="ORM y toolkit SQL de referencia en Python.">SQLAlchemy</abbr><a class="headerlink" href="#sqlalchemy" title="Enlace permanente a este título">¶</a></h3>
+<p>ORM y toolkit SQL de referencia en Python, con dos APIs (Core y ORM).
+<abbr title="Capa que combina SQLAlchemy y Pydantic en una sola declaración de modelo.">SQLModel</abbr> se construye encima. Custodiam lo usa indirectamente vía
+<abbr title="Capa que combina SQLAlchemy y Pydantic en una sola declaración de modelo.">SQLModel</abbr>.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://www.sqlalchemy.org/">https://www.sqlalchemy.org/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/sqlalchemy/sqlalchemy">https://github.com/sqlalchemy/sqlalchemy</a></li>
+</ul>
+<h3 id="sqlmodel"><abbr title="Capa que combina SQLAlchemy y Pydantic en una sola declaración de modelo.">SQLModel</abbr><a class="headerlink" href="#sqlmodel" title="Enlace permanente a este título">¶</a></h3>
+<p>Capa de modelos que combina <abbr title="ORM y toolkit SQL de referencia en Python.">SQLAlchemy</abbr> y <abbr title="Librería Python de validación y serialización basada en type hints.">Pydantic</abbr> en una sola
+declaración. Custodiam la adopta como ORM de <code>custodiam-api</code> para
+evitar duplicar modelo ORM y modelo de validación; ver
+<a href="../adrs/adr-002-sqlmodel/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-002</a>.</p>
+<ul>
+<li>:material-web: Docs: <a href="https://sqlmodel.tiangolo.com/">https://sqlmodel.tiangolo.com/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/fastapi/sqlmodel">https://github.com/fastapi/sqlmodel</a></li>
+</ul>
+<h3 id="url-launcher"><abbr title="Paquete Flutter para abrir URLs externas desde la app.">url_launcher</abbr><a class="headerlink" href="#url-launcher" title="Enlace permanente a este título">¶</a></h3>
+<p>Paquete <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr> para abrir URLs externas (navegador, app de correo,
+teléfono) desde la app. Custodiam lo usa en el flujo web de OAuth para
+abrir la pantalla de login del <abbr title="Identity Provider. Sistema que autentica usuarios y emite tokens de identidad.">IdP</abbr> en pestaña nueva o <code>_self</code>.</p>
+<ul>
+<li>:material-package: pub.dev:
+  <a href="https://pub.dev/packages/url_launcher">https://pub.dev/packages/url_launcher</a></li>
+</ul>
+<h3 id="uv"><abbr title="Toolchain Python de Astral escrita en Rust. Sustituye pip + venv + pip-tools.">uv</abbr><a class="headerlink" href="#uv" title="Enlace permanente a este título">¶</a></h3>
+<p>Toolchain de empaquetado y entornos virtuales para Python escrita en
+Rust por Astral. Sustituye <code>pip</code> + <code>venv</code> + <code>pip-tools</code> + <code>pipx</code> con
+un único binario muy rápido. Adoptada como toolchain canónica de
+<code>custodiam-api</code> por <a href="../adrs/adr-026-uv/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-026</a>.</p>
+<ul>
+<li>:material-web: Docs: <a href="https://docs.astral.sh/uv/">https://docs.astral.sh/uv/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/astral-sh/uv">https://github.com/astral-sh/uv</a></li>
+</ul>
+<hr/>
+<h2 id="conceptos-del-proyecto">Conceptos del proyecto<a class="headerlink" href="#conceptos-del-proyecto" title="Enlace permanente a este título">¶</a></h2>
+<h3 id="anonimizacion-art-17"><abbr title="Pisar campos PII con valores neutros cumpliendo el derecho de supresión RGPD (Art. 17).">anonimización Art. 17</abbr><a class="headerlink" href="#anonimizacion-art-17" title="Enlace permanente a este título">¶</a></h3>
+<p>Operación que pisa los campos <abbr title="Personally Identifiable Information. Datos que permiten identificar a una persona física.">PII</abbr> de una fila de voluntario con valores
+neutros y conserva su <code>keycloak_id</code> y <code>audit_log</code>, cumpliendo el
+derecho de supresión del Art. 17 <abbr title="Reglamento General de Protección de Datos (UE 2016/679). GDPR en inglés.">RGPD</abbr> sin perder integridad
+referencial. Se distingue del <em><abbr title="Borrado lógico (campo deleted_at) que mantiene la fila para histórico.">soft delete</abbr></em> (que solo marca como
+borrado).</p>
+<h3 id="app-links"><abbr title="Mecanismo de Android para vincular un dominio HTTPS a una app vía assetlinks.json.">App Links</abbr><a class="headerlink" href="#app-links" title="Enlace permanente a este título">¶</a></h3>
+<p>Mecanismo de Android para vincular un dominio HTTPS a una app de
+forma que abrir la URL desde un navegador o cliente de correo
+arranque directamente la app (verificación de propiedad por
+<code>assetlinks.json</code>). Equivalente Android de los <abbr title="Mecanismo iOS análogo a App Links de Android, vía apple-app-site-association.">Universal Links</abbr> de
+iOS; ver <a href="../adrs/adr-011-deep-links/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-011</a>.</p>
+<h3 id="app-permission-gate"><abbr title="Widget Flutter que oculta afordancias del UI si el usuario no tiene el permiso requerido.">AppPermissionGate</abbr><a class="headerlink" href="#app-permission-gate" title="Enlace permanente a este título">¶</a></h3>
+<p>Widget <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr> que envuelve cualquier afordancia del UI condicionada
+a un permiso. Si el <code>CurrentUser</code> no tiene el <code>Permission</code> requerido,
+devuelve <code>SizedBox.shrink()</code> (oculta) o un <code>AppEmptyState</code> con copy
+"Sin acceso". Patrón espejado en backend (<code>require_permission()</code>).
+Documentado en <a href="../adrs/adr-013-rbac-lockstep/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-013</a>.</p>
+<h3 id="app-startup"><abbr title="Caso de uso que ejecuta la lógica de arranque de la app antes de navegar.">AppStartup</abbr><a class="headerlink" href="#app-startup" title="Enlace permanente a este título">¶</a></h3>
+<p>Caso de uso que ejecuta toda la lógica de arranque de la app (carga
+de configuración, restauración de sesión, comprobación de versión)
+antes de decidir a qué ruta navegar. Convive con <code>SplashPage</code> para
+ofrecer feedback visual durante el proceso; ver
+<a href="../adrs/adr-017-splash-app-startup/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-017</a>.</p>
+<h3 id="authorization-code"><abbr title="Tipo de grant de OAuth 2.0 donde el cliente canjea un código por un access token.">Authorization Code</abbr><a class="headerlink" href="#authorization-code" title="Enlace permanente a este título">¶</a></h3>
+<p>Tipo de concesión (grant) de <abbr title="Marco IETF de autorización delegada por token (RFC 6749).">OAuth 2.0</abbr> en el que el cliente
+intercambia un código de autorización corto por un access token. Es
+el grant recomendado para clientes con UI (móvil, web) y el único
+que Custodiam acepta; ver
+<a href="../adrs/adr-010-oauth-pkce-keycloak/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-010</a>.</p>
+<h3 id="auth-service"><abbr title="Servicio Dart que coordina el flujo OAuth contra Keycloak en la app Flutter.">AuthService</abbr><a class="headerlink" href="#auth-service" title="Enlace permanente a este título">¶</a></h3>
+<p>Servicio Dart de la app que coordina el flujo <abbr title="Marco IETF de autorización delegada por token (RFC 6749).">OAuth 2.0</abbr> contra
+<abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr> (login, refresh, logout) y expone el estado de sesión al
+resto de la app vía <abbr title="Framework de gestión de estado e inyección de dependencias para Flutter, sucesor de Provider.">Riverpod</abbr>. Tiene implementaciones distintas para
+móvil y web; ver <a href="../adrs/adr-023-oauth-web-asimetria/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-023</a>.</p>
+<h3 id="audit-log"><abbr title="Tabla backend que registra eventos de auditoría (cambios sobre voluntarios, logins, etc.).">audit_log</abbr><a class="headerlink" href="#audit-log" title="Enlace permanente a este título">¶</a></h3>
+<p>Tabla del backend que registra eventos de auditoría
+(crear/editar/borrar voluntario, cambio de rol, anonimización, login
+fallido). Cumple obligación <abbr title="Reglamento General de Protección de Datos (UE 2016/679). GDPR en inglés.">RGPD</abbr> y de trazabilidad operativa.
+Documentado en <a href="../arquitectura/audit-log/">arquitectura</a>.</p>
+<h3 id="clean-architecture"><abbr title="Aproximación arquitectónica por capas concéntricas con dependencias hacia el centro.">Clean Architecture</abbr><a class="headerlink" href="#clean-architecture" title="Enlace permanente a este título">¶</a></h3>
+<p>Aproximación arquitectónica con capas concéntricas (entidades, casos
+de uso, adaptadores, frameworks) donde las dependencias siempre
+apuntan hacia el centro. Custodiam la aplica de forma estricta en
+<code>custodiam-app</code>; ver <a href="../arquitectura/">arquitectura</a>.</p>
+<h3 id="client-scope"><abbr title="Concepto Keycloak: conjunto de roles, claims y mappers asignables a un cliente.">client scope</abbr><a class="headerlink" href="#client-scope" title="Enlace permanente a este título">¶</a></h3>
+<p>Concepto de <abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr>: conjunto de roles, claims y protocolos mappers
+que se pueden asignar a un cliente <abbr title="OpenID Connect. Capa de identidad sobre OAuth 2.0 que añade id_token.">OIDC</abbr>. Custodiam usa scopes
+distintos para el cliente web y el móvil; ver
+<a href="../guias/configuracion-keycloak/">guía de configuración de <abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr></a>.</p>
+<h3 id="code-verifier"><abbr title="Cadena secreta del flujo PKCE que el cliente envía al canjear el código.">code_verifier</abbr><a class="headerlink" href="#code-verifier" title="Enlace permanente a este título">¶</a></h3>
+<p>Cadena aleatoria secreta que el cliente OAuth genera al iniciar un
+flujo <abbr title="Proof Key for Code Exchange. Extensión de OAuth 2.0 que protege el Authorization Code en clientes públicos.">PKCE</abbr> y envía al servidor en el intercambio del código. Junto
+con <code>code_challenge</code> (su hash SHA-256), demuestra que quien canjea el
+código es quien inició el flujo; ver
+<a href="../adrs/adr-010-oauth-pkce-keycloak/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-010</a>.</p>
+<h3 id="custom-scheme"><abbr title="URL no estándar (ej. com.custodiam.app://) que una app registra para recibir deep links.">custom scheme</abbr><a class="headerlink" href="#custom-scheme" title="Enlace permanente a este título">¶</a></h3>
+<p>Esquema de URL no estándar (p. ej. <code>com.custodiam.app://callback</code>)
+que una app registra en el sistema operativo para recibir <abbr title="URLs que abren una vista concreta dentro de una app móvil.">deep links</abbr>.
+Alternativa a <abbr title="Mecanismo de Android para vincular un dominio HTTPS a una app vía assetlinks.json.">App Links</abbr> / <abbr title="Mecanismo iOS análogo a App Links de Android, vía apple-app-site-association.">Universal Links</abbr> cuando no se quiere
+configurar verificación por dominio; ver
+<a href="../adrs/adr-011-deep-links/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-011</a>.</p>
+<h3 id="deep-links"><abbr title="URLs que abren una vista concreta dentro de una app móvil.">deep links</abbr><a class="headerlink" href="#deep-links" title="Enlace permanente a este título">¶</a></h3>
+<p>Genéricamente, cualquier URL que abre una vista concreta dentro de
+una app móvil. Bajo este paraguas caben <abbr title="Mecanismo de Android para vincular un dominio HTTPS a una app vía assetlinks.json.">App Links</abbr>, <abbr title="Mecanismo iOS análogo a App Links de Android, vía apple-app-site-association.">Universal Links</abbr> y
+custom schemes; ver <a href="../adrs/adr-011-deep-links/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-011</a>.</p>
+<h3 id="env-config"><abbr title="Clase Dart que centraliza variables de entorno inyectadas en build time con --dart-define.">EnvConfig</abbr><a class="headerlink" href="#env-config" title="Enlace permanente a este título">¶</a></h3>
+<p>Clase Dart que centraliza la lectura de variables de entorno
+inyectadas en build time con <code>--dart-define</code>. Evita strings
+hardcoded dispersos y permite cambiar el endpoint del backend/<abbr title="Identity Provider. Sistema que autentica usuarios y emite tokens de identidad.">IdP</abbr>
+sin recompilar. Documentado en <a href="../adrs/adr-015-env-config/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-015</a>.</p>
+<h3 id="mapper"><abbr title="Concepto Keycloak: regla que transforma datos del usuario en claims del token.">mapper</abbr><a class="headerlink" href="#mapper" title="Enlace permanente a este título">¶</a></h3>
+<p>Concepto de <abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr>: regla que transforma datos de un usuario en
+claims del token. Custodiam configura mappers para incluir los roles
+del <abbr title="Concepto Keycloak: contenedor lógico aislado con usuarios, roles, clientes y políticas propias.">realm</abbr> en el <code>access_token</code> que verifica el backend; ver
+<a href="../guias/configuracion-keycloak/">guía de configuración de <abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr></a>.</p>
+<h3 id="permission-enum"><abbr title="Catálogo cerrado de permisos canónicos del dominio, espejado entre backend y frontend.">Permission enum</abbr><a class="headerlink" href="#permission-enum" title="Enlace permanente a este título">¶</a></h3>
+<p>Catálogo cerrado de permisos canónicos del dominio
+(<code>voluntarios.crear</code>, <code>servicios.editar</code>, etc.). Reside en el backend
+y se espeja literal en el frontend para garantizar el lockstep; ver
+<a href="../adrs/adr-013-rbac-lockstep/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-013</a>.</p>
+<h3 id="polyrepo"><abbr title="Estructura de proyecto donde cada componente vive en su propio repositorio Git.">polyrepo</abbr><a class="headerlink" href="#polyrepo" title="Enlace permanente a este título">¶</a></h3>
+<p>Estructura de proyecto donde cada componente vive en su propio
+repositorio Git, en contraste con monorepo. Custodiam adopta
+<abbr title="Estructura de proyecto donde cada componente vive en su propio repositorio Git.">polyrepo</abbr> con cuatro repos (<code>custodiam-app</code>, <code>custodiam-api</code>,
+<code>custodiam-infra</code>, <code>custodiam-book</code>); ver
+<a href="../adrs/adr-001-polyrepo/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-001</a>.</p>
+<h3 id="rbac-lockstep"><abbr title="Disciplina por la que cualquier cambio en el catálogo de permisos se aplica síncrono en backend y frontend.">RBAC lockstep</abbr><a class="headerlink" href="#rbac-lockstep" title="Enlace permanente a este título">¶</a></h3>
+<p>Disciplina por la que cualquier cambio en el catálogo de permisos
+debe aplicarse de forma síncrona en backend y frontend en el mismo
+PR, manteniendo ambos espejos de la misma matriz. Documentado en
+<a href="../adrs/adr-013-rbac-lockstep/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-013</a>.</p>
+<h3 id="realm"><abbr title="Concepto Keycloak: contenedor lógico aislado con usuarios, roles, clientes y políticas propias.">realm</abbr><a class="headerlink" href="#realm" title="Enlace permanente a este título">¶</a></h3>
+<p>Concepto de <abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr>: contenedor lógico aislado con sus propios
+usuarios, roles, clientes y políticas. Custodiam usa dos realms
+distintos (<code>master</code> para administración de <abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr>, <code>custodiam</code> para
+los usuarios de la app); ver
+<a href="../empezar/usuarios-prueba/">la página de usuarios de prueba</a>.</p>
+<h3 id="result-t">Result<t><a class="headerlink" href="#result-t" title="Enlace permanente a este título">¶</a></t></h3>
+<p>Tipo sellado del frontend que representa o bien un valor de éxito
+(<code>Success&lt;T&gt;</code>) o bien una <code>Failure</code> tipada. Sustituye al manejo de
+excepciones para flujos previsibles (red, validación, autenticación);
+ver <a href="../adrs/adr-014-result-failure/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-014</a>.</p>
+<h3 id="session-storage"><abbr title="Almacenamiento por pestaña del navegador (se borra al cerrarla).">sessionStorage</abbr><a class="headerlink" href="#session-storage" title="Enlace permanente a este título">¶</a></h3>
+<p>Almacenamiento por pestaña del navegador (se borra al cerrarla).
+Custodiam lo usa en web para guardar el <code>code_verifier</code> mientras dura
+el redirect del flujo OAuth, evitando exponerlo en <code>localStorage</code>;
+ver <a href="../adrs/adr-023-oauth-web-asimetria/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-023</a>.</p>
+<h3 id="soft-delete"><abbr title="Borrado lógico (campo deleted_at) que mantiene la fila para histórico.">soft delete</abbr><a class="headerlink" href="#soft-delete" title="Enlace permanente a este título">¶</a></h3>
+<p>Borrado lógico: la fila no se elimina físicamente sino que se marca
+con un campo <code>deleted_at</code>. Custodiam lo usa para "dar de baja" un
+voluntario manteniendo histórico. <strong>Distinto</strong> de la anonimización
+Art. 17, que pisa los datos personales.</p>
+<h3 id="splash-page"><abbr title="Pantalla inicial de la app durante el arranque, mientras corre AppStartup.">SplashPage</abbr><a class="headerlink" href="#splash-page" title="Enlace permanente a este título">¶</a></h3>
+<p>Pantalla inicial de la app <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr> que se muestra durante el arranque
+mientras se ejecuta el caso de uso <code>AppStartup</code>. Documentada en
+<a href="../adrs/adr-017-splash-app-startup/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-017</a>.</p>
+<h3 id="universal-links"><abbr title="Mecanismo iOS análogo a App Links de Android, vía apple-app-site-association.">Universal Links</abbr><a class="headerlink" href="#universal-links" title="Enlace permanente a este título">¶</a></h3>
+<p>Mecanismo de iOS análogo a los <abbr title="Mecanismo de Android para vincular un dominio HTTPS a una app vía assetlinks.json.">App Links</abbr> de Android: vincula un
+dominio HTTPS a una app verificando la propiedad mediante un archivo
+<code>apple-app-site-association</code>. Si la app está instalada, abre
+directamente; si no, abre el navegador como fallback. Ver
+<a href="../adrs/adr-011-deep-links/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-011</a>.</p>
+<h3 id="valuekey"><abbr title="Clave estable de un widget Flutter para que los tests lo localicen con find.byKey.">ValueKey</abbr><a class="headerlink" href="#valuekey" title="Enlace permanente a este título">¶</a></h3>
+<p>Identificador estable que se asigna a un widget de <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr> para que
+los tests lo localicen de forma fiable con <code>find.byKey(...)</code>, en
+lugar de depender del tipo o del texto visible. En Custodiam todas
+las <abbr title="Clave estable de un widget Flutter para que los tests lo localicen con find.byKey.">ValueKey</abbr> estables viven en una única clase <code>K</code>
+(<code>lib/app/test_keys.dart</code>), compartida entre las pantallas y los
+tests. Ver <a href="../adrs/adr-028-valuekeys-tests/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-028</a>.</p>
+<hr/>
+<h2 id="alternativas-evaluadas-y-descartadas">Alternativas evaluadas y descartadas<a class="headerlink" href="#alternativas-evaluadas-y-descartadas" title="Enlace permanente a este título">¶</a></h2>
+<div class="admonition info">
+<p class="admonition-title">Estas herramientas no son parte del stack actual</p>
+<p>Esta sección lista herramientas que aparecen mencionadas en los
+ADRs como alternativas evaluadas y finalmente <strong>no elegidas</strong>.
+Se incluyen para que el lector entienda por qué se descartaron,
+pero <strong>no se usan en Custodiam</strong>.</p>
+</div>
+<h3 id="auth0"><abbr title="Plataforma SaaS de Identity-as-a-Service. ALTERNATIVA DESCARTADA en Custodiam (ADR-010).">Auth0</abbr><a class="headerlink" href="#auth0" title="Enlace permanente a este título">¶</a></h3>
+<p>Plataforma SaaS de Identity-as-a-Service. Descartada en
+<a href="../adrs/adr-010-oauth-pkce-keycloak/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-010</a> en favor de <abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr>
+autoalojado, por compatibilidad con <abbr title="GNU Affero General Public License. Licencia copyleft fuerte; obliga a publicar el fuente incluso en servicios en red.">AGPL</abbr> y para evitar lock-in y
+costes por usuario activo.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://auth0.com/">https://auth0.com/</a></li>
+</ul>
+<h3 id="bloc"><abbr title="Patrón de gestión de estado por streams para Flutter. ALTERNATIVA DESCARTADA (ADR-012).">BLoC</abbr><a class="headerlink" href="#bloc" title="Enlace permanente a este título">¶</a></h3>
+<p>Patrón de gestión de estado basado en streams para <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr>.
+Descartado en <a href="../adrs/adr-012-riverpod/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-012</a> frente a <abbr title="Framework de gestión de estado e inyección de dependencias para Flutter, sucesor de Provider.">Riverpod</abbr>
+por boilerplate más alto y curva de aprendizaje menos cómoda para el
+equipo.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://bloclibrary.dev/">https://bloclibrary.dev/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/felangel/bloc">https://github.com/felangel/bloc</a></li>
+</ul>
+<h3 id="caddy"><abbr title="Servidor web moderno con HTTPS automático. ALTERNATIVA DESCARTADA (ADR-006).">Caddy</abbr><a class="headerlink" href="#caddy" title="Enlace permanente a este título">¶</a></h3>
+<p>Servidor web moderno con HTTPS automático integrado. Descartado en
+<a href="../adrs/adr-006-nginx-alpine/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-006</a> en favor de Nginx Alpine por
+ecosistema mucho más maduro para servir bundles <abbr title="Single Page Application. App web que se carga una sola vez y navega por JavaScript.">SPA</abbr>/<abbr title="Progressive Web App. App web con capacidades nativas (instalación, offline, push).">PWA</abbr>.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://caddyserver.com/">https://caddyserver.com/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/caddyserver/caddy">https://github.com/caddyserver/caddy</a></li>
+</ul>
+<h3 id="casbin"><abbr title="Librería de autorización multi-lenguaje. ALTERNATIVA DESCARTADA (ADR-013).">Casbin</abbr><a class="headerlink" href="#casbin" title="Enlace permanente a este título">¶</a></h3>
+<p>Librería multi-lenguaje de autorización con soporte de <abbr title="Role-Based Access Control. Modelo de autorización por roles.">RBAC</abbr>, <abbr title="Attribute-Based Access Control. Modelo de autorización por atributos.">ABAC</abbr> y
+políticas custom. Descartada en
+<a href="../adrs/adr-013-rbac-lockstep/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-013</a> frente a un enum estático
+por sobreingeniería para un catálogo pequeño y estable.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://casbin.org/">https://casbin.org/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/casbin/casbin">https://github.com/casbin/casbin</a></li>
+</ul>
+<h3 id="cedar"><abbr title="Lenguaje de políticas de AWS. ALTERNATIVA DESCARTADA (ADR-013).">Cedar</abbr><a class="headerlink" href="#cedar" title="Enlace permanente a este título">¶</a></h3>
+<p>Lenguaje de políticas de AWS para autorización fine-grained.
+Descartado en <a href="../adrs/adr-013-rbac-lockstep/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-013</a> por el mismo
+motivo que <abbr title="Librería de autorización multi-lenguaje. ALTERNATIVA DESCARTADA (ADR-013).">Casbin</abbr>: demasiada maquinaria para un <abbr title="Role-Based Access Control. Modelo de autorización por roles.">RBAC</abbr> clásico.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://www.cedarpolicy.com/">https://www.cedarpolicy.com/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/cedar-policy/cedar">https://github.com/cedar-policy/cedar</a></li>
+</ul>
+<h3 id="chopper"><abbr title="Cliente HTTP con generación de código para Flutter. ALTERNATIVA DESCARTADA (ADR-004).">Chopper</abbr><a class="headerlink" href="#chopper" title="Enlace permanente a este título">¶</a></h3>
+<p>Cliente HTTP con generación de código para <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr>. Descartado en
+<a href="../adrs/adr-004-http-cliente/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-004</a> en favor del paquete oficial
+<code>http</code> por no necesitar <code>build_runner</code> en el cliente y minimizar
+generación de código.</p>
+<ul>
+<li>:material-package: pub.dev: <a href="https://pub.dev/packages/chopper">https://pub.dev/packages/chopper</a></li>
+</ul>
+<h3 id="cypress"><abbr title="Framework E2E solo para web. ALTERNATIVA DESCARTADA (ADR-024).">Cypress</abbr><a class="headerlink" href="#cypress" title="Enlace permanente a este título">¶</a></h3>
+<p>Framework de <abbr title="End-to-End test. Prueba que ejecuta toda la app contra infraestructura real.">E2E</abbr> para web. Descartado en
+<a href="../adrs/adr-024-patrol-e2e/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-024</a> por no soportar móvil nativo
+(Android/iOS) y por requerir mantener dos frameworks distintos.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://www.cypress.io/">https://www.cypress.io/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/cypress-io/cypress">https://github.com/cypress-io/cypress</a></li>
+</ul>
+<h3 id="dio"><abbr title="Cliente HTTP popular para Flutter. ALTERNATIVA DESCARTADA (ADR-004).">Dio</abbr><a class="headerlink" href="#dio" title="Enlace permanente a este título">¶</a></h3>
+<p>Cliente HTTP popular para <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr> con interceptors, cancelación y
+adapters. Descartado en <a href="../adrs/adr-004-http-cliente/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-004</a> en
+favor del paquete oficial <code>http</code> por mantener el stack
+deliberadamente minimalista.</p>
+<ul>
+<li>:material-package: pub.dev: <a href="https://pub.dev/packages/dio">https://pub.dev/packages/dio</a></li>
+<li>:material-github: Repo: <a href="https://github.com/cfug/dio">https://github.com/cfug/dio</a></li>
+</ul>
+<h3 id="drift"><abbr title="ORM tipado para SQLite en Flutter. ALTERNATIVA DESCARTADA (ADR-005).">drift</abbr><a class="headerlink" href="#drift" title="Enlace permanente a este título">¶</a></h3>
+<p>ORM moderno y tipado para SQLite en <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr> con generación de código.
+Descartado en <a href="../adrs/adr-005-sqflite/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-005</a> en favor de <abbr title="Paquete Flutter de SQLite para Android e iOS; almacenamiento local offline-first.">sqflite</abbr>
+puro por evitar <code>build_runner</code> y mantener queries SQL explícitas.</p>
+<ul>
+<li>:material-web: Docs: <a href="https://drift.simonbinder.eu/">https://drift.simonbinder.eu/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/simolus3/drift">https://github.com/simolus3/drift</a></li>
+</ul>
+<h3 id="flyway"><abbr title="Migraciones de BD basadas en JVM. ALTERNATIVA DESCARTADA (ADR-003).">Flyway</abbr><a class="headerlink" href="#flyway" title="Enlace permanente a este título">¶</a></h3>
+<p>Herramienta de migraciones de BD basada en JVM (Java). Descartada en
+<a href="../adrs/adr-003-alembic/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-003</a> frente a <abbr title="Herramienta de migraciones de esquema para SQLAlchemy/SQLModel.">Alembic</abbr> por evitar el
+runtime Java en el contenedor de migraciones y mantener el stack en
+Python.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://flywaydb.org/">https://flywaydb.org/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/flyway/flyway">https://github.com/flyway/flyway</a></li>
+</ul>
+<h3 id="get-it"><abbr title="Service locator simple para Flutter. ALTERNATIVA DESCARTADA (ADR-012).">GetIt</abbr><a class="headerlink" href="#get-it" title="Enlace permanente a este título">¶</a></h3>
+<p>Service locator simple para <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr>. Descartado en
+<a href="../adrs/adr-012-riverpod/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-012</a> frente a <abbr title="Framework de gestión de estado e inyección de dependencias para Flutter, sucesor de Provider.">Riverpod</abbr> por no ofrecer
+gestión reactiva de estado además de <abbr title="Dependency Injection. Patrón en el que un objeto recibe sus dependencias de fuera.">DI</abbr>.</p>
+<ul>
+<li>:material-package: pub.dev:
+  <a href="https://pub.dev/packages/get_it">https://pub.dev/packages/get_it</a></li>
+</ul>
+<h3 id="gitbook"><abbr title="Plataforma SaaS de documentación con editor WYSIWYG. ALTERNATIVA DESCARTADA (ADR-027).">GitBook</abbr><a class="headerlink" href="#gitbook" title="Enlace permanente a este título">¶</a></h3>
+<p>Plataforma SaaS de documentación con editor WYSIWYG. Descartada en
+<a href="../adrs/adr-027-mkdocs-pages/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-027</a> por lock-in al editor
+propietario y dificultad para versionar el contenido en Git plano.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://www.gitbook.com/">https://www.gitbook.com/</a></li>
+</ul>
+<h3 id="hatch"><abbr title="Toolchain Python de PyPA. ALTERNATIVA DESCARTADA (ADR-026).">Hatch</abbr><a class="headerlink" href="#hatch" title="Enlace permanente a este título">¶</a></h3>
+<p>Toolchain Python moderno de PyPA (gestor de proyectos, entornos y
+builds). Descartado en <a href="../adrs/adr-026-uv/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-026</a> frente a <abbr title="Toolchain Python de Astral escrita en Rust. Sustituye pip + venv + pip-tools.">uv</abbr> por
+no integrar resolución de dependencias tan rápida ni envoltura del
+intérprete.</p>
+<ul>
+<li>:material-web: Docs: <a href="https://hatch.pypa.io/">https://hatch.pypa.io/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/pypa/hatch">https://github.com/pypa/hatch</a></li>
+</ul>
+<h3 id="hive"><abbr title="Base de datos NoSQL ligera para Flutter en Dart puro. ALTERNATIVA DESCARTADA (ADR-005).">hive</abbr><a class="headerlink" href="#hive" title="Enlace permanente a este título">¶</a></h3>
+<p>Base de datos NoSQL ligera para <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr>, escrita en Dart puro.
+Descartada en <a href="../adrs/adr-005-sqflite/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-005</a> frente a SQLite por
+no soportar queries relacionales ni migraciones de esquema robustas.</p>
+<ul>
+<li>:material-package: pub.dev: <a href="https://pub.dev/packages/hive">https://pub.dev/packages/hive</a></li>
+</ul>
+<h3 id="isar"><abbr title="Base de datos NoSQL embebida para Flutter. ALTERNATIVA DESCARTADA (ADR-005).">isar</abbr><a class="headerlink" href="#isar" title="Enlace permanente a este título">¶</a></h3>
+<p>Base de datos NoSQL embebida para <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr>, sucesora moderna de <abbr title="Base de datos NoSQL ligera para Flutter en Dart puro. ALTERNATIVA DESCARTADA (ADR-005).">hive</abbr>.
+Descartada en <a href="../adrs/adr-005-sqflite/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-005</a> por el mismo motivo:
+modelo NoSQL no encaja con queries relacionales del dominio.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://isar.dev/">https://isar.dev/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/isar/isar">https://github.com/isar/isar</a></li>
+</ul>
+<h3 id="liquibase"><abbr title="Migraciones de BD multi-formato. ALTERNATIVA DESCARTADA (ADR-003).">Liquibase</abbr><a class="headerlink" href="#liquibase" title="Enlace permanente a este título">¶</a></h3>
+<p>Herramienta de migraciones de BD multi-formato (XML, YAML, SQL).
+Descartada en <a href="../adrs/adr-003-alembic/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-003</a> frente a <abbr title="Herramienta de migraciones de esquema para SQLAlchemy/SQLModel.">Alembic</abbr> por
+preferir migraciones declaradas en Python (mismo lenguaje que el
+backend).</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://www.liquibase.org/">https://www.liquibase.org/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/liquibase/liquibase">https://github.com/liquibase/liquibase</a></li>
+</ul>
+<h3 id="maestro"><abbr title="Framework E2E móvil con sintaxis YAML. ALTERNATIVA DESCARTADA (ADR-024).">Maestro</abbr><a class="headerlink" href="#maestro" title="Enlace permanente a este título">¶</a></h3>
+<p>Framework de <abbr title="End-to-End test. Prueba que ejecuta toda la app contra infraestructura real.">E2E</abbr> para móvil con sintaxis declarativa en YAML.
+Descartado en <a href="../adrs/adr-024-patrol-e2e/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-024</a> por menos
+expresivo que un test programado en Dart y por no integrarse
+nativamente con la app <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr>.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://maestro.mobile.dev/">https://maestro.mobile.dev/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/mobile-dev-inc/maestro">https://github.com/mobile-dev-inc/maestro</a></li>
+</ul>
+<h3 id="mdbook"><abbr title="Generador de sitios para libros técnicos en Rust. ALTERNATIVA DESCARTADA (ADR-027).">mdBook</abbr><a class="headerlink" href="#mdbook" title="Enlace permanente a este título">¶</a></h3>
+<p>Generador de sitios estáticos para libros técnicos escrito en Rust.
+Descartado en <a href="../adrs/adr-027-mkdocs-pages/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-027</a> frente a
+<abbr title="Generador Python de sitios estáticos a partir de Markdown.">MkDocs</abbr>+Material por ecosistema de plugins más limitado.</p>
+<ul>
+<li>:material-web: Sitio oficial:
+  <a href="https://rust-lang.github.io/mdBook/">https://rust-lang.github.io/mdBook/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/rust-lang/mdBook">https://github.com/rust-lang/mdBook</a></li>
+</ul>
+<h3 id="opa"><abbr title="Open Policy Agent. Motor de políticas CNCF. ALTERNATIVA DESCARTADA (ADR-013).">OPA</abbr><a class="headerlink" href="#opa" title="Enlace permanente a este título">¶</a></h3>
+<p><em>Open Policy Agent</em>. Motor de políticas de propósito general (CNCF).
+Descartado en <a href="../adrs/adr-013-rbac-lockstep/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-013</a> por la misma
+razón que <abbr title="Librería de autorización multi-lenguaje. ALTERNATIVA DESCARTADA (ADR-013).">Casbin</abbr>: complejidad excesiva para un <abbr title="Role-Based Access Control. Modelo de autorización por roles.">RBAC</abbr> clásico.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://www.openpolicyagent.org/">https://www.openpolicyagent.org/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/open-policy-agent/opa">https://github.com/open-policy-agent/opa</a></li>
+</ul>
+<h3 id="ory"><abbr title="Suite de productos de identidad (Kratos, Hydra, Keto). ALTERNATIVA DESCARTADA (ADR-010).">Ory</abbr><a class="headerlink" href="#ory" title="Enlace permanente a este título">¶</a></h3>
+<p>Suite de productos (Kratos, Hydra, Keto, Oathkeeper) para identidad y
+autorización. Descartada en
+<a href="../adrs/adr-010-oauth-pkce-keycloak/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-010</a> frente a <abbr title="Servidor OIDC y OAuth 2.0 de código abierto; Identity Provider de Custodiam.">Keycloak</abbr> por
+preferir una solución más integrada y mejor documentada para el
+caso de uso de Custodiam.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://www.ory.sh/">https://www.ory.sh/</a></li>
+</ul>
+<h3 id="pdm"><abbr title="Toolchain Python alternativo a Poetry. ALTERNATIVA DESCARTADA (ADR-026).">PDM</abbr><a class="headerlink" href="#pdm" title="Enlace permanente a este título">¶</a></h3>
+<p>Toolchain Python alternativo a <abbr title="Toolchain Python con dependencias y builds. ALTERNATIVA DESCARTADA (ADR-026).">Poetry</abbr>, basado en estándares PEP.
+Descartado en <a href="../adrs/adr-026-uv/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-026</a> frente a <abbr title="Toolchain Python de Astral escrita en Rust. Sustituye pip + venv + pip-tools.">uv</abbr> por
+velocidad de resolución y por no incluir gestión del intérprete.</p>
+<ul>
+<li>:material-web: Docs: <a href="https://pdm-project.org/">https://pdm-project.org/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/pdm-project/pdm">https://github.com/pdm-project/pdm</a></li>
+</ul>
+<h3 id="pipenv"><abbr title="Toolchain Python que combina pip y virtualenv. ALTERNATIVA DESCARTADA (ADR-026).">Pipenv</abbr><a class="headerlink" href="#pipenv" title="Enlace permanente a este título">¶</a></h3>
+<p>Toolchain Python que combina <code>pip</code> y <code>virtualenv</code> en un solo CLI.
+Descartado en <a href="../adrs/adr-026-uv/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-026</a> por velocidad muy
+inferior a <abbr title="Toolchain Python de Astral escrita en Rust. Sustituye pip + venv + pip-tools.">uv</abbr> y por ritmo de mantenimiento irregular.</p>
+<ul>
+<li>:material-web: Docs: <a href="https://pipenv.pypa.io/">https://pipenv.pypa.io/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/pypa/pipenv">https://github.com/pypa/pipenv</a></li>
+</ul>
+<h3 id="poetry"><abbr title="Toolchain Python con dependencias y builds. ALTERNATIVA DESCARTADA (ADR-026).">Poetry</abbr><a class="headerlink" href="#poetry" title="Enlace permanente a este título">¶</a></h3>
+<p>Toolchain Python con manejo de dependencias, builds y publicación.
+Descartado en <a href="../adrs/adr-026-uv/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-026</a> frente a <abbr title="Toolchain Python de Astral escrita en Rust. Sustituye pip + venv + pip-tools.">uv</abbr> por
+velocidad y por sintaxis propia de <code>pyproject.toml</code> no perfectamente
+alineada con PEPs recientes.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://python-poetry.org/">https://python-poetry.org/</a></li>
+<li>:material-github: Repo:
+  <a href="https://github.com/python-poetry/poetry">https://github.com/python-poetry/poetry</a></li>
+</ul>
+<h3 id="provider"><abbr title="Librería de estado precursora de Riverpod. ALTERNATIVA DESCARTADA (ADR-012).">Provider</abbr><a class="headerlink" href="#provider" title="Enlace permanente a este título">¶</a></h3>
+<p>Librería de gestión de estado anterior y base sobre la que se
+construyó <abbr title="Framework de gestión de estado e inyección de dependencias para Flutter, sucesor de Provider.">Riverpod</abbr>. Descartada en <a href="../adrs/adr-012-riverpod/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-012</a>
+porque <abbr title="Framework de gestión de estado e inyección de dependencias para Flutter, sucesor de Provider.">Riverpod</abbr> la sustituye con menos dependencia del árbol de
+widgets y mejor ergonomía.</p>
+<ul>
+<li>:material-package: pub.dev:
+  <a href="https://pub.dev/packages/provider">https://pub.dev/packages/provider</a></li>
+</ul>
+<h3 id="rye"><abbr title="Toolchain Python anterior de Astral. ALTERNATIVA DESCARTADA (ADR-026).">Rye</abbr><a class="headerlink" href="#rye" title="Enlace permanente a este título">¶</a></h3>
+<p>Toolchain Python anterior de Astral, predecesor parcial de <abbr title="Toolchain Python de Astral escrita en Rust. Sustituye pip + venv + pip-tools.">uv</abbr>.
+Descartada en <a href="../adrs/adr-026-uv/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-026</a> porque la propia Astral
+recomienda migrar a <abbr title="Toolchain Python de Astral escrita en Rust. Sustituye pip + venv + pip-tools.">uv</abbr>.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://rye.astral.sh/">https://rye.astral.sh/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/astral-sh/rye">https://github.com/astral-sh/rye</a></li>
+</ul>
+<h3 id="sphinx"><abbr title="Generador de documentación clásico de Python basado en reStructuredText. ALTERNATIVA DESCARTADA (ADR-027).">Sphinx</abbr><a class="headerlink" href="#sphinx" title="Enlace permanente a este título">¶</a></h3>
+<p>Generador de documentación clásico del ecosistema Python, basado en
+reStructuredText. Descartado en
+<a href="../adrs/adr-027-mkdocs-pages/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-027</a> frente a <abbr title="Generador Python de sitios estáticos a partir de Markdown.">MkDocs</abbr> por sintaxis
+RST menos cómoda que Markdown para el flujo del equipo.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://www.sphinx-doc.org/">https://www.sphinx-doc.org/</a></li>
+<li>:material-github: Repo: <a href="https://github.com/sphinx-doc/sphinx">https://github.com/sphinx-doc/sphinx</a></li>
+</ul>
+<h3 id="vercel"><abbr title="Plataforma de despliegue serverless con foco en frontend. ALTERNATIVA DESCARTADA (ADR-006).">Vercel</abbr><a class="headerlink" href="#vercel" title="Enlace permanente a este título">¶</a></h3>
+<p>Plataforma de despliegue serverless con foco en frontend. Descartada
+en <a href="../adrs/adr-006-nginx-alpine/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-006</a> frente a Nginx Alpine
+autoalojado para evitar dependencia de plataforma propietaria al
+servir el bundle de <abbr title="Framework de Google para construir apps Android, iOS, Web y desktop desde un código Dart.">Flutter</abbr> Web.</p>
+<ul>
+<li>:material-web: Sitio oficial: <a href="https://vercel.com/">https://vercel.com/</a></li>
+</ul>
+<!--
+  Definiciones de tooltip (Markdown abbr extension).
+  Incluido automáticamente en cada página vía pymdownx.snippets:auto_append.
+  Cada *[Término]: ... añade un <abbr title="..."> con tooltip al hacer hover.
+  Las definiciones se mantienen alineadas con docs/glosario.md.
+-->
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Volver al principio
+</button>
+</main>
+<footer class="md-footer">
+<nav aria-label="Pie" class="md-footer__inner md-grid">
+<a aria-label="Anterior: Cliente OIDC en Flutter" class="md-footer__link md-footer__link--prev" href="../guias/flutter-oidc/">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</div>
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Anterior
+              </span>
+<div class="md-ellipsis">
+                Cliente OIDC en Flutter
+              </div>
+</div>
+</a>
+<a aria-label="Siguiente: Contribuir" class="md-footer__link md-footer__link--next" href="../contribuir/">
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Siguiente
+              </span>
+<div class="md-ellipsis">
+                Contribuir
+              </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2026 Equipo Custodiam · <a href="https://github.com/custodiam/custodiam-book/blob/main/LICENSE">AGPL-3.0</a>
+</div>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/custodiam" rel="noopener" target="_blank" title="Organización Custodiam en GitHub">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.tabs.link", "content.tooltips", "navigation.footer", "navigation.indexes", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow", "toc.integrate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,2565 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Esquema relacional de Custodiam — patrón "catálogo extensible + instancias + JSONB" aplicado al módulo voluntarios y replicable a futuros módulos.">
+      
+      
+        <meta name="author" content="Equipo Custodiam (Rodrigo Mulero, Marcos Val Sanz)">
+      
+      
+        <link rel="canonical" href="https://docs.custodiam.es/arquitectura/modelo-datos/">
+      
+      
+        <link rel="prev" href="../diagramas/">
+      
+      
+        <link rel="next" href="../flujos-negocio/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Modelo de datos - Custodiam</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/mkdocs_d2_plugin.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#modelo-de-datos" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Custodiam" class="md-header__button md-logo" aria-label="Custodiam" data-md-component="logo">
+      
+  <img src="../../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Custodiam
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Modelo de datos
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="blue-grey"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="orange"  aria-label="Cambiar al modo del sistema"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Cambiar al modo del sistema" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Compartir" aria-label="Compartir" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/custodiam/custodiam-book" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    custodiam/custodiam-book
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Custodiam" class="md-nav__button md-logo" aria-label="Custodiam" data-md-component="logo">
+      
+  <img src="../../assets/logo.svg" alt="logo">
+
+    </a>
+    Custodiam
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/custodiam/custodiam-book" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    custodiam/custodiam-book
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../empezar/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Empezar
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Empezar
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../empezar/api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend (API)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../empezar/app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    App (Flutter)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../empezar/infra/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infraestructura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../empezar/usuarios-prueba/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usuarios de prueba
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arquitectura
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Arquitectura
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stack técnico
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagramas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrama del sistema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modelo de datos
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modelo de datos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#patron-estructural-del-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patrón estructural del proyecto
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagrama-er-modulo-voluntarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagrama ER — módulo voluntarios
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#catalogos-pre-poblados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catálogos pre-poblados
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indexacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validacion-de-datos_especificos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validación de datos_especificos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aplicabilidad-a-otros-modulos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aplicabilidad a otros módulos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#audit-log-cross-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audit log cross-module
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referencias
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flujos-negocio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flujos de negocio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notificaciones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notificaciones redundantes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../audit-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Audit log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../adrs/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADRs
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ADRs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-001-polyrepo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-001 Polyrepo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-002-sqlmodel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-002 SQLModel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-003-alembic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-003 Alembic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-004-http-cliente/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-004 Cliente HTTP Flutter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-005-sqflite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-005 sqflite
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-006-nginx-alpine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-006 Nginx Alpine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-007-ghcr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-007 GHCR
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-008-psycopg3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-008 psycopg3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-009-2-bds-separadas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-009 2 BDs separadas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-010-oauth-pkce-keycloak/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-010 OAuth + PKCE + Keycloak
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-011-deep-links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-011 Deep links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-012-riverpod/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-012 Riverpod
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-013-rbac-lockstep/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-013 RBAC lockstep
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-014-result-failure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-014 Result<T> + Failure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-015-env-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-015 EnvConfig
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-016-dev-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-016 dev.log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-017-splash-app-startup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-017 SplashPage + AppStartup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-018-design-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-018 Design System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-019-sops-age/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-019 sops + age
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-020-tres-modos-despliegue/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-020 Tres modos de despliegue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-021-smtp-resend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-021 SMTP Resend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-022-ios-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-022 iOS 15 mínimo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-023-oauth-web-asimetria/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-023 OAuth web vs móvil
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-024-patrol-e2e/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-024 Patrol E2E
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-025-modelo-extensible/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-025 Modelo extensible
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-026-uv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-026 uv
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-027-mkdocs-pages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-027 MkDocs + Pages
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-028-valuekeys-tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-028 ValueKeys para tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adrs/adr-031-material-vehiculo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-031 Material↔vehículo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../guias/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guías
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guías
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guias/docker-compose-local/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose local
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guias/configuracion-keycloak/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuración de Keycloak
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guias/setup-fastapi-uv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup FastAPI con uv
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guias/flutter-oidc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cliente OIDC en Flutter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glosario/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glosario
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../contribuir/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contribuir
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contribuir
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/custodiam/custodiam-book/edit/main/docs/arquitectura/modelo-datos.md" title="Editar esta página" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/custodiam/custodiam-book/raw/main/docs/arquitectura/modelo-datos.md" title="Ver código fuente de esta página" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5"/></svg>
+    </a>
+  
+
+
+<h1 id="modelo-de-datos">Modelo de datos<a class="headerlink" href="#modelo-de-datos" title="Enlace permanente a este título">&para;</a></h1>
+<p>Custodiam usa <strong>PostgreSQL 15</strong> como base de datos principal y <strong><a class="glossary-term" href="../../glosario/#sqlmodel"><abbr title="Capa que combina SQLAlchemy y Pydantic en una sola declaración de modelo.">SQLModel</abbr></a></strong> (<a href="../../adrs/adr-002-sqlmodel/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-002</a>) como ORM unificado (<a class="glossary-term" href="../../glosario/#sqlalchemy"><abbr title="ORM y toolkit SQL de referencia en Python.">SQLAlchemy</abbr></a> 2.0 + <a class="glossary-term" href="../../glosario/#pydantic"><abbr title="Librería Python de validación y serialización basada en type hints.">Pydantic</abbr></a> en una sola clase). El esquema se evoluciona con <a href="https://alembic.sqlalchemy.org/"><abbr title="Herramienta de migraciones de esquema para SQLAlchemy/SQLModel.">Alembic</abbr></a>, incluyendo data migrations para pre-poblar catálogos.</p>
+<h2 id="patron-estructural-del-proyecto">Patrón estructural del proyecto<a class="headerlink" href="#patron-estructural-del-proyecto" title="Enlace permanente a este título">&para;</a></h2>
+<p>Las entidades del dominio que admiten <strong>tipos predefinidos pero ampliables</strong> (acreditaciones, equipamiento, tipos de servicio, tipos de inventario, tipos de notificación) siguen un patrón único formalizado en <a href="../../adrs/adr-025-modelo-extensible/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-025</a>: <strong>catálogo + tabla de instancias + <a class="glossary-term" href="../../glosario/#jsonb"><abbr title="Tipo de PostgreSQL para almacenar JSON en formato binario indexable.">JSONB</abbr></a> para campos específicos + enum discriminador</strong>.</p>
+<p>Esto permite:</p>
+<ul>
+<li>Añadir un tipo nuevo es un <strong>INSERT en el catálogo</strong>, sin ALTER TABLE.</li>
+<li>Consultas atómicas por familia (<code>WHERE categoria = 'FORMACION_INTERNA'</code>) y mixtas (<code>EXISTS</code> correlacionado) sobre la misma estructura.</li>
+<li>Campos específicos por tipo en <code>JSONB</code> documentados por <code>campos_schema</code> del catálogo (schema-on-read).</li>
+<li>Catálogos canónicos versionados en Git como data migrations.</li>
+</ul>
+<h2 id="diagrama-er-modulo-voluntarios">Diagrama ER — módulo voluntarios<a class="headerlink" href="#diagrama-er-modulo-voluntarios" title="Enlace permanente a este título">&para;</a></h2>
+<div class="d2"><svg data-d2-version="v0.7.1" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1065 1423" role="img" aria-label="Diagram"><svg class="d2-5cff9f5de05447598deaba70587fd44d d2-svg" width="1065" height="1423" viewBox="-101 -101 1065 1423"><rect x="-101.000000" y="-101.000000" width="1065.000000" height="1423.000000" rx="0.000000" fill="#FFFFFF" class=" fill-N7" stroke-width="0" /><style type="text/css">
+.d2-5cff9f5de05447598deaba70587fd44d .text {
+	font-family: "d2-5cff9f5de05447598deaba70587fd44d-font-regular";
+}
+@font-face {
+	font-family: d2-5cff9f5de05447598deaba70587fd44d-font-regular;
+	src: url("data:application/font-woff;base64,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");
+}
+.d2-5cff9f5de05447598deaba70587fd44d .text-italic {
+	font-family: "d2-5cff9f5de05447598deaba70587fd44d-font-italic";
+}
+@font-face {
+	font-family: d2-5cff9f5de05447598deaba70587fd44d-font-italic;
+	src: url("data:application/font-woff;base64,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");
+}</style><style type="text/css">.shape {
+  shape-rendering: geometricPrecision;
+  stroke-linejoin: round;
+}
+.connection {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.blend {
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-N1{fill:#0A0F25;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-N2{fill:#676C7E;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-N3{fill:#9499AB;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-N4{fill:#CFD2DD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-N5{fill:#DEE1EB;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-N6{fill:#EEF1F8;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-N7{fill:#FFFFFF;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-B1{fill:#0D32B2;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-B2{fill:#0D32B2;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-B3{fill:#E3E9FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-B4{fill:#E3E9FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-B5{fill:#EDF0FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-B6{fill:#F7F8FE;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-AA2{fill:#4A6FF3;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-AA4{fill:#EDF0FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-AA5{fill:#F7F8FE;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-AB4{fill:#EDF0FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .fill-AB5{fill:#F7F8FE;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-N1{stroke:#0A0F25;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-N2{stroke:#676C7E;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-N3{stroke:#9499AB;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-N4{stroke:#CFD2DD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-N5{stroke:#DEE1EB;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-N6{stroke:#EEF1F8;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-N7{stroke:#FFFFFF;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-B1{stroke:#0D32B2;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-B2{stroke:#0D32B2;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-B3{stroke:#E3E9FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-B4{stroke:#E3E9FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-B5{stroke:#EDF0FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-B6{stroke:#F7F8FE;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-AA2{stroke:#4A6FF3;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-AA4{stroke:#EDF0FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-AA5{stroke:#F7F8FE;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-AB4{stroke:#EDF0FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .stroke-AB5{stroke:#F7F8FE;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-N1{background-color:#0A0F25;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-N2{background-color:#676C7E;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-N3{background-color:#9499AB;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-N4{background-color:#CFD2DD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-N5{background-color:#DEE1EB;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-N6{background-color:#EEF1F8;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-N7{background-color:#FFFFFF;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-B1{background-color:#0D32B2;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-B2{background-color:#0D32B2;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-B3{background-color:#E3E9FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-B4{background-color:#E3E9FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-B5{background-color:#EDF0FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-B6{background-color:#F7F8FE;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-AA2{background-color:#4A6FF3;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-AA4{background-color:#EDF0FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-AA5{background-color:#F7F8FE;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-AB4{background-color:#EDF0FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .background-color-AB5{background-color:#F7F8FE;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-N1{color:#0A0F25;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-N2{color:#676C7E;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-N3{color:#9499AB;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-N4{color:#CFD2DD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-N5{color:#DEE1EB;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-N6{color:#EEF1F8;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-N7{color:#FFFFFF;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-B1{color:#0D32B2;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-B2{color:#0D32B2;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-B3{color:#E3E9FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-B4{color:#E3E9FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-B5{color:#EDF0FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-B6{color:#F7F8FE;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-AA2{color:#4A6FF3;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-AA4{color:#EDF0FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-AA5{color:#F7F8FE;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-AB4{color:#EDF0FD;}
+		.d2-5cff9f5de05447598deaba70587fd44d .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright-d2-5cff9f5de05447598deaba70587fd44d);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}</style><g class="dm9sdW50YXJpb3M="><g class="shape"><rect x="0.000000" y="477.000000" width="396.000000" height="504.000000" stroke="#0A0F25" fill="#FFFFFF" class="shape stroke-N1 fill-N7" style="stroke-width:2;" /><rect x="0.000000" y="477.000000" width="396.000000" height="36.000000" fill="#0A0F25" class="class_header fill-N1" /><text x="10.000000" y="502.750000" fill="#FFFFFF" class="text fill-N7" style="text-anchor:start;font-size:24px">voluntarios</text><text x="10.000000" y="536.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">id</text><text x="212.000000" y="536.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">uuid</text><text x="386.000000" y="536.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px">PK</text><line x1="0.000000" x2="396.000000" y1="549.000000" y2="549.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="10.000000" y="572.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">keycloak_id</text><text x="212.000000" y="572.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="386.000000" y="572.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px">UNQ</text><line x1="0.000000" x2="396.000000" y1="585.000000" y2="585.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="10.000000" y="608.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">nombre</text><text x="212.000000" y="608.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="386.000000" y="608.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="0.000000" x2="396.000000" y1="621.000000" y2="621.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="10.000000" y="644.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">dni</text><text x="212.000000" y="644.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="386.000000" y="644.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px">UNQ</text><line x1="0.000000" x2="396.000000" y1="657.000000" y2="657.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="10.000000" y="680.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">email</text><text x="212.000000" y="680.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="386.000000" y="680.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px">UNQ</text><line x1="0.000000" x2="396.000000" y1="693.000000" y2="693.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="10.000000" y="716.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">telefono</text><text x="212.000000" y="716.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="386.000000" y="716.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="0.000000" x2="396.000000" y1="729.000000" y2="729.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="10.000000" y="752.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">municipio</text><text x="212.000000" y="752.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="386.000000" y="752.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="0.000000" x2="396.000000" y1="765.000000" y2="765.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="10.000000" y="788.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">fecha_nacimiento</text><text x="212.000000" y="788.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">date</text><text x="386.000000" y="788.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="0.000000" x2="396.000000" y1="801.000000" y2="801.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="10.000000" y="824.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">direccion</text><text x="212.000000" y="824.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="386.000000" y="824.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="0.000000" x2="396.000000" y1="837.000000" y2="837.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="10.000000" y="860.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">conductor_habilitado</text><text x="212.000000" y="860.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">bool</text><text x="386.000000" y="860.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="0.000000" x2="396.000000" y1="873.000000" y2="873.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="10.000000" y="896.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">estado</text><text x="212.000000" y="896.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">enum</text><text x="386.000000" y="896.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="0.000000" x2="396.000000" y1="909.000000" y2="909.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="10.000000" y="932.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">created_at</text><text x="212.000000" y="932.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">timestamptz</text><text x="386.000000" y="932.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="0.000000" x2="396.000000" y1="945.000000" y2="945.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="10.000000" y="968.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">updated_at</text><text x="212.000000" y="968.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">timestamptz</text><text x="386.000000" y="968.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="0.000000" x2="396.000000" y1="981.000000" y2="981.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /></g></g><g class="dGlwb3NfYWNyZWRpdGFjaW9u"><g class="shape"><rect x="42.000000" y="52.000000" width="312.000000" height="252.000000" stroke="#0A0F25" fill="#FFFFFF" class="shape stroke-N1 fill-N7" style="stroke-width:2;" /><rect x="42.000000" y="52.000000" width="312.000000" height="36.000000" fill="#0A0F25" class="class_header fill-N1" /><text x="52.000000" y="77.750000" fill="#FFFFFF" class="text fill-N7" style="text-anchor:start;font-size:24px">tipos_acreditacion</text><text x="52.000000" y="111.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">id</text><text x="212.000000" y="111.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">uuid</text><text x="344.000000" y="111.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px">PK</text><line x1="42.000000" x2="354.000000" y1="124.000000" y2="124.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="52.000000" y="147.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">codigo</text><text x="212.000000" y="147.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="344.000000" y="147.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px">UNQ</text><line x1="42.000000" x2="354.000000" y1="160.000000" y2="160.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="52.000000" y="183.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">nombre</text><text x="212.000000" y="183.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="344.000000" y="183.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="42.000000" x2="354.000000" y1="196.000000" y2="196.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="52.000000" y="219.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">categoria</text><text x="212.000000" y="219.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">enum</text><text x="344.000000" y="219.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="42.000000" x2="354.000000" y1="232.000000" y2="232.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="52.000000" y="255.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">campos_schema</text><text x="212.000000" y="255.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">jsonb</text><text x="344.000000" y="255.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="42.000000" x2="354.000000" y1="268.000000" y2="268.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="52.000000" y="291.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">activo</text><text x="212.000000" y="291.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">bool</text><text x="344.000000" y="291.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="42.000000" x2="354.000000" y1="304.000000" y2="304.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /></g></g><g class="YWNyZWRpdGFjaW9uZXM="><g class="shape"><rect x="554.000000" y="0.000000" width="307.000000" height="396.000000" stroke="#0A0F25" fill="#FFFFFF" class="shape stroke-N1 fill-N7" style="stroke-width:2;" /><rect x="554.000000" y="0.000000" width="307.000000" height="36.000000" fill="#0A0F25" class="class_header fill-N1" /><text x="564.000000" y="25.750000" fill="#FFFFFF" class="text fill-N7" style="text-anchor:start;font-size:24px">acreditaciones</text><text x="564.000000" y="59.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">id</text><text x="734.000000" y="59.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">uuid</text><text x="851.000000" y="59.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px">PK</text><line x1="554.000000" x2="861.000000" y1="72.000000" y2="72.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="564.000000" y="95.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">voluntario_id</text><text x="734.000000" y="95.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">uuid</text><text x="851.000000" y="95.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px">FK</text><line x1="554.000000" x2="861.000000" y1="108.000000" y2="108.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="564.000000" y="131.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">tipo_id</text><text x="734.000000" y="131.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">uuid</text><text x="851.000000" y="131.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px">FK</text><line x1="554.000000" x2="861.000000" y1="144.000000" y2="144.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="564.000000" y="167.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">categoria</text><text x="734.000000" y="167.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">enum</text><text x="851.000000" y="167.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="554.000000" x2="861.000000" y1="180.000000" y2="180.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="564.000000" y="203.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">fecha_obtencion</text><text x="734.000000" y="203.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">date</text><text x="851.000000" y="203.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="554.000000" x2="861.000000" y1="216.000000" y2="216.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="564.000000" y="239.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">fecha_caducidad</text><text x="734.000000" y="239.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">date</text><text x="851.000000" y="239.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="554.000000" x2="861.000000" y1="252.000000" y2="252.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="564.000000" y="275.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">numero</text><text x="734.000000" y="275.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="851.000000" y="275.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="554.000000" x2="861.000000" y1="288.000000" y2="288.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="564.000000" y="311.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">entidad_emisora</text><text x="734.000000" y="311.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="851.000000" y="311.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="554.000000" x2="861.000000" y1="324.000000" y2="324.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="564.000000" y="347.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">datos_especificos</text><text x="734.000000" y="347.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">jsonb</text><text x="851.000000" y="347.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="554.000000" x2="861.000000" y1="360.000000" y2="360.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="564.000000" y="383.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">documento_url</text><text x="734.000000" y="383.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="851.000000" y="383.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="554.000000" x2="861.000000" y1="396.000000" y2="396.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /></g></g><g class="dGlwb3NfZXF1aXBhbWllbnRv"><g class="shape"><rect x="52.000000" y="1041.000000" width="293.000000" height="180.000000" stroke="#0A0F25" fill="#FFFFFF" class="shape stroke-N1 fill-N7" style="stroke-width:2;" /><rect x="52.000000" y="1041.000000" width="293.000000" height="36.000000" fill="#0A0F25" class="class_header fill-N1" /><text x="62.000000" y="1066.750000" fill="#FFFFFF" class="text fill-N7" style="text-anchor:start;font-size:24px">tipos_equipamiento</text><text x="62.000000" y="1100.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">id</text><text x="203.000000" y="1100.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">uuid</text><text x="335.000000" y="1100.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px">PK</text><line x1="52.000000" x2="345.000000" y1="1113.000000" y2="1113.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="62.000000" y="1136.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">codigo</text><text x="203.000000" y="1136.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="335.000000" y="1136.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px">UNQ</text><line x1="52.000000" x2="345.000000" y1="1149.000000" y2="1149.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="62.000000" y="1172.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">nombre</text><text x="203.000000" y="1172.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="335.000000" y="1172.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="52.000000" x2="345.000000" y1="1185.000000" y2="1185.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="62.000000" y="1208.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">sistema_tallas</text><text x="203.000000" y="1208.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="335.000000" y="1208.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="52.000000" x2="345.000000" y1="1221.000000" y2="1221.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /></g></g><g class="dGFsbGFzX3ZvbHVudGFyaW8="><g class="shape"><rect x="573.000000" y="682.000000" width="269.000000" height="180.000000" stroke="#0A0F25" fill="#FFFFFF" class="shape stroke-N1 fill-N7" style="stroke-width:2;" /><rect x="573.000000" y="682.000000" width="269.000000" height="36.000000" fill="#0A0F25" class="class_header fill-N1" /><text x="583.000000" y="707.750000" fill="#FFFFFF" class="text fill-N7" style="text-anchor:start;font-size:24px">tallas_voluntario</text><text x="583.000000" y="741.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">id</text><text x="715.000000" y="741.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">uuid</text><text x="832.000000" y="741.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px">PK</text><line x1="573.000000" x2="842.000000" y1="754.000000" y2="754.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="583.000000" y="777.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">voluntario_id</text><text x="715.000000" y="777.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">uuid</text><text x="832.000000" y="777.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px">FK</text><line x1="573.000000" x2="842.000000" y1="790.000000" y2="790.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="583.000000" y="813.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">tipo_id</text><text x="715.000000" y="813.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">uuid</text><text x="832.000000" y="813.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px">FK</text><line x1="573.000000" x2="842.000000" y1="826.000000" y2="826.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="583.000000" y="849.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">valor</text><text x="715.000000" y="849.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="832.000000" y="849.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="573.000000" x2="842.000000" y1="862.000000" y2="862.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /></g></g><g class="Y29udGFjdG9zX2VtZXJnZW5jaWE="><g class="shape"><rect x="551.000000" y="964.000000" width="312.000000" height="252.000000" stroke="#0A0F25" fill="#FFFFFF" class="shape stroke-N1 fill-N7" style="stroke-width:2;" /><rect x="551.000000" y="964.000000" width="312.000000" height="36.000000" fill="#0A0F25" class="class_header fill-N1" /><text x="561.000000" y="989.750000" fill="#FFFFFF" class="text fill-N7" style="text-anchor:start;font-size:24px">contactos_emergencia</text><text x="561.000000" y="1023.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">id</text><text x="736.000000" y="1023.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">uuid</text><text x="853.000000" y="1023.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px">PK</text><line x1="551.000000" x2="863.000000" y1="1036.000000" y2="1036.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="561.000000" y="1059.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">voluntario_id</text><text x="736.000000" y="1059.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">uuid</text><text x="853.000000" y="1059.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px">FK</text><line x1="551.000000" x2="863.000000" y1="1072.000000" y2="1072.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="561.000000" y="1095.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">nombre</text><text x="736.000000" y="1095.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="853.000000" y="1095.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="551.000000" x2="863.000000" y1="1108.000000" y2="1108.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="561.000000" y="1131.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">telefono</text><text x="736.000000" y="1131.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="853.000000" y="1131.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="551.000000" x2="863.000000" y1="1144.000000" y2="1144.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="561.000000" y="1167.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">parentesco</text><text x="736.000000" y="1167.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">varchar</text><text x="853.000000" y="1167.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="551.000000" x2="863.000000" y1="1180.000000" y2="1180.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /><text x="561.000000" y="1203.000000" fill="#0D32B2" class="text fill-B2" style="text-anchor:start;font-size:20px">orden_preferencia</text><text x="736.000000" y="1203.000000" fill="#676C7E" class="text fill-N2" style="text-anchor:start;font-size:20px">int</text><text x="853.000000" y="1203.000000" fill="#4A6FF3" class="text fill-AA2" style="text-anchor:end;font-size:20px" /><line x1="551.000000" x2="863.000000" y1="1216.000000" y2="1216.000000" stroke="#0A0F25" class=" stroke-N1" style="stroke-width:2" /></g></g><g class="KHZvbHVudGFyaW9zIC0mZ3Q7IGFjcmVkaXRhY2lvbmVzKVswXQ=="><marker id="mk-d2-5cff9f5de05447598deaba70587fd44d-599773101" markerWidth="18.000000" markerHeight="18.000000" refX="15.000000" refY="9.000000" viewBox="0.000000 0.000000 18.000000 18.000000" orient="auto" markerUnits="userSpaceOnUse"> <g stroke="#0D32B2" fill="#FFFFFF" class="connection stroke-B1 fill-N7" stroke-width="2"><circle r="3.300000" cx="5.300000" cy="9.000000" stroke="#0D32B2" fill="#FFFFFF" class="connection stroke-B1 fill-N7" stroke-width="2" /><path d="M15.000000,9.000000 24.600000,9.000000 M9.600000,9.000000 24.600000,0.000000 M9.600000,9.000000 24.600000,18.000000" /></g> </marker><path d="M 396.777145 488.960876 C 457.899994 415.299988 489.500000 382.898010 550.452408 331.081785" stroke="#0D32B2" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-d2-5cff9f5de05447598deaba70587fd44d-599773101)" mask="url(#d2-5cff9f5de05447598deaba70587fd44d)" /><text x="469.000000" y="410.000000" fill="#676C7E" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">tiene</text></g><g class="KHZvbHVudGFyaW9zIC0mZ3Q7IHRhbGxhc192b2x1bnRhcmlvKVswXQ=="><path d="M 397.288854 629.105572 C 457.899994 598.799988 496.914001 609.099976 587.408302 679.053635" stroke="#0D32B2" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-d2-5cff9f5de05447598deaba70587fd44d-599773101)" mask="url(#d2-5cff9f5de05447598deaba70587fd44d)" /><text x="500.000000" y="617.000000" fill="#676C7E" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">tiene</text></g><g class="KHZvbHVudGFyaW9zIC0mZ3Q7IGNvbnRhY3Rvc19lbWVyZ2VuY2lhKVswXQ=="><path d="M 397.173939 859.594499 C 457.899994 899.299988 489.100006 921.500000 548.329504 967.061157" stroke="#0D32B2" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-d2-5cff9f5de05447598deaba70587fd44d-599773101)" mask="url(#d2-5cff9f5de05447598deaba70587fd44d)" /><text x="475.000000" y="917.000000" fill="#676C7E" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">tiene</text></g><g class="KHRpcG9zX2FjcmVkaXRhY2lvbiAtJmd0OyBhY3JlZGl0YWNpb25lcylbMF0="><path d="M 355.500000 177.500000 C 449.500000 177.500000 489.500000 178.904007 549.515328 184.173154" stroke="#0D32B2" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-d2-5cff9f5de05447598deaba70587fd44d-599773101)" mask="url(#d2-5cff9f5de05447598deaba70587fd44d)" /><text x="453.500000" y="183.000000" fill="#676C7E" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">clasifica</text></g><g class="KHRpcG9zX2VxdWlwYW1pZW50byAtJmd0OyB0YWxsYXNfdm9sdW50YXJpbylbMF0="><path d="M 347.500000 1131.000000 C 447.899994 1131.000000 508.500000 1077.199951 646.318732 865.352920" stroke="#0D32B2" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-d2-5cff9f5de05447598deaba70587fd44d-599773101)" mask="url(#d2-5cff9f5de05447598deaba70587fd44d)" /><text x="528.500000" y="1052.000000" fill="#676C7E" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">clasifica</text></g><mask id="d2-5cff9f5de05447598deaba70587fd44d" maskUnits="userSpaceOnUse" x="-101" y="-101" width="1065" height="1423">
+<rect x="-101" y="-101" width="1065" height="1423" fill="white" />
+<rect x="450.000000" y="394.000000" width="38" height="21" fill="black" />
+<rect x="481.000000" y="601.000000" width="38" height="21" fill="black" />
+<rect x="456.000000" y="901.000000" width="38" height="21" fill="black" />
+<rect x="424.000000" y="167.000000" width="59" height="21" fill="black" />
+<rect x="499.000000" y="1036.000000" width="59" height="21" fill="black" />
+</mask></svg></svg></div>
+<h2 id="catalogos-pre-poblados">Catálogos pre-poblados<a class="headerlink" href="#catalogos-pre-poblados" title="Enlace permanente a este título">&para;</a></h2>
+<p>Los catálogos <code>tipos_acreditacion</code> y <code>tipos_equipamiento</code> se cargan con datos canónicos mediante <strong><a class="glossary-term" href="../../glosario/#alembic"><abbr title="Herramienta de migraciones de esquema para SQLAlchemy/SQLModel.">Alembic</abbr></a> data migrations</strong> ejecutadas al desplegar. Esto los versiona en Git como parte del esquema, no como configuración volátil.</p>
+<h3 id="tipos_acreditacion-extracto"><code>tipos_acreditacion</code> (extracto)<a class="headerlink" href="#tipos_acreditacion-extracto" title="Enlace permanente a este título">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>codigo</th>
+<th>nombre</th>
+<th>categoría sugerida</th>
+<th><code>campos_schema</code> (ejemplo)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CARNET_CONDUCIR</code></td>
+<td>Carnet de conducir</td>
+<td><code>LICENCIA_OFICIAL</code></td>
+<td><code>{"tipo": "B\|B+E\|C\|C+E\|D", "incluye_remolque": "bool"}</code></td>
+</tr>
+<tr>
+<td><code>ESS_SANITARIO</code></td>
+<td>ESS Sanitario</td>
+<td><code>LICENCIA_OFICIAL</code></td>
+<td><code>{"nivel": "ESS\|ATS\|enfermería"}</code></td>
+</tr>
+<tr>
+<td><code>ADR_MERCANCIAS_PELIGROSAS</code></td>
+<td><a class="glossary-term" href="../../glosario/#adr"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr></a> Mercancías Peligrosas</td>
+<td><code>LICENCIA_OFICIAL</code></td>
+<td><code>{"clases": ["I","II","III","IV","V","VI","VII","VIII","IX"]}</code></td>
+</tr>
+<tr>
+<td><code>MANIPULADOR_ALIMENTOS</code></td>
+<td>Manipulador de alimentos</td>
+<td><code>LICENCIA_OFICIAL</code></td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>CURSO_DEA</code></td>
+<td>Curso uso de DEA</td>
+<td><code>FORMACION_INTERNA</code></td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>CURSO_PROTECCION_CIVIL</code></td>
+<td>Curso PC (genérico)</td>
+<td><code>FORMACION_INTERNA</code></td>
+<td><code>{"horas": "int", "nivel": "básico\|intermedio\|avanzado"}</code></td>
+</tr>
+<tr>
+<td><code>JORNADA_RESCATE_VEHICULOS</code></td>
+<td>Jornada rescate vehículos</td>
+<td><code>FORMACION_INTERNA</code></td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>OTRO</code></td>
+<td>Otra acreditación</td>
+<td><code>OTRO</code></td>
+<td>(libre)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tipos_equipamiento-extracto"><code>tipos_equipamiento</code> (extracto)<a class="headerlink" href="#tipos_equipamiento-extracto" title="Enlace permanente a este título">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>codigo</th>
+<th>nombre</th>
+<th>sistema_tallas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CAMISA</code></td>
+<td>Camisa de uniforme</td>
+<td><code>XS-XXXL</code></td>
+</tr>
+<tr>
+<td><code>POLO</code></td>
+<td>Polo de uniforme</td>
+<td><code>XS-XXXL</code></td>
+</tr>
+<tr>
+<td><code>CHAQUETA</code></td>
+<td>Chaqueta de uniforme</td>
+<td><code>XS-XXXL</code></td>
+</tr>
+<tr>
+<td><code>PANTALON</code></td>
+<td>Pantalón de uniforme</td>
+<td><code>36-50</code></td>
+</tr>
+<tr>
+<td><code>BOTAS</code></td>
+<td>Botas reglamentarias</td>
+<td><code>EU</code></td>
+</tr>
+<tr>
+<td><code>CASCO</code></td>
+<td>Casco</td>
+<td><code>S-XL</code></td>
+</tr>
+<tr>
+<td><code>GUANTES</code></td>
+<td>Guantes</td>
+<td><code>S-XL</code></td>
+</tr>
+<tr>
+<td><code>CHALECO</code></td>
+<td>Chaleco reflectante</td>
+<td><code>XS-XXXL</code></td>
+</tr>
+</tbody>
+</table>
+<p>Modificaciones futuras del catálogo (añadir un tipo nuevo, marcar uno como <code>activo = false</code>) se gestionan con <strong>nuevas data migrations</strong> <a class="glossary-term" href="../../glosario/#alembic"><abbr title="Herramienta de migraciones de esquema para SQLAlchemy/SQLModel.">Alembic</abbr></a>, revisables por PR como cualquier otro cambio de schema.</p>
+<h2 id="indexacion">Indexación<a class="headerlink" href="#indexacion" title="Enlace permanente a este título">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tabla</th>
+<th>Índices</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>voluntarios</code></td>
+<td><code>dni</code> UNIQUE, <code>email</code> UNIQUE, <code>keycloak_id</code> UNIQUE+INDEX, <code>estado</code></td>
+</tr>
+<tr>
+<td><code>acreditaciones</code></td>
+<td><code>voluntario_id</code>, <code>tipo_id</code>, <code>(voluntario_id, tipo_id, numero)</code> UNIQUE, <code>categoria</code></td>
+</tr>
+<tr>
+<td><code>tallas_voluntario</code></td>
+<td><code>voluntario_id</code>, <code>(voluntario_id, tipo_id)</code> UNIQUE</td>
+</tr>
+<tr>
+<td><code>contactos_emergencia</code></td>
+<td><code>voluntario_id</code></td>
+</tr>
+</tbody>
+</table>
+<p>El índice en <code>acreditaciones.categoria</code> soporta consultas atómicas por familia ("voluntarios con cualquier formación interna") sin recurrir a <code>JOIN</code> con el catálogo. Las consultas mixtas (<code>EXISTS</code> correlacionado por tipo) aprovechan los índices compuestos.</p>
+<h2 id="validacion-de-datos_especificos">Validación de <code>datos_especificos</code><a class="headerlink" href="#validacion-de-datos_especificos" title="Enlace permanente a este título">&para;</a></h2>
+<p>En la capa API, <a class="glossary-term" href="../../glosario/#fastapi"><abbr title="Framework Python para APIs HTTP con tipado, validación Pydantic y soporte OpenAPI.">FastAPI</abbr></a> + <a class="glossary-term" href="../../glosario/#pydantic"><abbr title="Librería Python de validación y serialización basada en type hints.">Pydantic</abbr></a> valida <code>datos_especificos</code> contra el <code>campos_schema</code> declarado en el tipo asociado. Implementación recomendada:</p>
+<ul>
+<li>Librería <a href="https://python-jsonschema.readthedocs.io/"><code>jsonschema</code></a> (validación a partir del schema almacenado).</li>
+<li>Alternativa: <code>model_validator</code> <a class="glossary-term" href="../../glosario/#pydantic"><abbr title="Librería Python de validación y serialización basada en type hints.">Pydantic</abbr></a> con lógica condicional por <code>tipo_id</code>.</li>
+</ul>
+<p>La validación es <strong>opcional al inicio</strong> (los catálogos <code>campos_schema</code> pueden ser <code>null</code>) y <strong>estricta cuando madure la UI de gestión</strong> (panel admin para crear/editar tipos y describir su schema). El cliente puede leer el <code>campos_schema</code> para construir formularios dinámicos sin hardcodearlos.</p>
+<h2 id="aplicabilidad-a-otros-modulos">Aplicabilidad a otros módulos<a class="headerlink" href="#aplicabilidad-a-otros-modulos" title="Enlace permanente a este título">&para;</a></h2>
+<p>El patrón se aplicará en módulos futuros con la misma estructura:</p>
+<table>
+<thead>
+<tr>
+<th>Módulo futuro</th>
+<th>Catálogo previsto</th>
+<th>Instancias</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Inventario</strong> (E05)</td>
+<td><code>tipos_material</code>, <code>tipos_vehiculo</code></td>
+<td><code>inventario</code>, <code>vehiculos</code></td>
+</tr>
+<tr>
+<td><strong>Servicios</strong> (E03)</td>
+<td><code>tipos_servicio</code> (preventivo, emergencia, formación, jornada)</td>
+<td><code>servicios</code></td>
+</tr>
+<tr>
+<td><strong>Notificaciones</strong> (E06)</td>
+<td><code>tipos_notificacion</code> con canales (<a class="glossary-term" href="../../glosario/#fcm"><abbr title="Firebase Cloud Messaging. Servicio de Google para notificaciones push.">FCM</abbr></a>, <a class="glossary-term" href="../../glosario/#ntfy"><abbr title="Servicio de notificaciones push HTTP autoalojable.">ntfy</abbr></a>, email)</td>
+<td><code>notificaciones</code></td>
+</tr>
+</tbody>
+</table>
+<p>La elección concreta (catálogo + instancias + <a class="glossary-term" href="../../glosario/#jsonb"><abbr title="Tipo de PostgreSQL para almacenar JSON en formato binario indexable.">JSONB</abbr></a> + enum) se documenta como <strong>principio de proyecto</strong> en <a href="../../adrs/adr-025-modelo-extensible/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-025</a>: para entidades con tipos predefinidos extensibles, no usar columnas planas ni <a class="glossary-term" href="../../glosario/#jsonb"><abbr title="Tipo de PostgreSQL para almacenar JSON en formato binario indexable.">JSONB</abbr></a> libre.</p>
+<h2 id="audit-log-cross-module">Audit log cross-module<a class="headerlink" href="#audit-log-cross-module" title="Enlace permanente a este título">&para;</a></h2>
+<p>Todas las operaciones críticas (alta/baja/edición de voluntarios, asignación a servicios, anonimización <a class="glossary-term" href="../../glosario/#rgpd"><abbr title="Reglamento General de Protección de Datos (UE 2016/679). GDPR en inglés.">RGPD</abbr></a>) se registran en una tabla <code>audit_log</code> cross-module con un patrón de imports diferidos para evitar dependencias cíclicas entre módulos. Detalle en <a href="../audit-log/">Audit log</a>.</p>
+<h2 id="referencias">Referencias<a class="headerlink" href="#referencias" title="Enlace permanente a este título">&para;</a></h2>
+<ul>
+<li><strong><a href="../../adrs/adr-002-sqlmodel/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-002 <abbr title="Capa que combina SQLAlchemy y Pydantic en una sola declaración de modelo.">SQLModel</abbr></a></strong> — ORM unificado.</li>
+<li><strong><a href="../../adrs/adr-025-modelo-extensible/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-025 Modelo extensible</a></strong> — patrón formal completo.</li>
+<li><strong><a href="https://www.postgresql.org/docs/current/datatype-json.html">PostgreSQL — <abbr title="Tipo de PostgreSQL para almacenar JSON en formato binario indexable.">JSONB</abbr></a></strong> — operadores e indexación.</li>
+<li><strong><a href="https://sqlmodel.tiangolo.com/tutorial/relationship-attributes/"><abbr title="Capa que combina SQLAlchemy y Pydantic en una sola declaración de modelo.">SQLModel</abbr> — Relationships</a></strong> — patrón de relaciones.</li>
+</ul>
+<!--
+  Definiciones de tooltip (Markdown abbr extension).
+  Incluido automáticamente en cada página vía pymdownx.snippets:auto_append.
+  Cada *[Término]: ... añade un <abbr title="..."> con tooltip al hacer hover.
+  Las definiciones se mantienen alineadas con docs/glosario.md.
+-->
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../diagramas/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Diagrama del sistema">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Diagrama del sistema
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../flujos-negocio/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Flujos de negocio">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                Flujos de negocio
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Equipo Custodiam &middot; <a href="https://github.com/custodiam/custodiam-book/blob/main/LICENSE">AGPL-3.0</a>
+    </div>
+  
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/custodiam" target="_blank" rel="noopener" title="Organización Custodiam en GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.tabs.link", "content.tooltips", "navigation.footer", "navigation.indexes", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow", "toc.integrate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

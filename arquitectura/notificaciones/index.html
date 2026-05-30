@@ -1,0 +1,1222 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Sistema de notificaciones push con Firebase Cloud Messaging como canal principal y ntfy como respaldo automático para alertas críticas." name="description"/>
+<meta content="Equipo Custodiam (Rodrigo Mulero, Marcos Val Sanz)" name="author"/>
+<link href="https://docs.custodiam.es/arquitectura/notificaciones/" rel="canonical"/>
+<link href="../flujos-negocio/" rel="prev"/>
+<link href="../audit-log/" rel="next"/>
+<link href="../../assets/favicon.svg" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Notificaciones redundantes - Custodiam</title>
+<link href="../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../stylesheets/extra.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/mkdocs_d2_plugin.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#notificaciones-redundantes">
+          Saltar a contenido
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Cabecera" class="md-header__inner md-grid">
+<a aria-label="Custodiam" class="md-header__button md-logo" data-md-component="logo" href="../.." title="Custodiam">
+<img alt="logo" src="../../assets/logo.svg"/>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Custodiam
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Notificaciones redundantes
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Cambiar a modo claro" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Cambiar a modo claro">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
+</label>
+<input aria-label="Cambiar a modo oscuro" class="md-option" data-md-color-accent="blue-grey" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="deep-orange" data-md-color-scheme="default" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_2" hidden="" title="Cambiar a modo oscuro">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Cambiar al modo del sistema" class="md-option" data-md-color-accent="orange" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="deep-orange" data-md-color-scheme="slate" id="__palette_2" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Cambiar al modo del sistema">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Búsqueda" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Búsqueda" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Buscar" class="md-search__options">
+<a aria-label="Compartir" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Compartir">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+</a>
+<button aria-label="Limpiar" class="md-search__icon md-icon" tabindex="-1" title="Limpiar" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/custodiam/custodiam-book" title="Ir al repositorio">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    custodiam/custodiam-book
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navegación" class="md-nav md-nav--primary md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Custodiam" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="Custodiam">
+<img alt="logo" src="../../assets/logo.svg"/>
+</a>
+    Custodiam
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/custodiam/custodiam-book" title="Ir al repositorio">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    custodiam/custodiam-book
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<div class="md-nav__link md-nav__container">
+<a class="md-nav__link" href="../../empezar/">
+<span class="md-ellipsis">
+    
+  
+    Empezar
+  
+
+    
+  </span>
+</a>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-nav__icon md-icon"></span>
+</label>
+</div>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Empezar
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../empezar/api/">
+<span class="md-ellipsis">
+    
+  
+    Backend (API)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../empezar/app/">
+<span class="md-ellipsis">
+    
+  
+    App (Flutter)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../empezar/infra/">
+<span class="md-ellipsis">
+    
+  
+    Infraestructura
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../empezar/usuarios-prueba/">
+<span class="md-ellipsis">
+    
+  
+    Usuarios de prueba
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<div class="md-nav__link md-nav__container">
+<a class="md-nav__link" href="../">
+<span class="md-ellipsis">
+    
+  
+    Arquitectura
+  
+
+    
+  </span>
+</a>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-nav__icon md-icon"></span>
+</label>
+</div>
+<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Arquitectura
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../stack/">
+<span class="md-ellipsis">
+    
+  
+    Stack técnico
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../diagramas/">
+<span class="md-ellipsis">
+    
+  
+    Diagrama del sistema
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../modelo-datos/">
+<span class="md-ellipsis">
+    
+  
+    Modelo de datos
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../flujos-negocio/">
+<span class="md-ellipsis">
+    
+  
+    Flujos de negocio
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Notificaciones redundantes
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    Notificaciones redundantes
+  
+
+    
+  </span>
+</a>
+<nav aria-label="Tabla de contenidos" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#por-que-dos-canales">
+<span class="md-ellipsis">
+      
+        Por qué dos canales
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#topologia">
+<span class="md-ellipsis">
+      
+        Topología
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#politica-de-envio-por-tipo">
+<span class="md-ellipsis">
+      
+        Política de envío por tipo
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#flujo-de-emergencia-paso-a-paso">
+<span class="md-ellipsis">
+      
+        Flujo de emergencia paso a paso
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#lecciones-operativas">
+<span class="md-ellipsis">
+      
+        Lecciones operativas
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuracion-por-entorno">
+<span class="md-ellipsis">
+      
+        Configuración por entorno
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#referencias">
+<span class="md-ellipsis">
+      
+        Referencias
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../audit-log/">
+<span class="md-ellipsis">
+    
+  
+    Audit log
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<div class="md-nav__link md-nav__container">
+<a class="md-nav__link" href="../../adrs/">
+<span class="md-ellipsis">
+    
+  
+    ADRs
+  
+
+    
+  </span>
+</a>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-nav__icon md-icon"></span>
+</label>
+</div>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    ADRs
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-001-polyrepo/">
+<span class="md-ellipsis">
+    
+  
+    ADR-001 Polyrepo
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-002-sqlmodel/">
+<span class="md-ellipsis">
+    
+  
+    ADR-002 SQLModel
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-003-alembic/">
+<span class="md-ellipsis">
+    
+  
+    ADR-003 Alembic
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-004-http-cliente/">
+<span class="md-ellipsis">
+    
+  
+    ADR-004 Cliente HTTP Flutter
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-005-sqflite/">
+<span class="md-ellipsis">
+    
+  
+    ADR-005 sqflite
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-006-nginx-alpine/">
+<span class="md-ellipsis">
+    
+  
+    ADR-006 Nginx Alpine
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-007-ghcr/">
+<span class="md-ellipsis">
+    
+  
+    ADR-007 GHCR
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-008-psycopg3/">
+<span class="md-ellipsis">
+    
+  
+    ADR-008 psycopg3
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-009-2-bds-separadas/">
+<span class="md-ellipsis">
+    
+  
+    ADR-009 2 BDs separadas
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-010-oauth-pkce-keycloak/">
+<span class="md-ellipsis">
+    
+  
+    ADR-010 OAuth + PKCE + Keycloak
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-011-deep-links/">
+<span class="md-ellipsis">
+    
+  
+    ADR-011 Deep links
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-012-riverpod/">
+<span class="md-ellipsis">
+    
+  
+    ADR-012 Riverpod
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-013-rbac-lockstep/">
+<span class="md-ellipsis">
+    
+  
+    ADR-013 RBAC lockstep
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-014-result-failure/">
+<span class="md-ellipsis">
+    
+  
+    ADR-014 Result<t> + Failure
+  
+
+    
+  </t></span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-015-env-config/">
+<span class="md-ellipsis">
+    
+  
+    ADR-015 EnvConfig
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-016-dev-log/">
+<span class="md-ellipsis">
+    
+  
+    ADR-016 dev.log
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-017-splash-app-startup/">
+<span class="md-ellipsis">
+    
+  
+    ADR-017 SplashPage + AppStartup
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-018-design-system/">
+<span class="md-ellipsis">
+    
+  
+    ADR-018 Design System
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-019-sops-age/">
+<span class="md-ellipsis">
+    
+  
+    ADR-019 sops + age
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-020-tres-modos-despliegue/">
+<span class="md-ellipsis">
+    
+  
+    ADR-020 Tres modos de despliegue
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-021-smtp-resend/">
+<span class="md-ellipsis">
+    
+  
+    ADR-021 SMTP Resend
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-022-ios-15/">
+<span class="md-ellipsis">
+    
+  
+    ADR-022 iOS 15 mínimo
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-023-oauth-web-asimetria/">
+<span class="md-ellipsis">
+    
+  
+    ADR-023 OAuth web vs móvil
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-024-patrol-e2e/">
+<span class="md-ellipsis">
+    
+  
+    ADR-024 Patrol E2E
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-025-modelo-extensible/">
+<span class="md-ellipsis">
+    
+  
+    ADR-025 Modelo extensible
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-026-uv/">
+<span class="md-ellipsis">
+    
+  
+    ADR-026 uv
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-027-mkdocs-pages/">
+<span class="md-ellipsis">
+    
+  
+    ADR-027 MkDocs + Pages
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-028-valuekeys-tests/">
+<span class="md-ellipsis">
+    
+  
+    ADR-028 ValueKeys para tests
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adrs/adr-031-material-vehiculo/">
+<span class="md-ellipsis">
+    
+  
+    ADR-031 Material↔vehículo
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
+<div class="md-nav__link md-nav__container">
+<a class="md-nav__link" href="../../guias/">
+<span class="md-ellipsis">
+    
+  
+    Guías
+  
+
+    
+  </span>
+</a>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-nav__icon md-icon"></span>
+</label>
+</div>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Guías
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../guias/docker-compose-local/">
+<span class="md-ellipsis">
+    
+  
+    Docker Compose local
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../guias/configuracion-keycloak/">
+<span class="md-ellipsis">
+    
+  
+    Configuración de Keycloak
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../guias/setup-fastapi-uv/">
+<span class="md-ellipsis">
+    
+  
+    Setup FastAPI con uv
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../guias/flutter-oidc/">
+<span class="md-ellipsis">
+    
+  
+    Cliente OIDC en Flutter
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../glosario/">
+<span class="md-ellipsis">
+    
+  
+    Glosario
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_7" type="checkbox"/>
+<div class="md-nav__link md-nav__container">
+<a class="md-nav__link" href="../../contribuir/">
+<span class="md-ellipsis">
+    
+  
+    Contribuir
+  
+
+    
+  </span>
+</a>
+</div>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Contribuir
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<a class="md-content__button md-icon" href="https://github.com/custodiam/custodiam-book/edit/main/docs/arquitectura/notificaciones.md" rel="edit" title="Editar esta página">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"></path></svg>
+</a>
+<a class="md-content__button md-icon" href="https://github.com/custodiam/custodiam-book/raw/main/docs/arquitectura/notificaciones.md" title="Ver código fuente de esta página">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5"></path></svg>
+</a>
+<h1 id="notificaciones-redundantes">Notificaciones redundantes<a class="headerlink" href="#notificaciones-redundantes" title="Enlace permanente a este título">¶</a></h1>
+<p>Custodiam usa <strong>dos canales de notificación push</strong> con políticas de redundancia distintas según la criticidad del mensaje. Esta página recoge la visión operativa del sistema.</p>
+<h2 id="por-que-dos-canales">Por qué dos canales<a class="headerlink" href="#por-que-dos-canales" title="Enlace permanente a este título">¶</a></h2>
+<p>Las notificaciones de Custodiam son funcionales (un coordinador convoca a voluntarios a un servicio preventivo o de emergencia) y <strong>una notificación que no llega es un fallo del producto, no de UX</strong>. Un voluntario que no recibe la convocatoria a una emergencia activa porque <a class="glossary-term" href="../../glosario/#firebase"><abbr title="Plataforma de Google con servicios para apps móviles y web.">Firebase</abbr></a> Cloud Messaging tuvo un incidente regional no es aceptable. La política de notificaciones del proyecto es <strong>redundancia activa para mensajes críticos</strong>.</p>
+<p>A su vez, <strong><a class="glossary-term" href="../../glosario/#firebase"><abbr title="Plataforma de Google con servicios para apps móviles y web.">Firebase</abbr></a> Cloud Messaging (<a class="glossary-term" href="../../glosario/#fcm"><abbr title="Firebase Cloud Messaging. Servicio de Google para notificaciones push.">FCM</abbr></a>)</strong> sigue siendo el canal nativo de Android y iOS con mejor entrega en background, batería, y soporte de notificaciones ricas (imagen, deep link, acciones). Sustituirlo por completo penaliza al 99 % de los mensajes para protegerse del 1 % de incidentes. Por eso <a class="glossary-term" href="../../glosario/#fcm"><abbr title="Firebase Cloud Messaging. Servicio de Google para notificaciones push.">FCM</abbr></a> se mantiene como canal principal y se añade <strong><a href="https://ntfy.sh/"><abbr title="Servicio de notificaciones push HTTP autoalojable.">ntfy</abbr></a></strong> (open-source self-hosted) como respaldo automático cuando <a class="glossary-term" href="../../glosario/#fcm"><abbr title="Firebase Cloud Messaging. Servicio de Google para notificaciones push.">FCM</abbr></a> falla o devuelve un timeout en mensajes marcados como críticos.</p>
+<h2 id="topologia">Topología<a class="headerlink" href="#topologia" title="Enlace permanente a este título">¶</a></h2>
+<div class="d2"><svg aria-label="Diagram" data-d2-version="v0.7.1" preserveaspectratio="xMinYMin meet" role="img" viewbox="0 0 1760 964"><svg class="d2-6fdffbb7269643d498c1105c0bf31064 d2-svg" height="964" viewbox="-45 -85 1760 964" width="1760"><rect class="fill-N7" fill="#FFFFFF" height="964.000000" rx="0.000000" stroke-width="0" width="1760.000000" x="-45.000000" y="-85.000000"></rect><style type="text/css">
+.d2-6fdffbb7269643d498c1105c0bf31064 .text {
+	font-family: "d2-6fdffbb7269643d498c1105c0bf31064-font-regular";
+}
+@font-face {
+	font-family: d2-6fdffbb7269643d498c1105c0bf31064-font-regular;
+	src: url("data:application/font-woff;base64,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");
+}
+.d2-6fdffbb7269643d498c1105c0bf31064 .text-bold {
+	font-family: "d2-6fdffbb7269643d498c1105c0bf31064-font-bold";
+}
+@font-face {
+	font-family: d2-6fdffbb7269643d498c1105c0bf31064-font-bold;
+	src: url("data:application/font-woff;base64,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");
+}
+.d2-6fdffbb7269643d498c1105c0bf31064 .text-italic {
+	font-family: "d2-6fdffbb7269643d498c1105c0bf31064-font-italic";
+}
+@font-face {
+	font-family: d2-6fdffbb7269643d498c1105c0bf31064-font-italic;
+	src: url("data:application/font-woff;base64,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");
+}</style><style type="text/css">.shape {
+  shape-rendering: geometricPrecision;
+  stroke-linejoin: round;
+}
+.connection {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.blend {
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-N1{fill:#0A0F25;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-N2{fill:#676C7E;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-N3{fill:#9499AB;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-N4{fill:#CFD2DD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-N5{fill:#DEE1EB;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-N6{fill:#EEF1F8;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-N7{fill:#FFFFFF;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-B1{fill:#0D32B2;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-B2{fill:#0D32B2;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-B3{fill:#E3E9FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-B4{fill:#E3E9FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-B5{fill:#EDF0FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-B6{fill:#F7F8FE;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-AA2{fill:#4A6FF3;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-AA4{fill:#EDF0FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-AA5{fill:#F7F8FE;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-AB4{fill:#EDF0FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .fill-AB5{fill:#F7F8FE;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-N1{stroke:#0A0F25;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-N2{stroke:#676C7E;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-N3{stroke:#9499AB;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-N4{stroke:#CFD2DD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-N5{stroke:#DEE1EB;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-N6{stroke:#EEF1F8;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-N7{stroke:#FFFFFF;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-B1{stroke:#0D32B2;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-B2{stroke:#0D32B2;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-B3{stroke:#E3E9FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-B4{stroke:#E3E9FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-B5{stroke:#EDF0FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-B6{stroke:#F7F8FE;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-AA2{stroke:#4A6FF3;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-AA4{stroke:#EDF0FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-AA5{stroke:#F7F8FE;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-AB4{stroke:#EDF0FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .stroke-AB5{stroke:#F7F8FE;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-N1{background-color:#0A0F25;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-N2{background-color:#676C7E;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-N3{background-color:#9499AB;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-N4{background-color:#CFD2DD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-N5{background-color:#DEE1EB;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-N6{background-color:#EEF1F8;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-N7{background-color:#FFFFFF;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-B1{background-color:#0D32B2;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-B2{background-color:#0D32B2;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-B3{background-color:#E3E9FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-B4{background-color:#E3E9FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-B5{background-color:#EDF0FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-B6{background-color:#F7F8FE;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-AA2{background-color:#4A6FF3;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-AA4{background-color:#EDF0FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-AA5{background-color:#F7F8FE;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-AB4{background-color:#EDF0FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .background-color-AB5{background-color:#F7F8FE;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-N1{color:#0A0F25;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-N2{color:#676C7E;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-N3{color:#9499AB;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-N4{color:#CFD2DD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-N5{color:#DEE1EB;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-N6{color:#EEF1F8;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-N7{color:#FFFFFF;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-B1{color:#0D32B2;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-B2{color:#0D32B2;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-B3{color:#E3E9FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-B4{color:#E3E9FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-B5{color:#EDF0FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-B6{color:#F7F8FE;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-AA2{color:#4A6FF3;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-AA4{color:#EDF0FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-AA5{color:#F7F8FE;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-AB4{color:#EDF0FD;}
+		.d2-6fdffbb7269643d498c1105c0bf31064 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright-d2-6fdffbb7269643d498c1105c0bf31064);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}</style><g class="YXBw"><g class="shape"><rect class="stroke-B1" fill="#eef2ff" height="404.000000" stroke="#0D32B2" style="stroke-width:2;" width="279.000000" x="1335.000000" y="348.000000"></rect></g><text class="text fill-N1" fill="#0A0F25" style="text-anchor:middle;font-size:28px" x="1474.500000" y="335.000000">custodiam-app (móvil)</text></g><g class="YmFja2VuZA=="><g class="shape"><rect class="stroke-B1" fill="#fefce8" height="182.000000" stroke="#0D32B2" style="stroke-width:2;" width="843.000000" x="56.000000" y="56.000000"></rect></g><text class="text fill-N1" fill="#0A0F25" style="text-anchor:middle;font-size:28px" x="477.500000" y="43.000000">custodiam-api</text></g><g class="ZXh0ZXJuYWw="><g class="shape"><rect class="stroke-B1" fill="#fef2f2" height="174.000000" stroke="#0D32B2" style="stroke-width:2;" width="338.000000" x="643.000000" y="324.000000"></rect></g><text class="text fill-N1" fill="#0A0F25" style="text-anchor:middle;font-size:28px" x="812.000000" y="311.000000">Servicios externos</text></g><g class="c2VsZg=="><g class="shape"><rect class="stroke-B1" fill="#f0fdf4" height="194.000000" stroke="#0D32B2" style="stroke-width:2;" width="334.000000" x="645.000000" y="584.000000"></rect></g><text class="text fill-N1" fill="#0A0F25" style="text-anchor:middle;font-size:28px" x="812.000000" y="571.000000">Self-hosted</text></g><g class="YXBwLmZjbV9zZGs="><g class="shape"><rect class="stroke-B1 fill-B5" fill="#EDF0FD" height="66.000000" stroke="#0D32B2" style="stroke-width:2;" width="219.000000" x="1365.000000" y="378.000000"></rect></g><text class="text-bold fill-N1" fill="#0A0F25" style="text-anchor:middle;font-size:16px" x="1474.500000" y="416.500000">firebase_messaging SDK</text></g><g class="YXBwLm50ZnlfY2xpZW50"><g class="shape"><rect class="stroke-B1 fill-B5" fill="#EDF0FD" height="82.000000" stroke="#0D32B2" style="stroke-width:2;" width="146.000000" x="1402.000000" y="640.000000"></rect></g><text class="text-bold fill-N1" fill="#0A0F25" style="text-anchor:middle;font-size:16px" x="1475.000000" y="678.500000"><tspan dy="0.000000" x="1475.000000">ntfy client</tspan><tspan dy="18.500000" x="1475.000000">(HTTP polling)</tspan></text></g><g class="YmFja2VuZC5zZXJ2aWNpbw=="><g class="shape"><rect class="stroke-B1 fill-B5" fill="#EDF0FD" height="66.000000" stroke="#0D32B2" style="stroke-width:2;" width="197.000000" x="86.000000" y="142.000000"></rect></g><text class="text-bold fill-N1" fill="#0A0F25" style="text-anchor:middle;font-size:16px" x="184.500000" y="180.500000">NotificacionesService</text></g><g class="YmFja2VuZC5hdWRpdA=="><g class="shape"><path class="stroke-B1 fill-AA5" d="M 756 110 C 756 86 807 86 813 86 C 818 86 869 86 869 110 V 180 C 869 204 818 204 813 204 C 807 204 756 204 756 180 V 110 Z" fill="#F7F8FE" stroke="#0D32B2" style="stroke-width:2;"></path><path class="stroke-B1 fill-AA5" d="M 756 110 C 756 134 807 134 813 134 C 818 134 869 134 869 110" fill="#F7F8FE" stroke="#0D32B2" style="stroke-width:2;"></path></g><text class="text-bold fill-N1" fill="#0A0F25" style="text-anchor:middle;font-size:16px" x="812.500000" y="162.500000">audit_log</text></g><g class="ZXh0ZXJuYWwuZmNt"><g class="shape"><path class="stroke-B1 fill-N7" d="M 719 394 C 719 395 717 396 715 396 C 691 398 673 413 673 432 C 673 452 694 468 720 468 H 899 C 927 468 950 451 950 430 C 950 410 929 393 902 392 C 900 392 898 391 898 390 C 892 370 864 355 832 355 C 811 355 792 361 780 371 C 779 372 776 373 775 372 C 770 371 765 370 760 370 C 738 370 721 380 719 394 Z" fill="#FFFFFF" stroke="#0D32B2" style="stroke-width:2;"></path></g><text class="text-bold fill-N1" fill="#0A0F25" style="text-anchor:middle;font-size:16px" x="810.841000" y="429.736000"><tspan dy="0.000000" x="810.841000">Firebase Cloud Messaging</tspan><tspan dy="18.500000" x="810.841000">(Google)</tspan></text></g><g class="c2VsZi5udGZ5"><g class="shape"><path class="stroke-B1 fill-AA5" d="M 675 638 C 675 614 798 614 812 614 C 826 614 949 614 949 638 V 724 C 949 748 826 748 812 748 C 798 748 675 748 675 724 V 638 Z" fill="#F7F8FE" stroke="#0D32B2" style="stroke-width:2;"></path><path class="stroke-B1 fill-AA5" d="M 675 638 C 675 662 798 662 812 662 C 826 662 949 662 949 638" fill="#F7F8FE" stroke="#0D32B2" style="stroke-width:2;"></path></g><text class="text-bold fill-N1" fill="#0A0F25" style="text-anchor:middle;font-size:16px" x="812.000000" y="690.500000"><tspan dy="0.000000" x="812.000000">ntfy</tspan><tspan dy="18.500000" x="812.000000">(contenedor en custodiam-infra)</tspan></text></g><g class="KGJhY2tlbmQuc2VydmljaW8gLSZndDsgZXh0ZXJuYWwuZmNtKVswXQ=="><marker id="mk-d2-6fdffbb7269643d498c1105c0bf31064-3488378134" markerheight="12.000000" markerunits="userSpaceOnUse" markerwidth="10.000000" orient="auto" refx="7.000000" refy="6.000000" viewbox="0.000000 0.000000 10.000000 12.000000"> <polygon class="connection fill-B1" fill="#0D32B2" points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" stroke-width="2"></polygon> </marker><path class="connection stroke-B1" d="M 285.000000 175.500000 C 404.600006 175.500000 621.400024 214.399994 756.350203 367.003572" fill="none" marker-end="url(#mk-d2-6fdffbb7269643d498c1105c0bf31064-3488378134)" mask="url(#d2-6fdffbb7269643d498c1105c0bf31064)" stroke="#0D32B2" style="stroke-width:2;"></path><text class="text-italic fill-N2" fill="#676C7E" style="text-anchor:middle;font-size:16px" x="555.500000" y="208.000000">HTTPS</text></g><g class="KGJhY2tlbmQuc2VydmljaW8gLSZndDsgc2VsZi5udGZ5KVswXQ=="><marker id="mk-d2-6fdffbb7269643d498c1105c0bf31064-2177206569" markerheight="12.000000" markerunits="userSpaceOnUse" markerwidth="10.000000" orient="auto" refx="7.000000" refy="6.000000" viewbox="0.000000 0.000000 10.000000 12.000000"> <polygon class="connection fill-B2" fill="#0D32B2" points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" stroke-width="2"></polygon> </marker><path class="connection stroke-B2" d="M 284.973485 191.824586 C 404.600006 211.500000 624.000000 296.200012 770.315688 611.371902" fill="none" marker-end="url(#mk-d2-6fdffbb7269643d498c1105c0bf31064-2177206569)" mask="url(#d2-6fdffbb7269643d498c1105c0bf31064)" stroke="#0D32B2" style="stroke-width:2;stroke-dasharray:6.000000,5.919384;"></path><text class="text-italic fill-N2" fill="#676C7E" style="text-anchor:middle;font-size:16px" x="621.000000" y="300.000000">fallback automático</text></g><g class="YmFja2VuZC4oc2VydmljaW8gLSZndDsgYXVkaXQpWzBd"><path class="connection stroke-B1" d="M 284.986122 162.764801 C 404.600006 148.600006 620.799988 145.000000 752.000000 145.000000" fill="none" marker-end="url(#mk-d2-6fdffbb7269643d498c1105c0bf31064-3488378134)" mask="url(#d2-6fdffbb7269643d498c1105c0bf31064)" stroke="#0D32B2" style="stroke-width:2;"></path></g><g class="KGV4dGVybmFsLmZjbSAtJmd0OyBhcHAuZmNtX3NkaylbMF0="><path class="connection stroke-B1" d="M 944.999993 410.994681 C 1018.200012 410.799988 1061.199951 410.750000 1097.500000 410.750000 C 1133.800049 410.750000 1296.199951 410.750000 1361.000000 410.750000" fill="none" marker-end="url(#mk-d2-6fdffbb7269643d498c1105c0bf31064-3488378134)" mask="url(#d2-6fdffbb7269643d498c1105c0bf31064)" stroke="#0D32B2" style="stroke-width:2;"></path><text class="text-italic fill-N2" fill="#676C7E" style="text-anchor:middle;font-size:16px" x="1153.500000" y="416.000000">push</text></g><g class="KHNlbGYubnRmeSAtJmd0OyBhcHAubnRmeV9jbGllbnQpWzBd"><path class="connection stroke-B1" d="M 950.999992 680.994318 C 1019.400024 680.799988 1061.199951 680.750000 1097.500000 680.750000 C 1133.800049 680.750000 1303.500000 680.750000 1397.500000 680.750000" fill="none" marker-end="url(#mk-d2-6fdffbb7269643d498c1105c0bf31064-3488378134)" mask="url(#d2-6fdffbb7269643d498c1105c0bf31064)" stroke="#0D32B2" style="stroke-width:2;"></path><text class="text-italic fill-N2" fill="#676C7E" style="text-anchor:middle;font-size:16px" x="1175.000000" y="686.000000">HTTP push</text></g><mask height="964" id="d2-6fdffbb7269643d498c1105c0bf31064" maskunits="userSpaceOnUse" width="1760" x="-45" y="-85">
+<rect fill="white" height="964" width="1760" x="-45" y="-85"></rect>
+<rect fill="black" height="21" width="49" x="531.000000" y="192.000000"></rect>
+<rect fill="black" height="21" width="136" x="553.000000" y="284.000000"></rect>
+<rect fill="black" height="21" width="37" x="1135.000000" y="400.000000"></rect>
+<rect fill="black" height="21" width="74" x="1138.000000" y="670.000000"></rect>
+</mask></svg></svg></div>
+<h2 id="politica-de-envio-por-tipo">Política de envío por tipo<a class="headerlink" href="#politica-de-envio-por-tipo" title="Enlace permanente a este título">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tipo de notificación</th>
+<th>Canal primario</th>
+<th>Fallback</th>
+<th>Reintentos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Emergencia activa</strong> (convocatoria)</td>
+<td><a class="glossary-term" href="../../glosario/#fcm"><abbr title="Firebase Cloud Messaging. Servicio de Google para notificaciones push.">FCM</abbr></a></td>
+<td><a class="glossary-term" href="../../glosario/#ntfy"><abbr title="Servicio de notificaciones push HTTP autoalojable.">ntfy</abbr></a> automático si <a class="glossary-term" href="../../glosario/#fcm"><abbr title="Firebase Cloud Messaging. Servicio de Google para notificaciones push.">FCM</abbr></a> falla o timeout &gt; 5 s</td>
+<td>3 reintentos exponenciales</td>
+</tr>
+<tr>
+<td><strong>Convocatoria a servicio preventivo</strong></td>
+<td><a class="glossary-term" href="../../glosario/#fcm"><abbr title="Firebase Cloud Messaging. Servicio de Google para notificaciones push.">FCM</abbr></a></td>
+<td><a class="glossary-term" href="../../glosario/#ntfy"><abbr title="Servicio de notificaciones push HTTP autoalojable.">ntfy</abbr></a> automático si <a class="glossary-term" href="../../glosario/#fcm"><abbr title="Firebase Cloud Messaging. Servicio de Google para notificaciones push.">FCM</abbr></a> responde error</td>
+<td>1 reintento</td>
+</tr>
+<tr>
+<td><strong>Confirmación / cambio de estado</strong></td>
+<td><a class="glossary-term" href="../../glosario/#fcm"><abbr title="Firebase Cloud Messaging. Servicio de Google para notificaciones push.">FCM</abbr></a></td>
+<td>sin fallback</td>
+<td>sin reintentos</td>
+</tr>
+<tr>
+<td><strong>Informativa (cambio de turno, recordatorio)</strong></td>
+<td><a class="glossary-term" href="../../glosario/#fcm"><abbr title="Firebase Cloud Messaging. Servicio de Google para notificaciones push.">FCM</abbr></a></td>
+<td>sin fallback</td>
+<td>sin reintentos</td>
+</tr>
+</tbody>
+</table>
+<p>El criterio operativo: <strong>solo las notificaciones donde un fallo de entrega tiene impacto sobre la operación real de la agrupación activan el fallback</strong>. Las notificaciones informativas pueden perderse sin coste; las de emergencia no.</p>
+<h2 id="flujo-de-emergencia-paso-a-paso">Flujo de emergencia paso a paso<a class="headerlink" href="#flujo-de-emergencia-paso-a-paso" title="Enlace permanente a este título">¶</a></h2>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Coord as Coordinador
+    participant App as App del coordinador
+    participant API as custodiam-api
+    participant FCM as Firebase FCM
+    participant NTFY as ntfy
+    participant Vol as App voluntarios (N dispositivos)
+
+    Coord-&gt;&gt;App: Crea convocatoria de emergencia
+    App-&gt;&gt;API: POST /servicios<br/>tipo=emergencia, voluntarios_filtrados
+    API-&gt;&gt;API: Filtra voluntarios disponibles + permisos RBAC
+    API-&gt;&gt;FCM: Envía push a tokens FCM<br/>(canal principal)
+
+    alt FCM responde 200
+        FCM--&gt;&gt;Vol: Push notification<br/>(payload + deep link)
+        Note over Vol: Tap → app abre en pantalla del servicio
+    else FCM falla o timeout &gt; 5 s
+        API-&gt;&gt;NTFY: Publica en canal /custodiam-emergencia
+        NTFY--&gt;&gt;Vol: Push vía ntfy (canal secundario)
+        Note over API: Log fallo FCM + telemetría
+    end
+
+    Vol-&gt;&gt;API: PATCH /servicios/{id}/voluntarios/{me}<br/>{respuesta: "acepto" | "rechazo"}
+    API--&gt;&gt;App: Notifica al coordinador (vía FCM)
+</code></pre>
+<h2 id="lecciones-operativas">Lecciones operativas<a class="headerlink" href="#lecciones-operativas" title="Enlace permanente a este título">¶</a></h2>
+<ul>
+<li><strong>iOS exige permisos explícitos</strong>. La primera vez que la app se abre, debe solicitarlos. Si el usuario los deniega, no hay notificaciones — la app debe mostrar un aviso reconductivo en el primer flujo afectado (intento de fichar, recepción de servicio).</li>
+<li><strong>Token <a class="glossary-term" href="../../glosario/#fcm"><abbr title="Firebase Cloud Messaging. Servicio de Google para notificaciones push.">FCM</abbr></a> rota</strong>. La app re-registra el token en cada arranque y lo sincroniza con el backend. El backend almacena varios tokens por voluntario (uno por dispositivo activo) y borra los que caducan tras 30 días sin uso.</li>
+<li><strong><a class="glossary-term" href="../../glosario/#ntfy"><abbr title="Servicio de notificaciones push HTTP autoalojable.">ntfy</abbr></a> requiere autenticación</strong>. Aunque el servidor es público en el dominio del proyecto, los canales sensibles (emergencia, servicios) están protegidos con tokens emitidos por el backend al hacer login.</li>
+<li><strong>El backend NO usa el SDK Admin de <a class="glossary-term" href="../../glosario/#firebase"><abbr title="Plataforma de Google con servicios para apps móviles y web.">Firebase</abbr></a> para enviar</strong>. Usa la HTTP v1 API directamente con un service account JSON cuyas credenciales viven en <code>docker/.env.sops</code> (cifradas con <a href="https://github.com/getsops/sops"><abbr title="Secrets OPerationS. Cifra archivos estructurados campo a campo con age, GPG o KMS.">sops</abbr></a> + <a href="https://github.com/FiloSottile/age"><abbr title="Herramienta moderna de cifrado de archivos con sintaxis simple y clave pública X25519.">age</abbr></a>). Esto evita arrastrar el SDK gigante de Google al backend.</li>
+</ul>
+<h2 id="configuracion-por-entorno">Configuración por entorno<a class="headerlink" href="#configuracion-por-entorno" title="Enlace permanente a este título">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Entorno</th>
+<th><a class="glossary-term" href="../../glosario/#fcm"><abbr title="Firebase Cloud Messaging. Servicio de Google para notificaciones push.">FCM</abbr></a></th>
+<th><a class="glossary-term" href="../../glosario/#ntfy"><abbr title="Servicio de notificaciones push HTTP autoalojable.">ntfy</abbr></a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>dev (Docker Compose)</strong></td>
+<td>Cuenta <a class="glossary-term" href="../../glosario/#firebase"><abbr title="Plataforma de Google con servicios para apps móviles y web.">Firebase</abbr></a> del proyecto, app <code>es.custodiam.dev</code></td>
+<td>Contenedor local <code>ntfy</code> en puerto 8080</td>
+</tr>
+<tr>
+<td><strong>tunnel (Cloudflare)</strong></td>
+<td>Cuenta <a class="glossary-term" href="../../glosario/#firebase"><abbr title="Plataforma de Google con servicios para apps móviles y web.">Firebase</abbr></a> del proyecto, app <code>es.custodiam.dev</code></td>
+<td>Contenedor <a class="glossary-term" href="../../glosario/#ntfy"><abbr title="Servicio de notificaciones push HTTP autoalojable.">ntfy</abbr></a> expuesto en <code>ntfy.custodiam.es</code></td>
+</tr>
+<tr>
+<td><strong>prod</strong></td>
+<td>Cuenta <a class="glossary-term" href="../../glosario/#firebase"><abbr title="Plataforma de Google con servicios para apps móviles y web.">Firebase</abbr></a> del proyecto, app <code>es.custodiam</code></td>
+<td>Contenedor <a class="glossary-term" href="../../glosario/#ntfy"><abbr title="Servicio de notificaciones push HTTP autoalojable.">ntfy</abbr></a> expuesto en <code>ntfy.custodiam.es</code></td>
+</tr>
+</tbody>
+</table>
+<p>Los tres modos están documentados en <a href="../../adrs/adr-020-tres-modos-despliegue/"><abbr title="Architecture Decision Record. Documento breve que registra una decisión técnica con su contexto y alternativas.">ADR</abbr>-020</a>.</p>
+<h2 id="referencias">Referencias<a class="headerlink" href="#referencias" title="Enlace permanente a este título">¶</a></h2>
+<ul>
+<li><strong><a href="https://firebase.google.com/docs/cloud-messaging"><abbr title="Plataforma de Google con servicios para apps móviles y web.">Firebase</abbr> Cloud Messaging</a></strong> — documentación oficial.</li>
+<li><strong><a href="https://ntfy.sh/"><abbr title="Servicio de notificaciones push HTTP autoalojable.">ntfy</abbr></a></strong> — proyecto open-source.</li>
+<li><strong><a href="https://github.com/binwiederhier/ntfy"><abbr title="Servicio de notificaciones push HTTP autoalojable.">ntfy</abbr> GitHub</a></strong> — código fuente y self-hosting.</li>
+<li><strong><a href="../diagramas/">Diagrama del sistema</a></strong> — flujo completo de notificación de emergencia.</li>
+</ul>
+<!--
+  Definiciones de tooltip (Markdown abbr extension).
+  Incluido automáticamente en cada página vía pymdownx.snippets:auto_append.
+  Cada *[Término]: ... añade un <abbr title="..."> con tooltip al hacer hover.
+  Las definiciones se mantienen alineadas con docs/glosario.md.
+-->
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Volver al principio
+</button>
+</main>
+<footer class="md-footer">
+<nav aria-label="Pie" class="md-footer__inner md-grid">
+<a aria-label="Anterior: Flujos de negocio" class="md-footer__link md-footer__link--prev" href="../flujos-negocio/">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</div>
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Anterior
+              </span>
+<div class="md-ellipsis">
+                Flujos de negocio
+              </div>
+</div>
+</a>
+<a aria-label="Siguiente: Audit log" class="md-footer__link md-footer__link--next" href="../audit-log/">
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Siguiente
+              </span>
+<div class="md-ellipsis">
+                Audit log
+              </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2026 Equipo Custodiam · <a href="https://github.com/custodiam/custodiam-book/blob/main/LICENSE">AGPL-3.0</a>
+</div>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/custodiam" rel="noopener" target="_blank" title="Organización Custodiam en GitHub">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.tabs.link", "content.tooltips", "navigation.footer", "navigation.indexes", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow", "toc.integrate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+<script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@11.4.1/dist/mermaid.esm.min.mjs";
+window.mermaidConfig = {default: {
+    startOnLoad: false
+}};</script></body>
+</html>
