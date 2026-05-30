@@ -169,6 +169,7 @@ nav:
       - ADR-026 uv: adrs/adr-026-uv.md
       - ADR-027 MkDocs + Pages: adrs/adr-027-mkdocs-pages.md
       - ADR-028 ValueKeys para tests: adrs/adr-028-valuekeys-tests.md
+      - ADR-031 Material↔vehículo: adrs/adr-031-material-vehiculo.md
   - Guías:
       - guias/index.md
       - Docker Compose local: guias/docker-compose-local.md
