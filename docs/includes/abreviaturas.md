@@ -41,6 +41,7 @@
 *[age]: Herramienta moderna de cifrado de archivos con sintaxis simple y clave pública X25519.
 *[Alembic]: Herramienta de migraciones de esquema para SQLAlchemy/SQLModel.
 *[app_links]: Paquete Flutter que captura App Links de Android y Universal Links de iOS.
+*[CARTO]: Proveedor de teselas de mapa sobre OpenStreetMap, sin clave ni facturación; usado en el mapa web.
 *[Cloudflare Tunnel]: Túnel saliente desde tu infra hasta Cloudflare; expone servicios sin abrir puertos.
 *[cloudflared]: Daemon que mantiene abierto el Cloudflare Tunnel desde el servidor.
 *[D2]: Lenguaje declarativo moderno para diagramas, alternativo a Mermaid.
@@ -59,6 +60,7 @@
 *[Mermaid]: Lenguaje basado en texto para describir diagramas que se renderizan en el navegador.
 *[MkDocs]: Generador Python de sitios estáticos a partir de Markdown.
 *[n8n]: Plataforma de automatización tipo workflow (Zapier autoalojado).
+*[Nominatim]: Servicio público de geocodificación sobre OpenStreetMap; usado para coordenada → dirección en web.
 *[ntfy]: Servicio de notificaciones push HTTP autoalojable.
 *[oauth2]: Paquete Dart oficial que implementa OAuth 2.0 con PKCE (no confundir con el estándar).
 *[Patrol]: Framework de testing E2E para Flutter, con gestos nativos y orquestación en Android, iOS y Web.
@@ -89,6 +91,7 @@
 *[custom scheme]: URL no estándar (ej. com.custodiam.app://) que una app registra para recibir deep links.
 *[deep links]: URLs que abren una vista concreta dentro de una app móvil.
 *[EnvConfig]: Clase Dart que centraliza variables de entorno inyectadas en build time con --dart-define.
+*[geocodificación inversa]: Traducción de una coordenada (lat, lng) a una dirección postal legible.
 *[mapper]: Concepto Keycloak: regla que transforma datos del usuario en claims del token.
 *[Permission enum]: Catálogo cerrado de permisos canónicos del dominio, espejado entre backend y frontend.
 *[polyrepo]: Estructura de proyecto donde cada componente vive en su propio repositorio Git.

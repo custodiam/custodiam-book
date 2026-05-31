@@ -378,6 +378,16 @@ flujo de OAuth para recibir el callback del IdP; ver
 - :material-github: Repo:
   <https://github.com/llfbandit/app_links>
 
+### CARTO { #carto }
+
+Proveedor de teselas de mapa basadas en OpenStreetMap, con estilos
+cartográficos listos para usar (el estilo *Voyager* recuerda a un mapa
+de calles clásico). Custodiam lo usa para el mapa interactivo en web,
+sin clave ni facturación; ver
+[ADR-030](adrs/adr-030-mapas-geolocalizacion.md).
+
+- :material-web: Mapas base: <https://carto.com/basemaps>
+
 ### Cloudflare Tunnel { #cloudflare-tunnel }
 
 Servicio de Cloudflare que crea un túnel saliente desde tu
@@ -550,6 +560,15 @@ auxiliares.
 
 - :material-web: Sitio oficial: <https://n8n.io/>
 - :material-github: Repo: <https://github.com/n8n-io/n8n>
+
+### Nominatim { #nominatim }
+
+Servicio público de geocodificación sobre datos de OpenStreetMap, sin
+registro ni clave. Custodiam lo usa para la geocodificación inversa
+(coordenada → dirección) en la versión web del selector de ubicación;
+ver [ADR-030](adrs/adr-030-mapas-geolocalizacion.md).
+
+- :material-web: Sitio oficial: <https://nominatim.org/>
 
 ### ntfy { #ntfy }
 
@@ -806,6 +825,14 @@ Clase Dart que centraliza la lectura de variables de entorno
 inyectadas en build time con `--dart-define`. Evita strings
 hardcoded dispersos y permite cambiar el endpoint del backend/IdP
 sin recompilar. Documentado en [ADR-015](adrs/adr-015-env-config.md).
+
+### geocodificación inversa { #geocodificacion-inversa }
+
+Traducción de una coordenada (latitud, longitud) a una dirección postal
+legible. Custodiam la usa al elegir la ubicación de un servicio en el
+mapa, para sugerir la dirección del punto marcado; el geocodificador es
+nativo del sistema operativo en móvil y Nominatim en web (ver
+[ADR-030](adrs/adr-030-mapas-geolocalizacion.md)).
 
 ### mapper { #mapper }
 
