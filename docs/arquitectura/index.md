@@ -37,6 +37,10 @@ La estructura polyrepo y la separación de los tres componentes de código está
 
     Esquema relacional, patrón catálogo + instancias + JSONB, diagrama ER del módulo voluntarios.
 
+- :material-table-network: **[Diagrama ER completo](modelo-datos-er.md)**
+
+    Las dieciocho tablas de la base de datos de negocio por módulo y el mapa de relaciones entre módulos.
+
 - :material-sitemap: **[Flujos de negocio](flujos-negocio.md)**
 
     Ciclo del voluntario, servicio preventivo, emergencia activa, fichaje, inventario.

@@ -22,6 +22,8 @@ Esto permite:
 
 ## Diagrama ER — módulo voluntarios
 
+El diagrama siguiente muestra el módulo de voluntarios. Para el esquema completo de la base de datos (las dieciocho tablas de todos los módulos y el mapa de relaciones entre ellos), ver el **[diagrama ER completo](modelo-datos-er.md)**.
+
 ```d2
 direction: right
 

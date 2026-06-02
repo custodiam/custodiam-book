@@ -136,6 +136,7 @@ nav:
       - Stack técnico: arquitectura/stack.md
       - Diagrama del sistema: arquitectura/diagramas.md
       - Modelo de datos: arquitectura/modelo-datos.md
+      - Diagrama ER completo: arquitectura/modelo-datos-er.md
       - Flujos de negocio: arquitectura/flujos-negocio.md
       - Notificaciones redundantes: arquitectura/notificaciones.md
       - Audit log: arquitectura/audit-log.md
