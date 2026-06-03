@@ -1,0 +1,47 @@
+/* Custodiam — overrides del theme Material for MkDocs.
+ *
+ * Naranja Protección Civil: #FF6600 (escudo PC). Material no tiene ese tono
+ * exacto en su paleta `deep orange` (que está más cerca de #FF5722); aquí
+ * forzamos el valor con custom properties tanto para modo claro como oscuro.
+ */
+
+:root,
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: #ff6600;
+  --md-primary-fg-color--light: #ff8533;
+  --md-primary-fg-color--dark: #cc5200;
+  --md-accent-fg-color: #455a64; /* blue grey de Material */
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #ff6600;
+  --md-primary-fg-color--light: #ff8533;
+  --md-primary-fg-color--dark: #cc5200;
+  --md-accent-fg-color: #ffa726; /* orange brighter para mejor contraste en oscuro */
+}
+
+/* Estilo de los blockquotes con icono para que destaquen como notas casuales */
+.md-typeset blockquote {
+  border-left: 4px solid var(--md-primary-fg-color);
+}
+
+/* Ancho máximo del contenido en pantallas grandes — más lectura confortable */
+.md-grid {
+  max-width: 1440px;
+}
+
+/* Términos del glosario auto-linkeados desde el hook hooks/glosario.py.
+ * Estilo discreto: subrayado punteado en el color de acento, sin pintar
+ * el fondo ni cambiar el peso. Ligeramente más visible al hacer hover.
+ */
+.md-typeset a.glossary-term {
+  color: inherit;
+  text-decoration: underline dotted var(--md-accent-fg-color);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+.md-typeset a.glossary-term:hover {
+  color: var(--md-accent-fg-color);
+  text-decoration-thickness: 1.5px;
+}
